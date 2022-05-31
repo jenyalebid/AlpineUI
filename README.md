@@ -1,3 +1,3 @@
 # AlpineUI
 
-A description of this package.
+SwiftUI designed UI elements standardized for Alpine LIS iOS applications. 
