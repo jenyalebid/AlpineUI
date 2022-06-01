@@ -9,6 +9,8 @@ import SwiftUI
 
 public struct DatePickerBlock: View {
 
+    @Environment(\.isEnabled) var isEnabled
+    
     var title: String
     
     @Binding var value: Date

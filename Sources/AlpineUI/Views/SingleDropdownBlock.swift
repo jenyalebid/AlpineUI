@@ -9,6 +9,8 @@ import SwiftUI
 
 public struct SingleDropdownBlock: View {
 
+    @Environment(\.isEnabled) var isEnabled
+    
     @ObservedObject var viewModel: PickerViewModel
 
     var title: String
@@ -47,7 +49,7 @@ public struct SingleDropdownBlock: View {
                         RoundedRectangle(cornerRadius: 5)
                             .stroke(Color((required ?? false && selection == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required ?? false && selection == "") ? 1.2 : 0.2)
                     )
-                    .background(Color(UIColor.systemGray6).opacity(0.5))
+                    .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
                     .cornerRadius(5)
             }
             .onChange(of: viewModel.selection) { _ in

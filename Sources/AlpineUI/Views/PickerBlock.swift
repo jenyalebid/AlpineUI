@@ -9,6 +9,8 @@ import SwiftUI
 
 public struct PickerBlock: View {
     
+    @Environment(\.isEnabled) var isEnabled
+    
     @ObservedObject var viewModel: PickerViewModel
 
     var title: String
@@ -55,7 +57,7 @@ public struct PickerBlock: View {
                 .popover(isPresented: $showPicker, content: {
                     MultiSelectMenu(values: values, exisingSelections: $selection)
                 })
-                .background(Color(UIColor.systemGray6).opacity(0.5))
+                .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
                 .cornerRadius(5)
         }
         .contentShape(Rectangle())

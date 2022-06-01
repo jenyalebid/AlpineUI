@@ -9,6 +9,8 @@ import SwiftUI
 
 public struct CheckmarkBlock: View {
     
+    @Environment(\.isEnabled) var isEnabled
+    
     var text: String
     
     @Binding var checked: Bool
@@ -30,7 +32,7 @@ public struct CheckmarkBlock: View {
                     checked.toggle()
                     changed.toggle()
                 }
-                .background(Color(UIColor.systemGray6).opacity(0.5))
+                .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
                 .cornerRadius(5)
         }
     }

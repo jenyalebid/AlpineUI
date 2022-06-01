@@ -9,6 +9,8 @@ import SwiftUI
 
 public struct DropdownBlock: View {
     
+    @Environment(\.isEnabled) var isEnabled
+    
     var title: String
     var values: [String]
     var controlField: Bool

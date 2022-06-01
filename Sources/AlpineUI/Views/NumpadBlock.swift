@@ -9,6 +9,8 @@ import SwiftUI
 
 public struct NumpadBlock<N>: View {
     
+    @Environment(\.isEnabled) var isEnabled
+    
     var title: String
     let formatter = NumberFormatter()
     
@@ -36,7 +38,7 @@ public struct NumpadBlock<N>: View {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
                 )
-                .background(Color(UIColor.systemGray6).opacity(0.5))
+                .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
                 .cornerRadius(5)
                 .popover(isPresented: $showPad) {
                     ZStack {

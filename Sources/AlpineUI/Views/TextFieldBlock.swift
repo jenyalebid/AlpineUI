@@ -9,6 +9,8 @@ import SwiftUI
 
 public struct TextFieldBlock: View {
     
+    @Environment(\.isEnabled) var isEnabled
+    
     var title: String
     var placeHolder: String? = nil
     
@@ -50,7 +52,7 @@ public struct TextFieldBlock: View {
                         changed.toggle()
                     }
                 }
-                .background(Color(UIColor.systemGray6).opacity(0.5))
+                .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
                 .cornerRadius(5)
         }
     }
