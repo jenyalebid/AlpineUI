@@ -12,29 +12,34 @@ public struct CheckmarkBlock: View {
     @Environment(\.isEnabled) var isEnabled
     
     var text: String
+    var independent: Bool
     
     @Binding var checked: Bool
     @Binding var changed: Bool
     
-    public init(text: String, checked: Binding<Bool>, changed: Binding<Bool>) {
+    public init(text: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true) {
         self.text = text
         self._checked = checked
         self._changed = changed
+        self.independent = independent
     }
     
     public var body: some View {
         HStack {
-            Text("\(text):")
-                .font(.subheadline)
             Image(systemName: checked ? "checkmark.square.fill" : "square")
                 .foregroundColor(checked ? Color.accentColor : Color.secondary)
+            Text(text)
+                .font(.subheadline)
+                .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
+                .cornerRadius(5)
+        }
+        .if(independent, transform: { view in
+            view
                 .onTapGesture {
                     checked.toggle()
                     changed.toggle()
                 }
-                .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
-                .cornerRadius(5)
-        }
+        })
     }
 }
 

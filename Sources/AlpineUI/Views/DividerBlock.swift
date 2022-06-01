@@ -11,6 +11,10 @@ public struct DividerBlock: View {
     
     var label: String
     
+    public init(label: String) {
+        self.label = label
+    }
+    
     public var body: some View {
         HStack {
             LabelBlock(value: label)
