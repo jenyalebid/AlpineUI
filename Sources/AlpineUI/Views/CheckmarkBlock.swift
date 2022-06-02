@@ -30,11 +30,11 @@ public struct CheckmarkBlock: View {
                 .foregroundColor(checked ? Color.accentColor : Color.secondary)
             Text(text)
                 .font(.subheadline)
-                .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
                 .cornerRadius(5)
         }
         .if(independent, transform: { view in
             view
+                .background(isEnabled ? Color(UIColor.systemBackground) : Color(UIColor.systemGray3).opacity(0.5))
                 .onTapGesture {
                     checked.toggle()
                     changed.toggle()

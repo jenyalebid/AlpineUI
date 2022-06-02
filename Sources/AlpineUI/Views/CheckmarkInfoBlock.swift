@@ -9,34 +9,49 @@ import SwiftUI
 
 public struct CheckmarkInfoBlock: View {
     
+    @Environment(\.isEnabled) var isEnabled
+    
     var primaryText: String
     var secondaryText: String
     var independent: Bool
+    var width: CGFloat?
     
     @Binding var checked: Bool
     @Binding var changed: Bool
     
-    public init(prmaryText: String, secondaryText: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true) {
+    public init(prmaryText: String, secondaryText: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true, width: CGFloat? = nil) {
         self.primaryText = prmaryText
         self.secondaryText = secondaryText
         self._checked = checked
         self._changed = changed
         self.independent = independent
+        self.width = width
     }
     
     public var body: some View {
         HStack {
             CheckmarkBlock(text: primaryText, checked: $checked, changed: $changed, independent: false)
                 .padding(.trailing)
+            if width != nil {
+                Spacer()
+            }
             Text(secondaryText)
                 .font(.footnote)
                 .foregroundColor(Color(uiColor: .systemGray))
+                .frame(alignment: .trailing)
         }
         .padding(6.0)
+        .background(isEnabled ? Color(uiColor: .systemBackground) : Color(uiColor: .systemGray3).opacity(0.5))
+        .cornerRadius(5)
+        .if(width != nil) { view in
+            view
+                .frame(width: width!, alignment: .leading)
+        }
         .overlay (
             RoundedRectangle(cornerRadius: 5)
                 .stroke(Color(uiColor: .systemGray), lineWidth: (0.2))
         )
+
         .contentShape(Rectangle())
         .if(independent) { view in
             view
@@ -49,7 +64,7 @@ public struct CheckmarkInfoBlock: View {
     }
 }
 
-struct SwiftUIView_Previews: PreviewProvider {
+struct CheckmarkInfoBlock_Previews: PreviewProvider {
     static var previews: some View {
         CheckmarkInfoBlock(prmaryText: "Title", secondaryText: "Second Title", checked: .constant(true), changed: .constant(false))
     }

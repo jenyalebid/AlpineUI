@@ -20,7 +20,7 @@ public struct SingleDropdownBlock: View {
     @Binding var changed: Bool
     @Binding var required: Bool?
 
-    public init(title: String, values: [[String]], selection: Binding<String> = Binding.constant(""), required: Binding<Bool?>? = .constant(nil), changed: Binding<Bool>) {
+    public init(title: String, values: [[String]], selection: Binding<String>, required: Binding<Bool?>? = .constant(nil), changed: Binding<Bool>) {
         self.title = title
         self.values = values
         self._selection = selection
