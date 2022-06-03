@@ -24,22 +24,15 @@ public struct DatePickerBlock: View {
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            HStack {
-//                Text("\(title):").font(.footnote)
-                DatePicker(selection: $value) {}
-                    .frame(width: 230)
-            }
-            .padding(.top)
-            .padding(.trailing, 4)
+            Text("\(title):").font(.footnote)
+//                .padding(.leading)
+            DatePicker(selection: $value) {}
+                .frame(width: 200)
         }
 //        .onChange(of: value) { _ in
 //            changed.toggle()
 //        }
     }
-    
-//    static func == (lhs: DatePickerBlock, rhs: DatePickerBlock) -> Bool {
-//        lhs.value == rhs.value
-//    }
 }
 
 struct DatePickerBlock_Previews: PreviewProvider {

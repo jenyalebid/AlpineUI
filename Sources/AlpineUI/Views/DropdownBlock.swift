@@ -44,7 +44,7 @@ public struct DropdownBlock: View {
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            TextFieldBlock(title: title, value: $viewModel.currentValue, required: $localRequired, changed: $changed)
+            TextFieldBlock(title: title, value: $viewModel.currentValue, required: false, changed: $changed)
                 .onTapGesture {
                     if !viewModel.showDropdown {
                         focused = true

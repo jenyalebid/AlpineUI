@@ -15,17 +15,18 @@ public struct SingleDropdownBlock: View {
 
     var title: String
     var values: [[String]]
+    var required: Bool
 
     @Binding var selection: String
     @Binding var changed: Bool
-    @Binding var required: Bool?
 
-    public init(title: String, values: [[String]], selection: Binding<String>, required: Binding<Bool?>? = .constant(nil), changed: Binding<Bool>) {
+    public init(title: String, values: [[String]], selection: Binding<String>, required: Bool = false, changed: Binding<Bool>) {
         self.title = title
         self.values = values
         self._selection = selection
+        self.required = required
         self._changed = changed
-        self._required = required ?? .constant(false)
+        
         self.viewModel = PickerViewModel(selection: selection.wrappedValue)
     }
 
@@ -47,21 +48,21 @@ public struct SingleDropdownBlock: View {
                     .foregroundColor(Color(UIColor.label))
                     .overlay (
                         RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color((required ?? false && selection == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required ?? false && selection == "") ? 1.2 : 0.2)
+                            .stroke(Color((required && selection == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required && selection == "") ? 1.2 : 0.2)
                     )
                     .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
                     .cornerRadius(5)
             }
-            .onChange(of: viewModel.selection) { _ in
-                if required != nil || required == false {
-                    if selection != "" {
-                        required = false
-                    }
-                    else {
-                        required = true
-                    }
-                }
-            }
+//            .onChange(of: viewModel.selection) { _ in
+//                if required == true {
+//                    if selection != "" {
+//                        missingRequired = false
+//                    }
+//                    else {
+//                        re = true
+//                    }
+//                }
+//            }
         }
         .onChange(of: selection) { _ in
             changed.toggle()
