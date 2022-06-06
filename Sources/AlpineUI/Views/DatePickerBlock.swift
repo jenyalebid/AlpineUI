@@ -27,7 +27,7 @@ public struct DatePickerBlock: View {
             Text("\(title):").font(.footnote)
 //                .padding(.leading)
             DatePicker(selection: $value) {}
-                .frame(width: 200)
+                .frame(width: 216)
         }
 //        .onChange(of: value) { _ in
 //            changed.toggle()

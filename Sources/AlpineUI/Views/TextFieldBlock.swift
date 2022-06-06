@@ -36,16 +36,6 @@ public struct TextFieldBlock: View {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(Color((required && value == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required  && value == "") ? 1.2 : 0.2)
                 )
-//                .onChange(of: value) { _ in
-//                    if required != nil || required == false {
-//                        if value != "" {
-//                            required = false
-//                        }
-//                        else {
-//                            required = true
-//                        }
-//                    }
-//                }
                 .onChange(of: isFocused) { _ in
                     if !isFocused {
                         changed.toggle()

@@ -53,11 +53,7 @@ public struct DropdownBlock: View {
                     }
                 }
                 .focused($focused)
-        }
-        .overlay(
-            VStack {
-                if viewModel.showDropdown {
-                    Spacer(minLength: 54)
+                .popover(isPresented: $viewModel.showDropdown) {
                     List {
                         ForEach(viewModel.filteredValues, id: \.self) { value in
                             VStack(alignment: .leading, spacing: 0) {
@@ -77,11 +73,12 @@ public struct DropdownBlock: View {
                     .id(UUID())
                     .padding(.top, 5)
                     .listStyle(.plain)
-                    .overlay (
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
-                        
-                    )
+        //            .overlay (
+        //                RoundedRectangle(cornerRadius: 5)
+        //                    .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
+        //
+        //            )
+                    .frame(minWidth: 160, maxWidth: .infinity)
                     .frame(minHeight: 45 * CGFloat(viewModel.filteredValues.count <= 4 ? viewModel.filteredValues.count : 4))
                     .background(Color(UIColor.systemBackground))
                     .padding(.top, 5)
@@ -89,9 +86,45 @@ public struct DropdownBlock: View {
                         height = Double(value)
                     }
                 }
-            }, alignment: .topLeading
-
-        )
+        }
+//        .overlay(
+//            VStack {
+//                if viewModel.showDropdown {
+//                    Spacer(minLength: 54)
+//                    List {
+//                        ForEach(viewModel.filteredValues, id: \.self) { value in
+//                            VStack(alignment: .leading, spacing: 0) {
+//                                Text("\(value)")
+//                                Divider()
+//                            }
+//                            .listRowSeparator(.hidden)
+//                            .contentShape(Rectangle())
+//                            .onTapGesture {
+//                                viewModel.makeSelectionWith(value)
+//                                selection = viewModel.currentValue
+//                                focused = false
+//                                required = localRequired
+//                            }
+//                        }
+//                    }
+//                    .id(UUID())
+//                    .padding(.top, 5)
+//                    .listStyle(.plain)
+//                    .overlay (
+//                        RoundedRectangle(cornerRadius: 5)
+//                            .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
+//
+//                    )
+//                    .frame(minHeight: 45 * CGFloat(viewModel.filteredValues.count <= 4 ? viewModel.filteredValues.count : 4))
+//                    .background(Color(UIColor.systemBackground))
+//                    .padding(.top, 5)
+//                    .onChange(of: viewModel.filteredValues.count) { value in
+//                        height = Double(value)
+//                    }
+//                }
+//            }, alignment: .topLeading
+//
+//        )
         .onChange(of: viewModel.currentValue) { val in
             if !viewModel.selected {
                 viewModel.filterList()
@@ -105,8 +138,8 @@ public struct DropdownBlock: View {
     }
 }
 
-//struct DropdownBlock_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DropdownBlock(title: "Dropdown Title", values: ["1 sample", "2 sample", "3 sample"], selection: Binding.constant(""))
-//    }
-//}
+struct DropdownBlock_Previews: PreviewProvider {
+    static var previews: some View {
+        DropdownBlock(title: "Dropdown", values: ["1", "22", "3", "4", "5"], selection: .constant("2"), changed: .constant(false))
+    }
+}
