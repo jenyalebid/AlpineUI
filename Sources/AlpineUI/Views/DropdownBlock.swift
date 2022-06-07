@@ -7,44 +7,37 @@
 
 import SwiftUI
 
+
 public struct DropdownBlock: View {
     
     @Environment(\.isEnabled) var isEnabled
     
     var title: String
-    var values: [String]
+    var values: [[String]]
     var controlField: Bool
+    var required: Bool
     
     @Binding var selection: String
-    @Binding var height: Double?
     @Binding var changed: Bool
-    @Binding var required: Bool?
-    
-    @State var localRequired: Bool? = false
     
     @FocusState private var focused: Bool
     
     @ObservedObject var viewModel: DropdownViewModel
     
-    public init(title: String, values: [String], selection: Binding<String>, height: Binding<Double?> = .constant(nil), required: Binding<Bool?>? = .constant(nil), controlField: Bool = false, changed: Binding<Bool>) {
+    public init(title: String, values: [[String]], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>) {
         self.title = title
         self.values = values
         self._selection = selection
-        self._height = height
-        self._required = required ?? .constant(false)
+        self.required = required
         self.controlField = controlField
         self._changed = changed
-        
-        if required?.wrappedValue ?? false {
-            localRequired = true
-        }
         
         self.viewModel = DropdownViewModel(values: values, currentValue: selection.wrappedValue)
     }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            TextFieldBlock(title: title, value: $viewModel.currentValue, required: false, changed: $changed)
+            TextFieldBlock(title: title, value: $viewModel.currentValue, required: required, changed: $changed)
                 .onTapGesture {
                     if !viewModel.showDropdown {
                         focused = true
@@ -53,78 +46,48 @@ public struct DropdownBlock: View {
                     }
                 }
                 .focused($focused)
-                .popover(isPresented: $viewModel.showDropdown) {
+        }
+    
+        .overlay(
+            VStack {
+                if viewModel.showDropdown {
+                    Spacer(minLength: 54)
                     List {
                         ForEach(viewModel.filteredValues, id: \.self) { value in
                             VStack(alignment: .leading, spacing: 0) {
-                                Text("\(value)")
+                                Text("\(value[0])")
+                                if value.count > 1 && !value[1].isEmpty {
+                                    Text(value[1]).font(.footnote).foregroundColor(Color(uiColor: .systemGray))
+                                }
                                 Divider()
                             }
                             .listRowSeparator(.hidden)
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                viewModel.makeSelectionWith(value)
+                                viewModel.makeSelectionWith(value[0])
                                 selection = viewModel.currentValue
                                 focused = false
-                                required = localRequired
                             }
                         }
                     }
                     .id(UUID())
                     .padding(.top, 5)
                     .listStyle(.plain)
-        //            .overlay (
-        //                RoundedRectangle(cornerRadius: 5)
-        //                    .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
-        //
-        //            )
-                    .frame(minWidth: 160, maxWidth: .infinity)
+                    .overlay (
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
+                        
+                    )
                     .frame(minHeight: 45 * CGFloat(viewModel.filteredValues.count <= 4 ? viewModel.filteredValues.count : 4))
                     .background(Color(UIColor.systemBackground))
                     .padding(.top, 5)
                     .onChange(of: viewModel.filteredValues.count) { value in
-                        height = Double(value)
+                        
                     }
                 }
-        }
-//        .overlay(
-//            VStack {
-//                if viewModel.showDropdown {
-//                    Spacer(minLength: 54)
-//                    List {
-//                        ForEach(viewModel.filteredValues, id: \.self) { value in
-//                            VStack(alignment: .leading, spacing: 0) {
-//                                Text("\(value)")
-//                                Divider()
-//                            }
-//                            .listRowSeparator(.hidden)
-//                            .contentShape(Rectangle())
-//                            .onTapGesture {
-//                                viewModel.makeSelectionWith(value)
-//                                selection = viewModel.currentValue
-//                                focused = false
-//                                required = localRequired
-//                            }
-//                        }
-//                    }
-//                    .id(UUID())
-//                    .padding(.top, 5)
-//                    .listStyle(.plain)
-//                    .overlay (
-//                        RoundedRectangle(cornerRadius: 5)
-//                            .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
-//
-//                    )
-//                    .frame(minHeight: 45 * CGFloat(viewModel.filteredValues.count <= 4 ? viewModel.filteredValues.count : 4))
-//                    .background(Color(UIColor.systemBackground))
-//                    .padding(.top, 5)
-//                    .onChange(of: viewModel.filteredValues.count) { value in
-//                        height = Double(value)
-//                    }
-//                }
-//            }, alignment: .topLeading
-//
-//        )
+            }, alignment: .topLeading
+            
+        )
         .onChange(of: viewModel.currentValue) { val in
             if !viewModel.selected {
                 viewModel.filterList()
@@ -140,6 +103,36 @@ public struct DropdownBlock: View {
 
 struct DropdownBlock_Previews: PreviewProvider {
     static var previews: some View {
-        DropdownBlock(title: "Dropdown", values: ["1", "22", "3", "4", "5"], selection: .constant("2"), changed: .constant(false))
+        DropdownBlock(title: "Dropdown", values: [["54", "2"], ["31", "4"]], selection: .constant("22"), changed: .constant(false))
     }
 }
+
+
+
+//    .popover(isPresented: $viewModel.showDropdown) {
+//        List {
+//            ForEach(viewModel.filteredValues, id: \.self) { value in
+//                VStack(alignment: .leading, spacing: 0) {
+//                    Text("\(value[0])")
+//                    if value.count > 1 && !value[1].isEmpty {
+//                        Text(value[1]).font(.footnote).foregroundColor(Color(uiColor: .systemGray))
+//                    }
+//                    Divider()
+//                }
+//                .listRowSeparator(.hidden)
+//                .contentShape(Rectangle())
+//                .onTapGesture {
+//                    viewModel.makeSelectionWith(value[0])
+//                    selection = viewModel.currentValue
+//                    focused = false
+//                }
+//            }
+//        }
+//        .id(UUID())
+//        .padding(.top, 5)
+//        .listStyle(.plain)
+//        .frame(width: 240)
+//        .frame(minHeight: 45 * CGFloat(viewModel.filteredValues.count <= 4 ? viewModel.filteredValues.count : 4))
+//        .background(Color(UIColor.systemBackground))
+//        .padding(.top, 5)
+//    }

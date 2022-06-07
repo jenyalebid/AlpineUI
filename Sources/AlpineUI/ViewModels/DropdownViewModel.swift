@@ -9,15 +9,15 @@ import SwiftUI
 
 class DropdownViewModel: ObservableObject {
 
-    let allValues: [String]
+    let allValues: [[String]]
     
-    @Published var filteredValues: [String] = []
+    @Published var filteredValues: [[String]] = []
     @Published var currentValue: String
     
     @Published var showDropdown = false
     @Published var selected = false
     
-    init(values: [String], currentValue: String) {
+    init(values: [[String]], currentValue: String) {
         self.allValues = values
         self.currentValue = currentValue
     }
@@ -30,8 +30,8 @@ class DropdownViewModel: ObservableObject {
         }
         
         let filteredList = allValues
-            .filter { $0.localizedCaseInsensitiveContains(currentValue) }
-            .sorted { ($0.hasPrefix(currentValue) ? 0 : 1) < ($1.hasPrefix(currentValue) ? 0 : 1) }
+            .filter { $0[0].localizedCaseInsensitiveContains(currentValue) }
+            .sorted { ($0[0].hasPrefix(currentValue) ? 0 : 1) < ($1[0].hasPrefix(currentValue) ? 0 : 1) }
 
         selected = false
 
