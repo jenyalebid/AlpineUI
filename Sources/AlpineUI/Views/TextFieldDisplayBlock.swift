@@ -16,13 +16,13 @@ public struct TextFieldDisplayBlock: View {
     @Binding var text: String
     @Binding var trigger: Bool
     
-    @Binding var required: Bool?
+    var required: Bool
         
-    public init(title: String, text: Binding<String>, trigger: Binding<Bool> = .constant(false), required: Binding<Bool?>? = .constant(nil)) {
+    public init(title: String, text: Binding<String>, trigger: Binding<Bool> = .constant(false), required: Bool = false) {
         self.title = title
         self._text = text
-        self._required = required ?? .constant(false)
         self._trigger = trigger
+        self.required = required
     }
     
     public var body: some View {
