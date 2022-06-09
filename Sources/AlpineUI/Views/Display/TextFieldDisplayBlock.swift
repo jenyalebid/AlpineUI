@@ -35,7 +35,7 @@ public struct TextFieldDisplayBlock: View {
                 .foregroundColor(Color(UIColor.label))
                 .overlay (
                     RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color((required ?? false && text == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required ?? false && text == "") ? 1.2 : 0.2)
+                        .stroke(Color((required && text == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required && text == "") ? 1.2 : 0.2)
                 )
                 .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
                 .cornerRadius(5)

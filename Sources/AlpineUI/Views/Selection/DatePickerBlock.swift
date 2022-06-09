@@ -25,8 +25,9 @@ public struct DatePickerBlock: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("\(title):").font(.footnote)
-//                .padding(.leading)
             DatePicker(selection: $value) {}
+                .labelsHidden()
+                .transformEffect(.init(scaleX: 0.9, y: 0.9))
                 .frame(width: 216)
         }
 //        .onChange(of: value) { _ in
