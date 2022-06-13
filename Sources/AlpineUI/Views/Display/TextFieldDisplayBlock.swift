@@ -15,14 +15,16 @@ public struct TextFieldDisplayBlock: View {
     
     @Binding var text: String
     @Binding var trigger: Bool
+    @Binding var changed: Bool
     
     var required: Bool
         
-    public init(title: String, text: Binding<String>, trigger: Binding<Bool> = .constant(false), required: Bool = false) {
+    public init(title: String, text: Binding<String>, trigger: Binding<Bool> = .constant(false), required: Bool = false, changed: Binding<Bool>) {
         self.title = title
         self._text = text
         self._trigger = trigger
         self.required = required
+        self._changed = changed
     }
     
     public var body: some View {
@@ -45,11 +47,14 @@ public struct TextFieldDisplayBlock: View {
         .onTapGesture {
             trigger.toggle()
         }
+        .onChange(of: text) { _ in
+            changed.toggle()
+        }
     }
 }
 
 struct TextFieldDisplayBlock_Previews: PreviewProvider {
     static var previews: some View {
-        TextFieldDisplayBlock(title: "Title", text: .constant("Text"))
+        TextFieldDisplayBlock(title: "Title", text: .constant("Text"), changed: .constant(false))
     }
 }

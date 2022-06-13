@@ -12,6 +12,7 @@ public struct NumpadBlock<N>: View {
     @Environment(\.isEnabled) var isEnabled
     
     var title: String
+    var required: Bool
     let formatter = NumberFormatter()
     
     @Binding var value: N
@@ -20,9 +21,10 @@ public struct NumpadBlock<N>: View {
     @State private var showPad = false
     @State private var localValue = ""
     
-    public init(title: String, value: Binding<N>, changed: Binding<Bool>) {
+    public init(title: String, value: Binding<N>, required: Bool = false, changed: Binding<Bool>) {
         self.title = title
         self._value = value
+        self.required = required
         self._changed = changed
         formatter.zeroSymbol = ""
         formatter.numberStyle = .decimal
@@ -36,7 +38,7 @@ public struct NumpadBlock<N>: View {
                 .padding(6.0)
                 .overlay (
                     RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
+                        .stroke(Color((required && value as? Double == 0) ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required  && value as? Double == 0) ? 1.2 : 0.2)
                 )
                 .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
                 .cornerRadius(5)
@@ -51,11 +53,6 @@ public struct NumpadBlock<N>: View {
                     }
                 }
         }
-//        .onAppear {
-//            if value as! Double != 0.0 {
-//                localValue = "\(value)"
-//            }
-//        }
         .onTapGesture {
             showPad.toggle()
         }
