@@ -12,21 +12,21 @@ public struct PickerBlock: View {
     @Environment(\.isEnabled) var isEnabled
     
     @ObservedObject var viewModel: PickerViewModel
-
+    
     var title: String
     var values: [[String]]
+    var required: Bool
     
     @State var showPicker = false
     
     @Binding var selection: String
-    @Binding var required: Bool?
     @Binding var changed: Bool
-
-    public init(title: String, values: [[String]], selection: Binding<String> = Binding.constant(""), required: Binding<Bool?>? = .constant(nil), changed: Binding<Bool>) {
+    
+    public init(title: String, values: [[String]], selection: Binding<String> = Binding.constant(""), required: Bool = false, changed: Binding<Bool>) {
         self.title = title
         self.values = values
         self._selection = selection
-        self._required = required ?? .constant(false)
+        self.required = required
         self._changed = changed
         self.viewModel = PickerViewModel(selection: selection.wrappedValue)
     }
@@ -41,17 +41,9 @@ public struct PickerBlock: View {
                 .foregroundColor(Color(UIColor.label))
                 .overlay (
                     RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color((required ?? false && selection == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required ?? false && selection == "") ? 1.2 : 0.2)
+                        .stroke(Color((required && selection == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required && selection == "") ? 1.2 : 0.2)
                 )
                 .onChange(of: selection) { _ in
-                    if required != nil || required != false {
-                        if selection != "" {
-                            required = false
-                        }
-                        else {
-                            required = true
-                        }
-                    }
                     changed.toggle()
                 }
                 .popover(isPresented: $showPicker, content: {
