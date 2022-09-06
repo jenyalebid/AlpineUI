@@ -19,7 +19,7 @@ public struct TextFieldDisplayBlock: View {
     
     var required: Bool
         
-    public init(title: String, text: Binding<String>, trigger: Binding<Bool> = .constant(false), required: Bool = false, changed: Binding<Bool>) {
+    public init(title: String, text: Binding<String>, trigger: Binding<Bool> = .constant(false), required: Bool = false, changed: Binding<Bool> = .constant(false)) {
         self.title = title
         self._text = text
         self._trigger = trigger
