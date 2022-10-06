@@ -16,6 +16,8 @@ public struct NumpadBlock<N>: View {
     let formatter = NumberFormatter()
     
     @Binding var value: N
+    @State var textValue = ""
+    
     @Binding var changed: Bool
     
     @State private var showPad = false
@@ -33,7 +35,14 @@ public struct NumpadBlock<N>: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("\(title):").font(.footnote)
-            TextField("", value: $value, formatter: formatter)
+            Group {
+                if value is String {
+                    TextField("", text: $textValue)
+                }
+                else {
+                    TextField("", value: $value, formatter: formatter)
+                }
+            }
                 .disabled(true)
                 .padding(6.0)
                 .overlay (
@@ -53,13 +62,44 @@ public struct NumpadBlock<N>: View {
                     }
                 }
         }
+        .onAppear {
+            if value is String {
+                textValue = value as! String
+            }
+        }
         .onTapGesture {
             showPad.toggle()
         }
         .onChange(of: localValue) { val in
-            if val != "delete" {
-                value = formatter.number(from: val) as! N
+            if guardCheck(value: val) {
+                modify(val: val)
             }
+        }
+    }
+    
+    func guardCheck(value: String) -> Bool {
+        if value == "delete" || value == "." {
+            return false
+        }
+        
+        var string = value.components(separatedBy: ".")
+        if string.count > 2 {
+            string.removeLast()
+            string.insert(".", at: 1)
+            modify(val: string.joined())
+            return false
+        }
+
+        return true
+    }
+    
+    func modify(val: String) {
+        if value is String {
+            value = val as! N
+            textValue = val
+        }
+        else {
+            value = formatter.number(from: val) as! N
         }
     }
 }
