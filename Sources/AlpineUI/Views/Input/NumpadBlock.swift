@@ -94,7 +94,7 @@ public struct NumpadBlock<N>: View {
     }
     
     func modify(val: String) {
-        if value is String {
+        if value is String || value is String? {
             value = val as! N
             textValue = val
         }

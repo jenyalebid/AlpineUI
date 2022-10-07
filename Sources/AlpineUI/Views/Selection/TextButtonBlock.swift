@@ -9,7 +9,8 @@ import SwiftUI
 
 public struct TextButtonBlock: View {
     
-    var text: String
+    var image: String?
+    var text: String?
     var height: CGFloat?
     var width: CGFloat?
     var foreground: Color
@@ -18,7 +19,8 @@ public struct TextButtonBlock: View {
     
     var action: () -> ()
     
-    public init(text: String, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, action: @escaping () -> ()) {
+    public init(image: String? = nil, text: String? = nil, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, action: @escaping () -> ()) {
+        self.image = image
         self.text = text
         self.width = width
         self.height = height
@@ -32,9 +34,16 @@ public struct TextButtonBlock: View {
         Button {
             action()
         } label: {
-            Text(text)
-                .font(font)
-                .foregroundColor(foreground)
+            HStack {
+                if let image = image {
+                    Image(systemName: image)
+                }
+                if let text = text {
+                    Text(text)
+                }
+            }
+            .font(font)
+            .foregroundColor(foreground)
         }
         .padding(10)
         .frame(width: width, height: height)
@@ -45,7 +54,7 @@ public struct TextButtonBlock: View {
 
 struct TextButtonBlock_Previews: PreviewProvider {
     static var previews: some View {
-        TextButtonBlock(text: "button", font: .footnote) {
+        TextButtonBlock(image: "person", font: .footnote) {
             
         }
     }
