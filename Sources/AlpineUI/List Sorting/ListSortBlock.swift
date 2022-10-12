@@ -25,7 +25,10 @@ public struct ListSortBlock: View {
             Menu {
                 ForEach(viewModel.options) { option in
                     Button(option.label) {
-                        viewModel.selection = option
+                        NotificationCenter.default.post(name: NSNotification.Name("ActivityListTopButtonClick"), object: nil, userInfo: ["animation": false])
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.50) {
+                            viewModel.selection = option
+                        }
                     }
                 }
             } label: {
@@ -64,6 +67,12 @@ public struct ListSortBlock: View {
             OrderImage(order: .descending, image: "chevron.down")
                 .environmentObject(viewModel)
         }
+        .onTapGesture {
+            NotificationCenter.default.post(name: NSNotification.Name("ActivityListTopButtonClick"), object: nil, userInfo: ["animation": false])
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.50) {
+                viewModel.toggleOrder()
+            }
+        }
     }
         
     struct OrderImage: View {
@@ -77,9 +86,6 @@ public struct ListSortBlock: View {
             Image(systemName: image)
                 .foregroundColor(viewModel.order == order ? Color.accentColor : Color(uiColor: .systemGray))
                 .font(.title2)
-                .onTapGesture {
-                    viewModel.order = order
-                }
         }
     }
 }

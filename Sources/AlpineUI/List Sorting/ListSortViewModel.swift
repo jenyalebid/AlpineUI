@@ -23,4 +23,13 @@ class ListSortViewModel: ObservableObject {
         self.selection = selection
         self.options = options
     }
+    
+    func toggleOrder() {
+        if order == .ascending {
+            order = .descending
+        }
+        else {
+            order = .ascending
+        }
+    }
 }

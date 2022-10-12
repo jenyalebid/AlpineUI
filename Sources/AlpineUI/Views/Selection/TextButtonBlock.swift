@@ -44,11 +44,11 @@ public struct TextButtonBlock: View {
             }
             .font(font)
             .foregroundColor(foreground)
+            .padding(10)
+            .frame(width: width, height: height)
+            .background(background)
+            .cornerRadius(10)
         }
-        .padding(10)
-        .frame(width: width, height: height)
-        .background(background)
-        .cornerRadius(10)
     }
 }
 
