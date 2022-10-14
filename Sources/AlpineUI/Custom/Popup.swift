@@ -12,13 +12,11 @@ public struct Popup<T: View>: ViewModifier {
     @State var bgOpacity = 0.0
     
     let popup: T
-    //    let alignment: Alignment
     let direction: Direction
     let isPresented: Bool
     
     public init(isPresented: Bool, direction: Direction, @ViewBuilder content: () -> T) {
         self.isPresented = isPresented
-        //        self.alignment = alignment
         self.direction = direction
         popup = content()
     }
@@ -40,7 +38,7 @@ public struct Popup<T: View>: ViewModifier {
                 popup
                     .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
                     .frame(width: 600, height: 200, alignment: .center)
-                    .animation(.spring())
+                    .animation(.spring(), value: UUID())
                     .transition(.offset(x: 0, y: direction.offset(popupFrame: geometry.frame(in: .global))))
             }
         }
@@ -70,7 +68,7 @@ public extension Popup {
 }
 
 extension View {
-    func popup<T: View>(isPresented: Bool, direction: Popup<T>.Direction = .bottom, @ViewBuilder content: () -> T) -> some View {
+    public func popup<T: View>(isPresented: Bool, direction: Popup<T>.Direction = .bottom, @ViewBuilder content: () -> T) -> some View {
         return modifier(Popup(isPresented: isPresented, direction: direction, content: content))
     }
 }
