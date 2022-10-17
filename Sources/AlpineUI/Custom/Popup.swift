@@ -9,51 +9,44 @@ import SwiftUI
 
 public struct Popup<T: View>: ViewModifier {
     
-    @State var bgOpacity = 0.0
-    
     let popup: T
+    let alignment: Alignment
     let direction: Direction
     let isPresented: Bool
-    
-    public init(isPresented: Bool, direction: Direction, @ViewBuilder content: () -> T) {
+
+    public init(isPresented: Bool, alignment: Alignment, direction: Direction, @ViewBuilder content: () -> T) {
         self.isPresented = isPresented
+        self.alignment = alignment
         self.direction = direction
         popup = content()
     }
-    
-    public func body(content: Content) -> some View {
-        ZStack {
-            content
-                .background(Color(uiColor: .systemBackground))
 
-            Color.black.opacity(bgOpacity).ignoresSafeArea()
-            popupContent()
-        }
+    public func body(content: Content) -> some View {
+        content
+            .overlay {
+                popupContent()
+            }
     }
-    
+
     @ViewBuilder
     private func popupContent() -> some View {
         GeometryReader { geometry in
             if isPresented {
                 popup
-                    .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 3)
-                    .frame(width: 600, height: 200, alignment: .center)
-                    .animation(.spring(), value: UUID())
+                    .cornerRadius(10)
+                    .shadow(radius: 3)
+                    .animation(.spring(), value: isPresented)
                     .transition(.offset(x: 0, y: direction.offset(popupFrame: geometry.frame(in: .global))))
-            }
-        }
-        .onChange(of: isPresented) { _ in
-            withAnimation {
-                bgOpacity = bgOpacity == 0 ? 0.5 : 0
+                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: alignment)
             }
         }
     }
 }
 
-public extension Popup {
-    enum Direction {
+extension Popup {
+    public enum Direction {
         case top, bottom
-        
+
         func offset(popupFrame: CGRect) -> CGFloat {
             switch self {
             case .top:
@@ -68,8 +61,13 @@ public extension Popup {
 }
 
 extension View {
-    public func popup<T: View>(isPresented: Bool, direction: Popup<T>.Direction = .bottom, @ViewBuilder content: () -> T) -> some View {
-        return modifier(Popup(isPresented: isPresented, direction: direction, content: content))
+    public func popup<T: View>(
+        isPresented: Bool,
+        alignment: Alignment = .center,
+        direction: Popup<T>.Direction = .bottom,
+        @ViewBuilder content: () -> T
+    ) -> some View {
+        return modifier(Popup(isPresented: isPresented, alignment: alignment, direction: direction, content: content))
     }
 }
 
@@ -80,7 +78,7 @@ private extension View {
         })
         .onPreferenceChange(FramePreferenceKey.self, perform: onChange)
     }
-    
+
     func print(_ varargs: Any...) -> Self {
         Swift.print(varargs)
         return self
