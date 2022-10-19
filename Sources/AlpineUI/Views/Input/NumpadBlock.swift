@@ -28,7 +28,6 @@ public struct NumpadBlock<N>: View {
         self._value = value
         self.required = required
         self._changed = changed
-        formatter.zeroSymbol = ""
         formatter.numberStyle = .decimal
     }
     
