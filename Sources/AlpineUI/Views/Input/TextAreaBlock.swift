@@ -12,14 +12,14 @@ public struct TextAreaBlock: View {
     @Environment(\.isEnabled) var isEnabled
     
     var title: String
-    var height: Int
+    var height: CGFloat?
     
     @FocusState private var isFocused: Bool
     
     @Binding var text: String
     @Binding var changed: Bool
     
-    public init(title: String, text: Binding<String>, height: Int = 300, changed: Binding<Bool>) {
+    public init(title: String, text: Binding<String>, height: CGFloat?, changed: Binding<Bool>) {
         self.title = title
         self._text = text
         self.height = height
@@ -31,7 +31,7 @@ public struct TextAreaBlock: View {
             Text("\(title):").font(.footnote)
             TextEditor(text: $text)
                 .focused($isFocused)
-                .frame(height: CGFloat(height))
+                .frame(height: height)
                 .overlay (
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
@@ -49,6 +49,6 @@ public struct TextAreaBlock: View {
 
 struct TextAreaBlock_Previews: PreviewProvider {
     static var previews: some View {
-        TextAreaBlock(title: "Comments", text: Binding.constant("Sample Text"), changed: Binding.constant(false))
+        TextAreaBlock(title: "Comments", text: Binding.constant("Sample Text"), height: 300, changed: Binding.constant(false))
     }
 }
