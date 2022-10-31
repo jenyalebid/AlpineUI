@@ -27,7 +27,7 @@ public struct ToolBarImage: View {
             .font(font)
             .frame(width: CGFloat(size), height: CGFloat(size), alignment: .center)
             .foregroundColor(tag == currentTag ? Color.accentColor : Color(UIColor.systemGray))
-            .padding([.top, .leading, .trailing])
+            .padding()
     }
 }
 

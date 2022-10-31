@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct TextButtonBlock: View {
+public struct TextButtonBlock<Destination: View>: View {
     
     var image: String?
     var text: String?
@@ -17,9 +17,13 @@ public struct TextButtonBlock: View {
     var background: Color
     var font: Font
     
-    var action: () -> ()
+    var action: (() -> ())?
+    var destination: () -> Destination
     
-    public init(image: String? = nil, text: String? = nil, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, action: @escaping () -> ()) {
+    @State private var destinationActive = false
+
+    
+    public init(image: String? = nil, text: String? = nil, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, action: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
         self.image = image
         self.text = text
         self.width = width
@@ -28,11 +32,17 @@ public struct TextButtonBlock: View {
         self.background = background
         self.font = font
         self.action = action
+        self.destination = destination
     }
     
     public var body: some View {
         Button {
-            action()
+            if let action {
+                action()
+            }
+            if hasDestination {
+                destinationActive.toggle()
+            }
         } label: {
             HStack {
                 if let image = image {
@@ -46,9 +56,22 @@ public struct TextButtonBlock: View {
             .foregroundColor(foreground)
             .padding(10)
             .frame(width: width, height: height)
-            .background(background)
+            .background(
+                Group {
+                    background
+                    if hasDestination {
+                        NavigationLink(destination: destination(), isActive: $destinationActive) {
+                            EmptyView()
+                        }
+                    }
+                }
+            )
             .cornerRadius(10)
         }
+    }
+    
+    var hasDestination: Bool {
+        return !(destination is (() -> EmptyView))
     }
 }
 

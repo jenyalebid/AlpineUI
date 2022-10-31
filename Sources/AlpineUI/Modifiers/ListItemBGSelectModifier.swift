@@ -33,7 +33,7 @@ public struct ListItemBGSelectModifier: ViewModifier {
     
     public func body(content: Content) -> some View {
         content
-            .listRowBackground(bgColor)
+            .background(bgColor)
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ListItemLongPress"))) { id in
                 localId = id.userInfo?.first?.value as? UUID
                 isLongPress = true
