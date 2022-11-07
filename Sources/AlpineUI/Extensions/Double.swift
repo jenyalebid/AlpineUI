@@ -26,6 +26,10 @@ extension Double {
         let s = String(format: "%02d", Int(60 * secf))
         
         return "\(h):\(m):\(s)"
-
+    }
+    
+    public func round(to places: Int = 2) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
     }
 }

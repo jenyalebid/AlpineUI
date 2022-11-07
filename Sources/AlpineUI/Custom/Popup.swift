@@ -12,10 +12,11 @@ public struct Popup<T: View>: ViewModifier {
     let popup: T
     let alignment: Alignment
     let direction: Direction
-    let isPresented: Bool
+    
+    @Binding var isPresented: Bool
 
-    public init(isPresented: Bool, alignment: Alignment, direction: Direction, @ViewBuilder content: () -> T) {
-        self.isPresented = isPresented
+    public init(isPresented: Binding<Bool>, alignment: Alignment, direction: Direction, @ViewBuilder content: () -> T) {
+        self._isPresented = isPresented
         self.alignment = alignment
         self.direction = direction
         popup = content()
@@ -33,8 +34,8 @@ public struct Popup<T: View>: ViewModifier {
         GeometryReader { geometry in
             if isPresented {
                 popup
+                    .slideGesture(show: $isPresented, alignment: alignment)
                     .cornerRadius(10)
-                    .shadow(radius: 3)
                     .animation(.spring(), value: isPresented)
                     .transition(.offset(x: 0, y: direction.offset(popupFrame: geometry.frame(in: .global))))
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: alignment)
@@ -61,12 +62,7 @@ extension Popup {
 }
 
 extension View {
-    public func popup<T: View>(
-        isPresented: Bool,
-        alignment: Alignment = .center,
-        direction: Popup<T>.Direction = .bottom,
-        @ViewBuilder content: () -> T
-    ) -> some View {
+    public func popup<T: View>(isPresented: Binding<Bool>, alignment: Alignment = .center, direction: Popup<T>.Direction = .bottom, @ViewBuilder content: () -> T) -> some View {
         return modifier(Popup(isPresented: isPresented, alignment: alignment, direction: direction, content: content))
     }
 }
