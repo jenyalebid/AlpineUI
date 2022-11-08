@@ -1,6 +1,6 @@
 //
 //  Alert.swift
-//  AlpineConnect
+//  AlpineUI
 //
 //  Created by Jenya Lebid on 10/14/22.
 //

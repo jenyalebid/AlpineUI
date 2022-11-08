@@ -16,6 +16,7 @@ class DropdownViewModel: ObservableObject {
     
     @Published var showDropdown = false
     @Published var selected = false
+    @Published var show = false
     
     init(values: [[String]], currentValue: String) {
         self.allValues = values
@@ -25,7 +26,6 @@ class DropdownViewModel: ObservableObject {
     func filterList() {
         if currentValue == "" || currentValue.count == 1 {
             filteredValues = allValues
-            showDropdown = true
             return
         }
         

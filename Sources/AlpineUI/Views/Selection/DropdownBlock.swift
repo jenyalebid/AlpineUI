@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-
 public struct DropdownBlock: View {
-    
+        
     @Environment(\.isEnabled) var isEnabled
     
     var title: String
@@ -37,57 +36,40 @@ public struct DropdownBlock: View {
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            TextFieldBlock(title: title, value: $viewModel.currentValue, required: required, changed: $changed)
-                .onTapGesture {
-                    if !viewModel.showDropdown {
-                        focused = true
-                        viewModel.filterList()
-                        viewModel.showDropdown = true
-                    }
-                }
-                .focused($focused)
-        }
-    
-        .overlay(
-            VStack {
-                if viewModel.showDropdown {
-                    Spacer(minLength: 54)
-                    List {
-                        ForEach(viewModel.filteredValues, id: \.self) { value in
-                            VStack(alignment: .leading, spacing: 0) {
-                                Text("\(value[0])")
-                                if value.count > 1 && !value[1].isEmpty {
-                                    Text(value[1]).font(.footnote).foregroundColor(Color(uiColor: .systemGray))
+            TextFieldBlock(title: title, value: $viewModel.currentValue, changed: .constant(false))
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded {
+                            if !viewModel.showDropdown {
+                                viewModel.filterList()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    self.viewModel.showDropdown = true
                                 }
-                                Divider()
-                            }
-                            .listRowSeparator(.hidden)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                viewModel.makeSelectionWith(value[0])
-                                selection = viewModel.currentValue
-                                focused = false
                             }
                         }
+                )
+        }
+        .popover(isPresented: $viewModel.showDropdown) {
+            BetterList {
+                ForEach(viewModel.filteredValues, id: \.self) { value in
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("\(value[0])")
+                        if value.count > 1 && !value[1].isEmpty {
+                            Text(value[1]).font(.footnote).foregroundColor(Color(uiColor: .systemGray))
+                        }
+                        Divider()
                     }
-                    .id(UUID())
-                    .padding(.top, 5)
-                    .listStyle(.plain)
-                    .overlay (
-                        RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
-                        
-                    )
-                    .frame(minHeight: 45 * CGFloat(viewModel.filteredValues.count <= 4 ? viewModel.filteredValues.count : 4))
-                    .background(Color(UIColor.systemBackground))
-                    .padding(.top, 5)
-                    .onChange(of: viewModel.filteredValues.count) { value in
-                        
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        viewModel.makeSelectionWith(value[0])
+                        selection = viewModel.currentValue
+                        focused = false
                     }
                 }
-            }, alignment: .topLeading
-            
-        )
+                .padding(6)
+            }
+            .frame(minWidth: 200, minHeight: 200)
+        }
         .onChange(of: viewModel.currentValue) { val in
             if !viewModel.selected {
                 viewModel.filterList()
@@ -107,7 +89,46 @@ struct DropdownBlock_Previews: PreviewProvider {
     }
 }
 
-
+//        .overlay(
+//            VStack {
+//                if viewModel.showDropdown {
+//                    Spacer(minLength: 54)
+//                    List {
+//                        ForEach(viewModel.filteredValues, id: \.self) { value in
+//                            VStack(alignment: .leading, spacing: 0) {
+//                                Text("\(value[0])")
+//                                if value.count > 1 && !value[1].isEmpty {
+//                                    Text(value[1]).font(.footnote).foregroundColor(Color(uiColor: .systemGray))
+//                                }
+//                                Divider()
+//                            }
+//                            .listRowSeparator(.hidden)
+//                            .contentShape(Rectangle())
+//                            .onTapGesture {
+//                                viewModel.makeSelectionWith(value[0])
+//                                selection = viewModel.currentValue
+//                                focused = false
+//                            }
+//                        }
+//                    }
+//                    .id(UUID())
+//                    .padding(.top, 5)
+//                    .listStyle(.plain)
+//                    .overlay (
+//                        RoundedRectangle(cornerRadius: 5)
+//                            .stroke(Color(UIColor.systemGray), lineWidth: 0.2)
+//
+//                    )
+//                    .frame(minHeight: 45 * CGFloat(viewModel.filteredValues.count <= 4 ? viewModel.filteredValues.count : 4))
+//                    .background(Color(UIColor.systemBackground))
+//                    .padding(.top, 5)
+//                    .onChange(of: viewModel.filteredValues.count) { value in
+//
+//                    }
+//                }
+//            }, alignment: .topLeading
+//
+//        )
 
 //    .popover(isPresented: $viewModel.showDropdown) {
 //        List {
