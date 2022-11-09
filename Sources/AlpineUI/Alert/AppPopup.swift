@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-public struct AppPopup {
+public struct AppPopup<Content: View> {
     
-    public init(alignment: Alignment = .center, direction: Alignment = .bottom, view: AnyView) {
+    public init(alignment: Alignment = .center, direction: Alignment = .bottom, @ViewBuilder content: () -> Content) {
         self.alignment = alignment
         self.direction = direction
-        self.view = view
+        self.content = content()
     }
     
     public var alignment: Alignment
     public var direction: Alignment
-    public var view: AnyView
+    public var content: Content
 }

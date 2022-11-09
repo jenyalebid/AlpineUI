@@ -8,44 +8,41 @@
 import SwiftUI
 
 class DropdownViewModel: ObservableObject {
-
-    let allValues: [[String]]
+    
+    var allValues: [[String]]
     
     @Published var filteredValues: [[String]] = []
-    @Published var currentValue: String
     
     @Published var showDropdown = false
     @Published var selected = false
     @Published var show = false
     
-    init(values: [[String]], currentValue: String) {
+    init(values: [[String]]) {
         self.allValues = values
-        self.currentValue = currentValue
     }
     
-    func filterList() {
-        if currentValue == "" || currentValue.count == 1 {
+    func filterList(value: String) {
+        if value == "" || value.count == 1 {
             filteredValues = allValues
             return
         }
         
-        let filteredList = allValues
-            .filter { $0[0].localizedCaseInsensitiveContains(currentValue) }
-            .sorted { ($0[0].hasPrefix(currentValue) ? 0 : 1) < ($1[0].hasPrefix(currentValue) ? 0 : 1) }
-
-        selected = false
-
-        if filteredList.isEmpty {
-            showDropdown = false
-        }
-        else {
-            filteredValues = filteredList
-            showDropdown = true
+        var filteredList: [[String]] = []
+        
+    outer: for values in allValues {
+        for string in values {
+            if string.localizedCaseInsensitiveContains(value) {
+                filteredList.append(values)
+                break
+            }
         }
     }
+        
+        selected = false
+        filteredValues = filteredList.sorted { ($0[0].hasPrefix(value) ? 0 : 1) < ($1[0].hasPrefix(value) ? 0 : 1) }
+    }
     
-    func makeSelectionWith(_ value: String) {
-        currentValue = value
+    func makeSelection() {
         selected = true
         showDropdown = false
     }
