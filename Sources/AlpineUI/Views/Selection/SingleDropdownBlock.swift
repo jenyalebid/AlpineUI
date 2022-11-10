@@ -10,11 +10,9 @@ import SwiftUI
 public struct SingleDropdownBlock: View {
     
     @Environment(\.isEnabled) var isEnabled
-    
-    @ObservedObject var viewModel: PickerViewModel
+    @StateObject var viewModel: PickerViewModel
     
     var title: String
-    var values: [[String]]
     var required: Bool
     
     @Binding var selection: String
@@ -22,14 +20,13 @@ public struct SingleDropdownBlock: View {
     
     @State private var show = false
     
-    public init(title: String, values: [[String]], selection: Binding<String>, required: Bool = false, changed: Binding<Bool>) {
+    public init(title: String, values: [PickerOption], selection: Binding<String>, required: Bool = false, changed: Binding<Bool>) {
         self.title = title
-        self.values = values
         self._selection = selection
         self.required = required
         self._changed = changed
         
-        self.viewModel = PickerViewModel(selection: selection.wrappedValue)
+        _viewModel = StateObject(wrappedValue: PickerViewModel(selection: selection.wrappedValue, values: values))
     }
     
     public var body: some View {
@@ -38,20 +35,20 @@ public struct SingleDropdownBlock: View {
             field
                 .popover(isPresented: $show) {
                     ScrollView {
-                        ForEach(values, id: \.self) { value in
+                        ForEach(viewModel.values) { value in
                             Button {
-                                viewModel.selection = value.count > 1 ? value[1] : value[0]
+                                viewModel.selection = value.primaryText
                                 selection = viewModel.selection
                                 show.toggle()
                             } label: {
                                 VStack(alignment: .leading, spacing: 0) {
-                                    Text("\(value[0])")
-                                        .foregroundColor(selection == value[0] ? Color.accentColor : Color(uiColor: .label))
-                                    if value.count > 2 && !value[2].isEmpty {
+                                    Text("\(value.primaryText)")
+                                        .foregroundColor(selection == value.primaryText ? Color.accentColor : Color(uiColor: .label))
+                                    if let secondary = value.secondaryText {
                                         Divider()
                                             .frame(width: 20)
                                             .padding(.bottom, 2)
-                                        Text(value[2])
+                                        Text(secondary)
                                             .font(.footnote)
                                             .foregroundColor(Color(uiColor: .systemGray))
                                     }
@@ -86,8 +83,8 @@ public struct SingleDropdownBlock: View {
     }
 }
 
-struct SingleDropdownBlock_Previews: PreviewProvider {
-    static var previews: some View {
-        SingleDropdownBlock(title: "Dropdown", values: [["112313", "232323", "3434234"], ["43434344", "523433", "65345"], ["7234234", "8234444", "54549"], ["12342340", "11111", "11232"]], selection: .constant("1"), changed: .constant(false))
-    }
-}
+//struct SingleDropdownBlock_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SingleDropdownBlock(title: "Dropdown", values: [["112313", "232323", "3434234"], ["43434344", "523433", "65345"], ["7234234", "8234444", "54549"], ["12342340", "11111", "11232"]], selection: .constant("1"), changed: .constant(false))
+//    }
+//}

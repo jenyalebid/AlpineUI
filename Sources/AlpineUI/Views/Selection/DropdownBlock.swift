@@ -12,7 +12,7 @@ public struct DropdownBlock: View {
     @Environment(\.isEnabled) var isEnabled
     
     var title: String
-    var values: [[String]]
+    var values: [PickerOption]
     var controlField: Bool
     var required: Bool
     
@@ -22,7 +22,7 @@ public struct DropdownBlock: View {
     @FocusState private var focused: Bool
     @StateObject var viewModel: DropdownViewModel
     
-    public init(title: String, values: [[String]], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>) {
+    public init(title: String, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>) {
         self.title = title
         self.values = values
         self._selection = selection
@@ -39,17 +39,19 @@ public struct DropdownBlock: View {
             field
                 .popover(isPresented: $viewModel.showDropdown) {
                     BetterList {
-                        ForEach(viewModel.filteredValues, id: \.self) { value in
+                        ForEach(viewModel.filteredValues) { value in
                             VStack(alignment: .leading, spacing: 0) {
-                                Text("\(value[0])")
-                                if value.count > 1 && !value[1].isEmpty {
-                                    Text(value[1]).font(.footnote).foregroundColor(Color(uiColor: .systemGray))
+                                Text(value.primaryText)
+                                if let secondary = value.secondaryText {
+                                    Text(secondary)
+                                        .font(.footnote)
+                                        .foregroundColor(Color(uiColor: .systemGray))
                                 }
                                 Divider()
                             }
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                selection = value[0]
+                                selection = value.primaryText
                                 viewModel.makeSelection()
                                 focused = false
                             }
@@ -111,11 +113,11 @@ public struct DropdownBlock: View {
     }
 }
 
-struct DropdownBlock_Previews: PreviewProvider {
-    static var previews: some View {
-        DropdownBlock(title: "Dropdown", values: [["54", "2"], ["31", "4"]], selection: .constant("22"), changed: .constant(false))
-    }
-}
+//struct DropdownBlock_Previews: PreviewProvider {
+//    static var previews: some View {
+//        DropdownBlock(title: "Dropdown", values: [["54", "2"], ["31", "4"]], selection: .constant("22"), changed: .constant(false))
+//    }
+//}
 
 //        .overlay(
 //            VStack {

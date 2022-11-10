@@ -42,7 +42,7 @@ public struct Popup<T: View>: ViewModifier, KeyboardReadable {
 //                    .transition(.offset(x: 0, y: d.offset(popupFrame: geometry.frame(in: .global))))
 //                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: alignment)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
-                    .keyboardAdaptive()
+//                    .keyboardAdaptive()
             }
         }
     }

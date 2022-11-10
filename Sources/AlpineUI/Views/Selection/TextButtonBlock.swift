@@ -77,8 +77,8 @@ public struct TextButtonBlock<Destination: View>: View {
 
 struct TextButtonBlock_Previews: PreviewProvider {
     static var previews: some View {
-        TextButtonBlock(image: "person", font: .footnote) {
+        TextButtonBlock(image: "person", font: .footnote, destination:  {
             
-        }
+        })
     }
 }
