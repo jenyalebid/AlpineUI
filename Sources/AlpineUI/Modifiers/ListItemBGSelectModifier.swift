@@ -10,7 +10,7 @@ public struct ListItemBGSelectModifier: ViewModifier {
     var id: UUID?
     var showSelected: Bool
     
-    var selectedColor = Color(hex: "B8E994")
+    var selectedColor = Color(hex: "A2C285")
     var longPressColor = Color(hex: "E17355")
     
     var bgColor: Color? {
