@@ -77,8 +77,13 @@ public struct TextButtonBlock<Destination: View>: View {
 
 struct TextButtonBlock_Previews: PreviewProvider {
     static var previews: some View {
-        TextButtonBlock(image: "person", font: .footnote, destination:  {
-            
-        })
+        HStack {
+            TextButtonBlock(text: "Hello", background: .red, destination:  {
+                
+            })
+            TextButtonBlock(image: "person", height: 41, destination:  {
+                
+            })
+        }
     }
 }
