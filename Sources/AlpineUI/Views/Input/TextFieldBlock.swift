@@ -12,6 +12,7 @@ public struct TextFieldBlock: View {
     @Environment(\.isEnabled) var isEnabled
     
     var title: String
+    var placeholder: String
     var required: Bool
 
     @FocusState private var isFocused: Bool
@@ -19,8 +20,9 @@ public struct TextFieldBlock: View {
     @Binding var value: String
     @Binding var changed: Bool
     
-    public init(title: String, value: Binding<String>, required: Bool = false, changed: Binding<Bool>) {
+    public init(title: String, placeholder: String = "", value: Binding<String>, required: Bool = false, changed: Binding<Bool>) {
         self.title = title
+        self.placeholder = placeholder
         self._value = value
         self.required = required
         self._changed = changed
@@ -29,7 +31,7 @@ public struct TextFieldBlock: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("\(title):").font(.footnote)
-            TextField("", text: $value)
+            TextField(placeholder, text: $value)
                 .focused($isFocused)
                 .padding(6.0)
                 .overlay (
