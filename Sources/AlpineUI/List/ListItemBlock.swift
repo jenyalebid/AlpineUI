@@ -16,7 +16,7 @@ public struct ListItemBlock<Content: View, Destination: View>: View {
     
     @State private var isActive = false
     
-    public init(longPressAction: (() -> ())? = nil, tapAction: (() -> ())? = nil, @ViewBuilder content: @escaping () -> Content, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
+    public init(@ViewBuilder content: @escaping () -> Content, tapAction: (() -> ())? = nil, longPressAction: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
         self.longPressAction = longPressAction
         self.tapAction = tapAction
         self.content = content
