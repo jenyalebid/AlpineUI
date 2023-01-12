@@ -31,7 +31,9 @@ public struct SingleDropdownBlock: View {
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("\(title):").font(.footnote)
+            if title != "" {
+                Text("\(title):").font(.footnote)
+            }
             field
                 .popover(isPresented: $show) {
                     ScrollView {

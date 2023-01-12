@@ -49,3 +49,4 @@ extension View {
         return modifier(ListItemBGSelectModifier(id: id, selectedID: selectedID, showSelected: showSelected))
     }
 }
+
