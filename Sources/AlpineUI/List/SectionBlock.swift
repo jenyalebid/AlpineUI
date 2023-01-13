@@ -28,7 +28,6 @@ public struct SectionBlock<Content: View>: View {
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
             content()
-                .background(Color(uiColor: .systemBackground))
         }
     }
 }
