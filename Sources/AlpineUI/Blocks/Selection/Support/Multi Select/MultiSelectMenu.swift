@@ -7,37 +7,34 @@
 
 import SwiftUI
 
-public struct MultiSelectMenu: View {
+struct MultiSelectMenu: View {
     
-    var values: [[String]]
+    @StateObject var viewModel: MultiSelectMenuViewModel
     
-    @Binding var exisingSelections: String
-    @ObservedObject var viewModel: MultiSelectMenuViewModel
+    @Binding var selections: String
     
-    public init(values: [[String]], exisingSelections: Binding<String>) {
-        self.values = values
-        self._exisingSelections = exisingSelections
-        
-        viewModel = MultiSelectMenuViewModel(existingSelections: exisingSelections.wrappedValue)
+    init(values: [PickerOption], selections: Binding<String>) {
+        self._selections = selections
+        self._viewModel = StateObject(wrappedValue: MultiSelectMenuViewModel(selections: selections.wrappedValue, values: values))
     }
     
-    public var body: some View {
-        VStack {
-            ForEach(values, id: \.self) { value in
+    var body: some View {
+        ScrollView {
+            ForEach(viewModel.values) { value in
                 VStack(spacing: 10) {
                     HStack {
-                        Text("\(value.count > 1 ? value[1] : value[0])")
+                        Text(value.primaryText)
                         Spacer()
-                        if viewModel.selectedValues.contains(value[0]) {
+                        if viewModel.selectedValues.contains(value.primaryText) {
                             Image(systemName: "checkmark")
                         }
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        exisingSelections = viewModel.addRemoveFromSelection(value[0])
+                        selections = viewModel.addRemoveFromSelection(value.primaryText)
                     }
                     .padding(.horizontal, 10.0)
-                    if values.last != value {
+                    if viewModel.values.last != value {
                         Divider()
                     }
                 }
