@@ -12,7 +12,6 @@ public struct DropdownBlock: View {
     @Environment(\.isEnabled) var isEnabled
     
     var title: String
-    var values: [PickerOption]
     var controlField: Bool
     var required: Bool
     
@@ -24,7 +23,6 @@ public struct DropdownBlock: View {
     
     public init(title: String, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>) {
         self.title = title
-        self.values = values
         self._selection = selection
         self.required = required
         self.controlField = controlField

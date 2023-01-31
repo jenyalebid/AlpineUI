@@ -25,8 +25,15 @@ class PickerViewModel: ObservableObject {
     init(selection: String, values: [PickerOption]) {
         self.selection = selection
         self.values = values
-
+        
+        checkEmpty()
         sortValues()
+    }
+    
+    func checkEmpty() {
+        if values.isEmpty {
+            values.append(PickerOption(primaryText: "NULL"))
+        }
     }
 
 

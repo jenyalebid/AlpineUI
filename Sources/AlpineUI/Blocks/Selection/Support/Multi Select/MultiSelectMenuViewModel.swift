@@ -24,11 +24,16 @@ public class MultiSelectMenuViewModel: ObservableObject {
     
     init(selections: String, values: [PickerOption]) {
         self.values = values
+        checkEmpty()
         self.selectedValues = makeArrayFromString(selections)
-        
         sortValues()
     }
     
+    func checkEmpty() {
+        if values.isEmpty {
+            values.append(PickerOption(primaryText: "NULL"))
+        }
+    }
     
     func sortValues() {
         if hasOrder {

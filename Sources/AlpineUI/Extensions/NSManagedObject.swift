@@ -43,4 +43,22 @@ public extension NSManagedObject {
         }
         return result
     }
+    
+    func saveMergeInTo(context: NSManagedObjectContext) {
+        guard let selfContext = self.managedObjectContext else {
+            assertionFailure()
+            return
+        }
+        do {
+            try selfContext.performAndWait {
+                try selfContext.save()
+                try context.performAndWait {
+                    try context.save()
+                }
+            }
+        }
+        catch {
+            print(error.localizedDescription)
+        }
+    }
 }

@@ -19,6 +19,13 @@ class DropdownViewModel: ObservableObject {
     
     init(values: [PickerOption]) {
         self.allValues = values
+        checkEmpty()
+    }
+    
+    func checkEmpty() {
+        if allValues.isEmpty {
+            allValues.append(PickerOption(primaryText: "NULL"))
+        }
     }
     
     func filterList(value: String) {
