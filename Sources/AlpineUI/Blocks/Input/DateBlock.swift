@@ -53,7 +53,7 @@ public struct DateBlock: View {
     }
 }
 
-struct SwiftUIView_Previews: PreviewProvider {
+struct DateBlock_Previews: PreviewProvider {
         
     static var previews: some View {
         DateBlock(title: "Date", date: .constant(Date()))
