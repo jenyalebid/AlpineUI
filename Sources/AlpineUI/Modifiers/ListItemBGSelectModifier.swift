@@ -1,11 +1,15 @@
 import SwiftUI
 
 public struct ListItemBGSelectModifier: ViewModifier {
-
-    @State var isLongPress = false
-    @State var localId: UUID?
     
-    @Binding var selectedID: UUID?
+    enum SelectionState {
+        case selected
+        case longPress
+        case none
+    }
+    
+    @State var state = SelectionState.none
+    @State var selectedID: UUID?
     
     var id: UUID?
     var showSelected: Bool
@@ -14,20 +18,18 @@ public struct ListItemBGSelectModifier: ViewModifier {
     var longPressColor = Color(hex: "E17355")
     
     var bgColor: Color? {
-        if isLongPress && localId == id {
+        switch state {
+        case .selected:
+            return selectedColor
+        case .longPress:
             return longPressColor
+        case .none:
+            return Color(uiColor: .systemBackground)
         }
-        if let id = id {
-            if showSelected && id == selectedID {
-                return selectedColor
-            }
-        }
-        return nil
     }
     
-    public init(id: UUID? = nil, selectedID: Binding<UUID?>?, showSelected: Bool) {
+    public init(id: UUID? = nil, showSelected: Bool) {
         self.id = id
-        self._selectedID = selectedID ?? .constant(nil)
         self.showSelected = showSelected
     }
     
@@ -35,18 +37,29 @@ public struct ListItemBGSelectModifier: ViewModifier {
         content
             .background(bgColor)
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ListItemLongPress"))) { id in
-                localId = id.userInfo?.first?.value as? UUID
-                isLongPress = true
+                if self.id == id.userInfo?.first?.value as? UUID {
+                    state = .longPress
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: Notification.Name("AlertCancel"))) { _ in
-                isLongPress = false
+                state = self.id == selectedID ? .selected : .none
+            }
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("ListItemSelect"))) { id in
+                if let selectedID = id.userInfo?.first?.value as? UUID {
+                    if self.id == selectedID {
+                        state = .selected
+                    }
+                    else {
+                        state = .none
+                    }
+                }
             }
     }
 }
 
 extension View {
-    public func listItemBackGround(id: UUID?, selectedID: Binding<UUID?>?, showSelected: Bool = true) -> some View {
-        return modifier(ListItemBGSelectModifier(id: id, selectedID: selectedID, showSelected: showSelected))
+    public func listItemBackGround(id: UUID?, showSelected: Bool = true) -> some View {
+        return modifier(ListItemBGSelectModifier(id: id, showSelected: showSelected))
     }
 }
 

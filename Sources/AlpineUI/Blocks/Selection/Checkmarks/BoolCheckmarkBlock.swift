@@ -16,10 +16,10 @@ public struct BoolCheckmarkBlock: View {
     
     var spacing: Double
 
-    @Binding var bool: Bool
+    @Binding var bool: NSNumber
     @Binding var changed: Bool
     
-    public init(title: String = "", ch1Title: String = "", ch2Title: String = "", bool: Binding<Bool>, spacing: Double = 20, required: Bool = false, changed: Binding<Bool>) {
+    public init(title: String = "", ch1Title: String = "", ch2Title: String = "", bool: Binding<NSNumber>, spacing: Double = 20, required: Bool = false, changed: Binding<Bool>) {
         self.title = title
         self.ch1Title = ch1Title
         self.ch2Title = ch2Title
@@ -43,14 +43,14 @@ public struct BoolCheckmarkBlock: View {
     
     var checkmarks: some View {
         HStack {
-            CheckmarkBlock(text: ch1Title, checked: .constant(bool ? true : false), changed: .constant(false), independent: false)
+            CheckmarkBlock(text: ch1Title, checked: .constant(bool == true ? true : false), changed: .constant(false), independent: false)
                 .onTapGesture {
                     bool = true
                 }
             Divider()
                 .padding(.horizontal, spacing)
                 .frame(height: 30)
-            CheckmarkBlock(text: ch2Title, checked: .constant(bool ? false : true), changed: .constant(false), independent: false)
+            CheckmarkBlock(text: ch2Title, checked: .constant(bool == false ? true : false), changed: .constant(false), independent: false)
                 .onTapGesture {
                     bool = false
                 }

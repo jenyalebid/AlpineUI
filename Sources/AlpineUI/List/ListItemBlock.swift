@@ -14,9 +14,12 @@ public struct ListItemBlock<Content: View, Destination: View>: View {
     var content: () -> Content
     var destination: () -> Destination
     
+    var guid: UUID?
+    
     @State private var isActive = false
     
-    public init(@ViewBuilder content: @escaping () -> Content, tapAction: (() -> ())? = nil, longPressAction: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
+    public init(guid: UUID?, @ViewBuilder content: @escaping () -> Content, tapAction: (() -> ())? = nil, longPressAction: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
+        self.guid = guid
         self.longPressAction = longPressAction
         self.tapAction = tapAction
         self.content = content
@@ -26,6 +29,7 @@ public struct ListItemBlock<Content: View, Destination: View>: View {
         VStack(spacing: 0) {
             contentView
                 .padding(8)
+                .listItemBackGround(id: guid, showSelected: true)
             Divider()
         }
     }
@@ -45,13 +49,19 @@ public struct ListItemBlock<Content: View, Destination: View>: View {
             )
             .onTapGesture {
                 isActive.toggle()
-                if let tapAction = tapAction {
-                    tapAction()
+                if let tapAction {
+                    if let guid {
+                        NotificationCenter.default.post(name: Notification.Name("ListItemSelect"), object: nil, userInfo: ["id": guid])
+                        tapAction()
+                    }
                 }
             }
             .onLongPressGesture(minimumDuration: 1) {
                 if let longPressAction {
-                    longPressAction()
+                    if let guid {
+                        NotificationCenter.default.post(name: Notification.Name("ListItemLongPress"), object: nil, userInfo: ["id": guid])
+                        longPressAction()
+                    }
                 }
             }
     }
