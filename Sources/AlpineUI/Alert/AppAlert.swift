@@ -33,10 +33,19 @@ public struct AlertAction {
     public init(text: String, role: AlertButtonRole = .regular, action: @escaping (() -> ()) = {}) {
         self.text = text
         self.role = role
-        self.action = action
+        self.action = {
+            AlertAction.actionMaker {
+                action()
+            }
+        }
     }
     
     public var text: String
     public var role: AlertButtonRole
-    public var action: (()->())
+    public var action: () -> ()
+    
+    static func actionMaker(action: () -> ()) {
+        action()
+        NotificationCenter.default.post(name: Notification.Name("AlertCancel"), object: nil)
+    }
 }
