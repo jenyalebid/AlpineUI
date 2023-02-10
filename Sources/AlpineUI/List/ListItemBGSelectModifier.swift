@@ -30,7 +30,7 @@ public struct ListItemBGSelectModifier: ViewModifier {
     
     public init(id: UUID? = nil, showSelected: Bool) {
         self.id = id
-        self._state = State(initialValue: id == ListSelector.selectedGUID ? .selected : .none)
+        self._state = State(initialValue: (id != nil && id == ListSelector.selectedGUID) ? .selected : .none)
         self.showSelected = showSelected
     }
     
@@ -48,7 +48,7 @@ public struct ListItemBGSelectModifier: ViewModifier {
             .onReceive(NotificationCenter.default.publisher(for: Notification.Name("ListItemSelect"))) { id in
                 if let selectedID = id.userInfo?.first?.value as? UUID {
                     ListSelector.selectedGUID = selectedID
-                    if self.id == selectedID {
+                    if (self.id != nil && self.id == selectedID) {
                         state = .selected
                     }
                     else {
