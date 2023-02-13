@@ -55,6 +55,15 @@ public struct BoolCheckmarkBlock: View {
                     bool = false
                 }
         }
+        .padding(6)
+        .overlay (
+            Group {
+                if required && (bool != 0 && bool != 1) {
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color(uiColor: .systemRed), lineWidth: 1.2)
+                }
+            }
+        )
         .onChange(of: bool) { _ in
             changed.toggle()
         }
