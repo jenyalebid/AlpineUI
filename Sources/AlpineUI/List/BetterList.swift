@@ -21,7 +21,6 @@ public struct BetterList<Content: View>: View {
                 content()
             }
         }
-        
     }
 }
 

@@ -39,10 +39,12 @@ public struct MultiSelectBlock: View {
                     MultiSelectMenu(values: values, selections: $selections)
                 }
         }
+        .onChange(of: selections) { _ in
+            changed.toggle()
+        }
         .onTapGesture {
             showPopover.toggle()
         }
-        
     }
 }
 
