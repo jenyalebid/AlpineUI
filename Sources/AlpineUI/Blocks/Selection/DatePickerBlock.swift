@@ -29,8 +29,8 @@ public struct DatePickerBlock: View {
             }
             DatePicker(selection: $value) {}
                 .labelsHidden()
-                .frame(width: 216)
-//                .transformEffect(.init(scaleX: 0.95, y: 0.95))
+                .frame(width: 208)
+                .transformEffect(.init(scaleX: 0.95, y: 0.95))
 
         }
 //        .onChange(of: value) { _ in
