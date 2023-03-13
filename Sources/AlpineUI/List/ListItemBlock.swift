@@ -14,12 +14,15 @@ public struct ListItemBlock<Content: View, Destination: View>: View {
     var content: () -> Content
     var destination: () -> Destination
     
+    var showSelected: Bool
+    
     var guid: UUID?
     
     @State private var isActive = false
     
-    public init(guid: UUID?, @ViewBuilder content: @escaping () -> Content, tapAction: (() -> ())? = nil, longPressAction: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
+    public init(guid: UUID?, showSelected: Bool = false, @ViewBuilder content: @escaping () -> Content, tapAction: (() -> ())? = nil, longPressAction: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
         self.guid = guid
+        self.showSelected = showSelected
         self.longPressAction = longPressAction
         self.tapAction = tapAction
         self.content = content
@@ -29,7 +32,7 @@ public struct ListItemBlock<Content: View, Destination: View>: View {
         VStack(spacing: 0) {
             contentView
                 .padding(8)
-                .listItemBackGround(id: guid, showSelected: true)
+                .listItemBackGround(id: guid, showSelected: showSelected)
             Divider()
         }
     }
@@ -50,9 +53,11 @@ public struct ListItemBlock<Content: View, Destination: View>: View {
             .onTapGesture {
                 isActive.toggle()
                 if let tapAction {
+                    tapAction()
                     if let guid {
-                        NotificationCenter.default.post(name: Notification.Name("ListItemSelect"), object: nil, userInfo: ["id": guid])
-                        tapAction()
+                        if showSelected {
+                            NotificationCenter.default.post(name: Notification.Name("ListItemSelect"), object: nil, userInfo: ["id": guid])
+                        }
                     }
                 }
             }
