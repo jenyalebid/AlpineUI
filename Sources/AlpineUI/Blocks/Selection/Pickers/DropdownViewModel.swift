@@ -39,12 +39,10 @@ class DropdownViewModel: ObservableObject {
         for option in allValues {
             if option.primaryText.localizedCaseInsensitiveContains(value) {
                 filteredList.append(option)
-                break
             }
             else if let secondary = option.secondaryText {
                 if secondary.localizedCaseInsensitiveContains(value) {
                     filteredList.append(option)
-                    break
                 }
             }
         }
