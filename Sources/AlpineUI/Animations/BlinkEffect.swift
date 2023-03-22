@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  BlinkEffect.swift
 //  AlpineUI
 //
 //  Created by Jenya Lebid on 10/25/22.
