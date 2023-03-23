@@ -48,7 +48,13 @@ public class MultiSelectMenuViewModel: ObservableObject {
         if string == "" {
             return []
         }
-        return string.components(separatedBy: ", ")
+        let components = string.components(separatedBy: ", ")
+        if components.count == 1 {
+            if components[0].contains(",") {
+                return string.components(separatedBy: ",")
+            }
+        }
+        return components
     }
     
     func makeStringFromArray(_ array: [String]) -> String {
