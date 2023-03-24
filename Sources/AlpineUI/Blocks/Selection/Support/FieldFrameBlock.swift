@@ -16,7 +16,6 @@ struct FieldFrameBlock: View {
         case TextField
     }
     
-    var title: String
     var required: Bool
     var fieldType: FieldType
     
@@ -24,8 +23,7 @@ struct FieldFrameBlock: View {
     
     @FocusState private var focused: Bool
     
-    init(title: String, selection: Binding<String>, required: Bool = false, fieldType: FieldType) {
-        self.title = title
+    init(selection: Binding<String>, required: Bool = false, fieldType: FieldType) {
         self._selection = selection
         self.required = required
         self.fieldType = fieldType
@@ -43,7 +41,6 @@ struct FieldFrameBlock: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 20)
         .padding(6.0)
-        .foregroundColor(Color(UIColor.label))
         .overlay (
             RoundedRectangle(cornerRadius: 5)
                 .stroke(Color((required && selection == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required && selection == "") ? 1.2 : 0.2)

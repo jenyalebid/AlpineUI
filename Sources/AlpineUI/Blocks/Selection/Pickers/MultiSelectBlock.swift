@@ -34,7 +34,7 @@ public struct MultiSelectBlock: View {
         VStack(alignment: .leading, spacing: 2) {
             Text("\(title):")
                 .font(.footnote)
-            FieldFrameBlock(title: title, selection: $selections, fieldType: .text)
+            FieldFrameBlock(selection: $selections, fieldType: .text)
                 .popover(isPresented: $showPopover) {
                     MultiSelectMenu(values: values, selections: $selections)
                 }
