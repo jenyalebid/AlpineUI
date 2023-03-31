@@ -15,6 +15,8 @@ public struct NumpadBlock<N>: View {
     var required: Bool
     let formatter = NumberFormatter()
     
+    var limit: Double?
+    
     @Binding var value: N
     @State var textValue = ""
     
@@ -23,9 +25,10 @@ public struct NumpadBlock<N>: View {
     @State private var showPad = false
     @State private var localValue = ""
     
-    public init(title: String, value: Binding<N>, required: Bool = false, changed: Binding<Bool>) {
+    public init(title: String, value: Binding<N>, limit: Double? = nil, required: Bool = false, changed: Binding<Bool>) {
         self.title = title
         self._value = value
+        self.limit = limit
         self.required = required
         self._changed = changed
         formatter.numberStyle = .decimal
@@ -70,6 +73,11 @@ public struct NumpadBlock<N>: View {
             showPad.toggle()
         }
         .onChange(of: localValue) { val in
+            if let limit {
+                guard Double(val) ?? 0 <= limit else{
+                    return
+                }
+            }
             if guardCheck(value: val) {
                 modify(val: val)
             }
