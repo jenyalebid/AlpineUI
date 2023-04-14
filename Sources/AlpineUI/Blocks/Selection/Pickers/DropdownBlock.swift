@@ -96,6 +96,7 @@ public struct DropdownBlock: View {
             .frame(height: 20)
             .padding(6.0)
             .foregroundColor(Color(UIColor.label))
+            .autocorrectionDisabled(true)
             .overlay (
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(Color((required && selection == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required && selection == "") ? 1.2 : 0.2)
