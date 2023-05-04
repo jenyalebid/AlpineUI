@@ -22,8 +22,8 @@ public struct SlideGestureModifier: ViewModifier {
     
     public func body(content: Content) -> some View {
         content
-            .shadow(color: Color(uiColor: colorScheme == .light ? .systemFill : .black), radius: 2, x: viewModel.shadow, y: viewModel.shadow)
             .offset(x: viewModel.xOffset, y: viewModel.yOffset)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: viewModel.alignmnet)
             .transition(.move(edge: viewModel.slideEdge))
             .gesture(
                 DragGesture()
