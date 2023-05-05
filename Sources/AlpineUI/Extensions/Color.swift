@@ -9,76 +9,54 @@ import SwiftUI
 import UIKit
 
 extension Color {
-    
-    public init(hexString: String) {
-         let scanner = Scanner(string: hexString)
-         var hexValue: UInt64 = 0
-         if scanner.scanHexInt64(&hexValue) {
-             let r = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
-             let g = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
-             let b = CGFloat((hexValue & 0x0000FF00) >> 8) / 255.0
-             let a = CGFloat(hexValue & 0x000000FF) / 255.0
-             
-             self.init(red: r, green: g, blue: b, opacity: a)
-         } else {
-             self.init(.red) // Fallback color in case of an error
-         }
-     }
-    
+    // alpha is in last place
+//    public init(hexString: String) {
+//        let scanner = Scanner(string: hexString)
+//        var hexValue: UInt64 = 0
+//        if scanner.scanHexInt64(&hexValue) {
+//            let r = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
+//            let g = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
+//            let b = CGFloat((hexValue & 0x0000FF00) >> 8) / 255.0
+//            let a = CGFloat(hexValue & 0x000000FF) / 255.0
+//
+//            self.init(red: r, green: g, blue: b, opacity: a)
+//        } else {
+//            self.init(.black)
+//        }
+//    }
+
+    // alpha is in first place
     public init(hex: String) {
-        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        var hexSanitized: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
-
-        var rgb: UInt64 = 0
-
-        var r: CGFloat = 0.0
-        var g: CGFloat = 0.0
-        var b: CGFloat = 0.0
-        var a: CGFloat = 1.0
-
-        let length = hexSanitized.count
-
-        guard Scanner(string: hexSanitized).scanHexInt64(&rgb) else {
+        if (hexSanitized.count != 6 && hexSanitized.count != 8) {
             self.init(CGColor.init(red: 0, green: 0, blue: 0, alpha: 1))
             return
         }
-
-        if length == 6 {
-            r = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
-            g = CGFloat((rgb & 0x00FF00) >> 8) / 255.0
-            b = CGFloat(rgb & 0x0000FF) / 255.0
-
-        } else if length == 8 {
-            r = CGFloat((rgb & 0xFF000000) >> 24) / 255.0
-            g = CGFloat((rgb & 0x00FF0000) >> 16) / 255.0
-            b = CGFloat((rgb & 0x0000FF00) >> 8) / 255.0
-            a = CGFloat(rgb & 0x000000FF) / 255.0
-
-        } else {
-            self.init(CGColor.init(red: 0, green: 0, blue: 0, alpha: 1))
-        }
+        var rgbValue: UInt64 = 0
+        Scanner(string: hexSanitized).scanHexInt64(&rgbValue)
+        let a: CGFloat = hexSanitized.count == 6 ? 1.0 : CGFloat((rgbValue & 0xFF000000) >> 24) / 255.0
+        let r: CGFloat = CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0
+        let g: CGFloat = CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0
+        let b: CGFloat = CGFloat( rgbValue & 0x0000FF) / 255.0
 
         self.init(red: r, green: g, blue: b, opacity: a)
     }
-    
-    public func toHex() -> String? {
+
+    public func toHex() -> String {
         let uic = UIColor(self)
-        guard let components = uic.cgColor.components, components.count >= 3 else {
-            return nil
+        guard let components = uic.cgColor.components, (components.count == 3 || components.count == 4) else {
+            return "#ff000000"
         }
         let r = Float(components[0])
         let g = Float(components[1])
         let b = Float(components[2])
-        var a = Float(1.0)
-
-        if components.count >= 4 {
-            a = Float(components[3])
-        }
+        let a = components.count == 4 ? Float(components[3]) : 1.0
 
         if a != Float(1.0) {
-            return String(format: "%02lX%02lX%02lX%02lX", lroundf(a * 255), lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
+            return String(format: "#%02lX%02lX%02lX%02lX", lroundf(a * 255), lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
         } else {
-            return String(format: "%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
+            return String(format: "#%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
         }
     }
 }
