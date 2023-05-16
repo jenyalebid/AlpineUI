@@ -17,8 +17,10 @@ public struct ListItemBlock<Content: View, Destination: View>: View {
     var showSelected: Bool
     
     var guid: UUID?
-    
+        
     @State private var isActive = false
+    
+    @ObservedObject var selection = SelectionManager.shared
     
     public init(guid: UUID?, showSelected: Bool = false, @ViewBuilder content: @escaping () -> Content, tapAction: (() -> ())? = nil, longPressAction: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
         self.guid = guid
