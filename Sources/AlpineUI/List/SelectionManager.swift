@@ -5,33 +5,60 @@
 //  Created by Jenya Lebid on 5/16/23.
 //
 
-import Foundation
+import SwiftUI
 
 public class SelectionManager: ObservableObject {
     
     public static var shared = SelectionManager()
     
     @Published public var selectedItem: UUID?
-    @Published public var highlightedItem: UUID?
  
     private init() {}
 }
 
 public extension SelectionManager {
     
-    static func select(_ guid: UUID) {
+    static func select(_ guid: UUID?) {
         SelectionManager.shared.selectedItem = guid
     }
     
     static func deselect() {
         SelectionManager.shared.selectedItem = nil
     }
+}
+
+struct SelectionModifier: ViewModifier {
     
-    static func highlight(_ guid: UUID) {
-        SelectionManager.shared.highlightedItem = guid
+    @ObservedObject var manager = SelectionManager.shared
+    
+    var selectedColor = Color(hex: "A2C285")
+    var regularColor = Color(uiColor: .systemBackground)
+    
+    var guid: UUID?
+    
+    init(guid: UUID?) {
+        self.guid = guid
     }
     
-    static func unhighlight() {
-        SelectionManager.shared.highlightedItem = nil
+    func body(content: Content) -> some View {
+        content
+            .background(backgroundColor)
+    }
+    
+    var backgroundColor: Color {
+        guard let guid else {
+            return regularColor
+        }
+        if manager.selectedItem == guid {
+            return selectedColor
+        }
+        return regularColor
+    }
+}
+
+public extension View {
+    
+    func selectable(for id: UUID?) -> some View {
+        modifier(SelectionModifier(guid: id))
     }
 }
