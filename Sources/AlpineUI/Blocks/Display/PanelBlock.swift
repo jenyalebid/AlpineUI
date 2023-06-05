@@ -20,6 +20,7 @@ public struct SizeFrame {
     var alignment: Alignment
 }
 
+@available(iOS 16.0, *)
 public struct PanelBlock<Content: View>: View {
     
     @Environment(\.colorScheme) var colorScheme
@@ -36,46 +37,34 @@ public struct PanelBlock<Content: View>: View {
     }
     
     public var body: some View {
-        if isPresented {
-            panel
+        VStack {
+            if isPresented {
+                panel
+            }
         }
     }
     
     var panel: some View {
-        NavigationView {
-            content
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            withAnimation {
-                                isPresented.toggle()
-                            }
-                        } label: {
-                            Image(systemName: "xmark")
-                        }
-                    }
-                }
-        }
-        .navigationViewStyle(.stack)
-        .zIndex(1)
-        .background(Color(uiColor: .systemBackground))
-        .cornerRadius(5)
-        .shadow(color: Color(uiColor: colorScheme == .light ? .systemFill : .black), radius: 2)
-        .frame(width: frame.width, height: frame.height)
-        .slideGesture(show: $isPresented, alignment: frame.alignment)
+        content
+            .frame(width: frame.width, height: frame.height)
+            .background(Color(uiColor: .systemBackground))
+            .cornerRadius(5)
+            .shadow(radius: 2)
+            .draggable(isPresented: $isPresented, alignment: frame.alignment)
     }
 }
 
-struct SwiftUIView_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            PanelBlock(isPresented: .constant(true), frame: SizeFrame(alignment: .trailing)) {
-                Text("Hello There")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-        }
-        .padding()
-        .background(Color.blue)
-        
-    }
-}
+//struct SwiftUIView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        VStack {
+//            PanelBlock(isPresented: .constant(true), frame: SizeFrame(alignment: .trailing)) {
+//                Text("Hello There")
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            }
+//        }
+//        .padding()
+//        .background(Color.blue)
+//
+//    }
+//}
