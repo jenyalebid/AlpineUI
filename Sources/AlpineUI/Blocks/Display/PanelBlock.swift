@@ -7,19 +7,6 @@
 
 import SwiftUI
 
-public struct SizeFrame {
-    
-    public init(height: CGFloat? = nil, width: CGFloat? = nil, alignment: Alignment) {
-        self.height = height
-        self.width = width
-        self.alignment = alignment
-    }
-    
-    var height: CGFloat?
-    var width: CGFloat?
-    var alignment: Alignment
-}
-
 @available(iOS 16.0, *)
 public struct PanelBlock<Content: View>: View {
     
@@ -28,11 +15,11 @@ public struct PanelBlock<Content: View>: View {
     public var content: Content
     
     @Binding var isPresented: Bool
-    var frame: SizeFrame
+    var alignment: Alignment
     
-    public init(isPresented: Binding<Bool>, frame: SizeFrame, @ViewBuilder content: () -> Content) {
+    public init(isPresented: Binding<Bool>, alignment: Alignment, @ViewBuilder content: () -> Content) {
         self._isPresented = isPresented
-        self.frame = frame
+        self.alignment = alignment
         self.content = content()
     }
     
@@ -46,11 +33,33 @@ public struct PanelBlock<Content: View>: View {
     
     var panel: some View {
         content
-            .frame(width: frame.width, height: frame.height)
+            .panel(isPresented: $isPresented, alignment: alignment)
+    }
+}
+
+struct PanelModifier: ViewModifier {
+    
+    @Binding var isPresented: Bool
+    var alignment: Alignment
+    
+    public init(isPresented: Binding<Bool>, alignment: Alignment) {
+        self._isPresented = isPresented
+        self.alignment = alignment
+    }
+    
+    public func body(content: Content) -> some View {
+        content
             .background(Color(uiColor: .systemBackground))
             .cornerRadius(5)
             .shadow(radius: 2)
-            .draggable(isPresented: $isPresented, alignment: frame.alignment)
+            .draggable(isPresented: $isPresented, alignment: alignment)
+    }
+}
+
+public extension View {
+    
+    func panel(isPresented: Binding<Bool>, alignment: Alignment) -> some View {
+        modifier(PanelModifier(isPresented: isPresented, alignment: alignment))
     }
 }
 
