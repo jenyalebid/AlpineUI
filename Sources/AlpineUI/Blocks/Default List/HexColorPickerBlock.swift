@@ -22,7 +22,7 @@ public struct HexColorPickerBlock: View {
     
     public var body: some View {
         ColorPicker(selection: $color) {
-            Text(title)
+            ListLabel(title)
         }
         .onChange(of: color) { newValue in
             colorText = newValue.toHex()

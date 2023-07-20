@@ -31,7 +31,7 @@ public struct ListSliderBlock: View {
         self.valueType = .double(value)
     }
 
-    internal init(title: String, min: Float, max: Float, value: Binding<Float>) {
+    public init(title: String, min: Float, max: Float, value: Binding<Float>) {
         self.title = title
         self.valueRange = Double(min)...Double(max)
         self.valueType = .float(value)
@@ -40,7 +40,7 @@ public struct ListSliderBlock: View {
     public var body: some View {
         GeometryReader { geometry in
             HStack {
-                Text("\(title)")
+                ListLabel(title)
                     .frame(width: geometry.size.width / 3, alignment: .leading)
                 slider
             }
