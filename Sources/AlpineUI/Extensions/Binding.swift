@@ -7,9 +7,16 @@
 
 import SwiftUI
 
-extension Binding {
+public extension Binding {
     
-     public func toUnwrapped<T>(defaultValue: T) -> Binding<T> where Value == Optional<T>  {
+     func toUnwrapped<T>(defaultValue: T) -> Binding<T> where Value == Optional<T>  {
         Binding<T>(get: { self.wrappedValue ?? defaultValue }, set: { self.wrappedValue = $0 })
     }
+}
+
+public func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
+    Binding(
+        get: { lhs.wrappedValue ?? rhs },
+        set: { lhs.wrappedValue = $0 }
+    )
 }
