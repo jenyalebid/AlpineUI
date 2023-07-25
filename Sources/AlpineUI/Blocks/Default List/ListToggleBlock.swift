@@ -10,20 +10,43 @@ import SwiftUI
 public struct ListToggleBlock: View {
     
     var title: String
+    private var showTitle: Bool
+    
     @Binding var isOn: Bool
     
     public init(title: String, isOn: Binding<Bool>) {
         self.title = title
         self._isOn = isOn
+        
+        self.showTitle = true
+    }
+    
+    public init(isOn: Binding<Bool>) {
+        self.title = ""
+        self._isOn = isOn
+        
+        self.showTitle = false
     }
     
     public var body: some View {
+        if showTitle {
+            titleToggle
+        }
+        else {
+            toggle
+        }
+    }
+    
+    var titleToggle: some View {
         HStack {
             ListLabel(title)
             Spacer()
-            Toggle(title, isOn: $isOn)
-                .labelsHidden()
+            toggle
         }
+    }
+    var toggle: some View {
+        Toggle(title, isOn: $isOn)
+            .labelsHidden()
     }
 }
 

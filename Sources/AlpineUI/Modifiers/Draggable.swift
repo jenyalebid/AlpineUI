@@ -17,13 +17,12 @@ struct DraggableModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-//            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
             .offset(x: isHorizontal ? translation.width : 0,
                     y: !isHorizontal ? translation.height : 0)
             .animation(.spring(), value: translation)
             .transition(.move(edge: Edge(from: alignment)))
             .gesture(
-                DragGesture()
+                DragGesture(minimumDistance: 100)
                     .onChanged { value in
                         switch alignment {
                         case .top, .bottom:

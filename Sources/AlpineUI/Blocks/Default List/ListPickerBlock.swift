@@ -11,17 +11,28 @@ public struct ListPickerBlock<PickerValue: Hashable, Style: PickerStyle, PickerV
     
     var title: String
     var style: Style
-    var showLabel: Bool
+    
+    private var showLabel: Bool
     
     @Binding var value: PickerValue
     @ViewBuilder var values: PickerValues
     
-    public init(title: String, style: Style = .automatic, showLabel: Bool = true, value: Binding<PickerValue>, @ViewBuilder values: () -> PickerValues) {
+    public init(title: String, style: Style = .automatic, value: Binding<PickerValue>, @ViewBuilder values: () -> PickerValues) {
         self.title = title
         self.style = style
-        self.showLabel = showLabel
         self._value = value
         self.values = values()
+        
+        self.showLabel = true
+    }
+    
+    public init(style: Style = .automatic, value: Binding<PickerValue>, @ViewBuilder values: () -> PickerValues) {
+        self.style = style
+        self._value = value
+        self.values = values()
+        
+        title = ""
+        showLabel = false
     }
     
     public var body: some View {
