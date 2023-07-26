@@ -10,19 +10,40 @@ import SwiftUI
 public struct ListTextFieldBlock: View {
     
     var title: String
+    var placeHolder: String?
     @Binding var content: String
-    
-    public init(title: String, content: Binding<String>) {
+        
+    public init(title: String, placeHolder: String? = nil, content: Binding<String>) {
         self.title = title
+        self.placeHolder = placeHolder
         self._content = content
+    }
+    
+    public init(placeHolder: String? = nil, content: Binding<String>) {
+        self.placeHolder = placeHolder
+        self._content = content
+        self.title = ""
     }
 
     public var body: some View {
+        if title.isEmpty {
+            textField
+        }
+        else {
+            labelTextField
+        }
+    }
+    
+    var labelTextField: some View {
         VStack(alignment: .leading, spacing: 3) {
             ListLabel(title)
-            TextField(title, text: $content)
-                .textFieldStyle(.roundedBorder)
+            textField
         }
+    }
+    
+    var textField: some View {
+        TextField(placeHolder ?? title, text: $content)
+            .textFieldStyle(.roundedBorder)
     }
 }
 

@@ -21,9 +21,13 @@ public struct HexColorPickerBlock: View {
     }
     
     public var body: some View {
-        ColorPicker(selection: $color) {
+        HStack {
             ListLabel(title)
+            Spacer()
+            ColorPicker(title, selection: $color)
+                .labelsHidden()
         }
+        .contentShape(Rectangle())
         .onChange(of: color) { newValue in
             colorText = newValue.toHex()
         }
