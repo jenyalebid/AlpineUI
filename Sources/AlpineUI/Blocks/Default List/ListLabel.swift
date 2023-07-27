@@ -17,7 +17,7 @@ struct ListLabel: View {
     
     var body: some View {
         Text(content + ":")
-            .fontWeight(.semibold)
+//            .fontWeight(.semibold)
             .font(.caption)
     }
 }
