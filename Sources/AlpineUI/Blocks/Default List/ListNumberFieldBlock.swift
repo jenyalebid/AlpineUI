@@ -9,14 +9,21 @@ import SwiftUI
 
 public struct ListNumberFieldBlock<T>: View where T: Numeric & LosslessStringConvertible {
     
-    var title: String
+    var label: String
     @Binding var value: T
     
     var formatter: NumberFormatter
     var keyboardType: UIKeyboardType
     
     public init(title: String, value: Binding<T>, formatter: NumberFormatter = NumberFormatter(), keyboardType: UIKeyboardType = .decimalPad) {
-        self.title = title
+        self.label = title
+        self._value = value
+        self.formatter = formatter
+        self.keyboardType = keyboardType
+    }
+    
+    public init(label: String, value: Binding<T>, formatter: NumberFormatter = NumberFormatter(), keyboardType: UIKeyboardType = .decimalPad) {
+        self.label = label
         self._value = value
         self.formatter = formatter
         self.keyboardType = keyboardType
@@ -24,8 +31,8 @@ public struct ListNumberFieldBlock<T>: View where T: Numeric & LosslessStringCon
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            ListLabel(title)
-            TextField(title, value: $value, formatter: formatter)
+            ListLabel(label)
+            TextField(label, value: $value, formatter: formatter)
                 .textFieldStyle(.roundedBorder)
                 .keyboardType(keyboardType)
         }
