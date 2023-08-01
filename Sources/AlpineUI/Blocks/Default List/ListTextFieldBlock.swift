@@ -6,23 +6,29 @@
 //
 
 import SwiftUI
+import JSwiftUI
 
 public struct ListTextFieldBlock: View {
     
     var title: String
     var placeHolder: String?
     @Binding var content: String
+    
+    var required: Bool
         
-    public init(title: String, placeHolder: String? = nil, content: Binding<String>) {
+    public init(title: String, placeHolder: String? = nil, content: Binding<String>, required: Bool = false) {
         self.title = title
         self.placeHolder = placeHolder
         self._content = content
+        
+        self.required = required
     }
     
     public init(placeHolder: String? = nil, content: Binding<String>) {
         self.placeHolder = placeHolder
         self._content = content
         self.title = ""
+        required = false
     }
 
     public var body: some View {
@@ -43,6 +49,7 @@ public struct ListTextFieldBlock: View {
     
     var textField: some View {
         TextField(placeHolder ?? title, text: $content)
+            .requiredOutline(required && content.isEmpty)
             .textFieldStyle(.roundedBorder)
     }
 }

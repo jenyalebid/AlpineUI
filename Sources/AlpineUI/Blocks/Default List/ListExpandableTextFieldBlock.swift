@@ -6,35 +6,31 @@
 //
 
 import SwiftUI
+import JSwiftUI
 
 public struct ListExpandableTextFieldBlock: View {
     
     var label: String
     @Binding var value: String
     
-    public init(label: String, value: Binding<String>) {
+    var required: Bool
+    
+    public init(label: String, value: Binding<String>, required: Bool = false) {
         self.label = label
         self._value = value
+        self.required = required
     }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             ListLabel(label)
-                .padding(.top)
             field
         }
     }
     
     var field: some View {
-        ScrollView(showsIndicators: false) {
-            ZStack {
-                TextEditor(text: $value)
-                RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder()
-                    .foregroundColor(Color(uiColor: .systemGray6))
-            }
-            .frame(minHeight: 40, maxHeight: 200)
-        }
+        ExpandableTextField(value: $value)
+            .requiredOutline(required && value.isEmpty)
     }
 }
 

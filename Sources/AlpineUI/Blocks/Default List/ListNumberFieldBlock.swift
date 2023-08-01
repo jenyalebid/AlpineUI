@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JSwiftUI
 
 public struct ListNumberFieldBlock<T>: View where T: Numeric & LosslessStringConvertible {
     

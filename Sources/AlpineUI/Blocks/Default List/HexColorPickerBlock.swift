@@ -39,7 +39,7 @@ public struct HexColorPickerBlock: View {
     }
 }
 
-struct SwiftUIView_Previews: PreviewProvider {
+struct HexColorPickerBlock_Previews: PreviewProvider {
     static var previews: some View {
         HexColorPickerBlock(title: "Color", color: .constant("#479FD3"))
     }
