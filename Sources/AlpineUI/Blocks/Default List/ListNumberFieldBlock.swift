@@ -10,6 +10,8 @@ import JSwiftUI
 
 public struct ListNumberFieldBlock<T>: View where T: Numeric & LosslessStringConvertible {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var label: String
     @Binding var value: T
     
@@ -33,9 +35,15 @@ public struct ListNumberFieldBlock<T>: View where T: Numeric & LosslessStringCon
     public var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             ListLabel(label)
-            TextField(label, value: $value, formatter: formatter)
-                .textFieldStyle(.roundedBorder)
-                .keyboardType(keyboardType)
+            ZStack {
+                RoundedRectangle(cornerRadius: 5)
+                    .strokeBorder()
+                    .foregroundColor(Color(uiColor: .systemGray3))
+                    .background(Color(uiColor: colorScheme == .light ? .systemGray6 : .black))
+                TextField(label, value: $value, formatter: formatter)
+                    .keyboardType(keyboardType)
+                    .padding(.horizontal, 5)
+            }
         }
     }
 }

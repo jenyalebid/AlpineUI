@@ -36,9 +36,9 @@ public struct ListBoolBlock: View {
     
     var bool: some View {
         BooleanPicker(leftLabel: left, rightLabel: right, value: $value)
-            .requiredOutline(required && value != 0 && value != 1)
-            .frame(maxWidth: .infinity)
             .frame(height: 26)
+            .requiredOutline(required && value != 0 && value != 1)
+            .frame(maxWidth: .infinity, minHeight: 26)
     }
 }
 
