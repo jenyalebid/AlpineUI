@@ -39,7 +39,7 @@ public struct ListNumberFieldBlock<T>: View where T: Numeric & LosslessStringCon
                 RoundedRectangle(cornerRadius: 5)
                     .strokeBorder()
                     .foregroundColor(Color(uiColor: .systemGray3))
-                    .background(Color(uiColor: colorScheme == .light ? .systemGray6 : .black))
+                    .background(.ultraThickMaterial)
                 TextField(label, value: $value, formatter: formatter)
                     .keyboardType(keyboardType)
                     .padding(.horizontal, 5)
