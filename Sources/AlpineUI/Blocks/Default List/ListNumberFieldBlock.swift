@@ -22,6 +22,7 @@ public struct ListNumberFieldBlock<T>: View where T: Numeric & LosslessStringCon
         self.label = title
         self._value = value
         self.formatter = formatter
+        self.formatter.maximumIntegerDigits = 40
         self.keyboardType = keyboardType
     }
     

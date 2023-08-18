@@ -12,6 +12,7 @@ public struct SettingBlock<Content: View, Destination: View>: View {
     var image: String
     var color: Color = .accentColor
     var title: String
+    var subtitle: String?
     
     var displayContent: () -> Content
     var destination: () -> Destination
@@ -19,10 +20,11 @@ public struct SettingBlock<Content: View, Destination: View>: View {
     
     @State var isActiveNavigation = false
     
-    public init(image: String, color: Color = .accentColor, title: String, @ViewBuilder displayContent: @escaping () -> Content = {EmptyView()}, destination: @escaping (() -> Destination) = {EmptyView()}, action: (() -> ())? = nil) {
+    public init(image: String, color: Color = .accentColor, title: String, subtitle: String? = nil, @ViewBuilder displayContent: @escaping () -> Content = {EmptyView()}, destination: @escaping (() -> Destination) = {EmptyView()}, action: (() -> ())? = nil) {
         self.image = image
         self.color = color
         self.title = title
+        self.subtitle = subtitle
         self.displayContent = displayContent
         self.destination = destination
         self.action = action
@@ -42,9 +44,17 @@ public struct SettingBlock<Content: View, Destination: View>: View {
             }
             .padding(.trailing, 6)
             .foregroundColor(color)
-            Text(title)
-                .font(.headline)
-                .fontWeight(.medium)
+            VStack(alignment: .leading) {
+                Text(title)
+                    .font(.headline)
+                    .fontWeight(.medium)
+                if let subtitle {
+                    Text(subtitle)
+                        .font(.caption2)
+                        .foregroundColor(Color(uiColor: .systemGray))
+                        .lineLimit(4)
+                }
+            }
             Spacer()
             displayContent()
             if !(destination is (() -> EmptyView)) {
