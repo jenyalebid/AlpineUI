@@ -32,6 +32,33 @@ public struct SettingBlock<Content: View, Destination: View>: View {
     }
     
     public var body: some View {
+        if action != nil || !(destination is (() -> EmptyView)) {
+            blockContent
+                .background(
+                    Group {
+                        if !(destination is (() -> EmptyView)) {
+                            NavigationLink(isActive: $isActiveNavigation, destination: destination) {EmptyView()}
+                        }
+                    }
+                )
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded {
+                            if let action = action {
+                                action()
+                            }
+                            if !(destination is (() -> EmptyView)) {
+                                isActiveNavigation.toggle()
+                            }
+                        }
+                )
+        }
+        else {
+            blockContent
+        }
+    }
+    
+    var blockContent: some View {
         HStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
@@ -57,24 +84,9 @@ public struct SettingBlock<Content: View, Destination: View>: View {
             }
             Spacer()
             displayContent()
-            if !(destination is (() -> EmptyView)) {
-                NavigationLink(isActive: $isActiveNavigation, destination: destination) {EmptyView()}
-            }
         }
         .padding(2)
         .contentShape(Rectangle())
-        .simultaneousGesture(
-            TapGesture()
-                .onEnded {
-                    if let action = action {
-                        action()
-                    }
-                    if !(destination is (() -> EmptyView)) {
-                        isActiveNavigation.toggle()
-                    }
-                }
-        )
-
     }
 }
 
