@@ -9,21 +9,6 @@ import SwiftUI
 import UIKit
 
 extension Color {
-    // alpha is in last place
-//    public init(hexString: String) {
-//        let scanner = Scanner(string: hexString)
-//        var hexValue: UInt64 = 0
-//        if scanner.scanHexInt64(&hexValue) {
-//            let r = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
-//            let g = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
-//            let b = CGFloat((hexValue & 0x0000FF00) >> 8) / 255.0
-//            let a = CGFloat(hexValue & 0x000000FF) / 255.0
-//
-//            self.init(red: r, green: g, blue: b, opacity: a)
-//        } else {
-//            self.init(.black)
-//        }
-//    }
 
     // alpha is in first place
     public init(hex: String) {
