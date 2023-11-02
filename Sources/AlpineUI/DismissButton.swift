@@ -32,7 +32,7 @@ public struct DismissButton: View {
             }
         } label: {
             Image(systemName: "xmark")
-                .font(.headline)
+                .imageScale(.large)
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.circle)
