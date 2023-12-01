@@ -23,7 +23,7 @@ struct MultiSelectMenu: View {
             ForEach(viewModel.values) { value in
                 VStack(spacing: 10) {
                     HStack {
-                        Text(value.primaryText)
+                        Text(value.rawText ?? value.primaryText)
                         Spacer()
                         if viewModel.selectedValues.contains(value.primaryText) {
                             Image(systemName: "checkmark")
