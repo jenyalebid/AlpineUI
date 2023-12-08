@@ -14,7 +14,7 @@ class Symbols {
     let allSymbols: [String]
 
     private init() {
-        self.allSymbols = Self.fetchSymbols(fileName: "sfsymbol4")
+        self.allSymbols = Self.fetchSymbols(fileName: "sfsymbol4_1")
     }
 
     private static func fetchSymbols(fileName: String) -> [String] {
