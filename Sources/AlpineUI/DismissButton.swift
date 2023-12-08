@@ -35,7 +35,6 @@ public struct DismissButton: View {
                 .imageScale(.large)
         }
         .buttonStyle(.bordered)
-        .buttonBorderShape(.circle)
         .tint(.secondary)
     }
 }
