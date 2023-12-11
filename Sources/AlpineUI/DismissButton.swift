@@ -1,6 +1,6 @@
 //
-//  SwiftUIView.swift
-//  
+//  DismissButton.swift
+//  AlpineUI
 //
 //  Created by Jenya Lebid on 10/24/23.
 //
@@ -33,15 +33,25 @@ public struct DismissButton: View {
         } label: {
             Image(systemName: "xmark")
                 .imageScale(.large)
+                .tint(.secondary)
+                .padding(9)
+                .background(Color(uiColor: .systemGray5))
+                .clipShape(Circle())
         }
-        .buttonStyle(.bordered)
-        .tint(.secondary)
+
     }
 }
 
 #Preview {
     if #available(iOS 17, *) {
-        DismissButton()
+        NavigationStack {
+            List {
+                Text("...")
+            }
+            .toolbar {
+                DismissButton()
+            }
+        }
     } else {
         EmptyView()
     }
