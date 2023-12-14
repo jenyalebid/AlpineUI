@@ -16,7 +16,6 @@ struct FillPatternPickerView: View {
     private static let viewCornerRadius: CGFloat = 8
     private static let unselectedItemBackgroundColor = Color(UIColor.systemBackground)
     private static let selectedItemBackgroundColor = Color.accentColor
-    private static let backgroundColor = Color(UIColor.systemGroupedBackground)
     
     @State var hatchWidth: Int = 10
     @State var fillPercent: Int = 0
@@ -26,7 +25,7 @@ struct FillPatternPickerView: View {
     
     var title: String
     
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     init(title: String, pattern: Binding<String>, patternView: FillPatternView) {
         self.title = title
@@ -35,13 +34,16 @@ struct FillPatternPickerView: View {
     }
 
     private var patternGrid: some View {
-        VStack {
-            ScrollView {
+        List {
+            Section {
+                ListSliderBlock(title: "Hatch Width", min: 20, max: 50, value: $hatchWidth)
+                ListSliderBlock(title: "Fill Percent", min: 0, max: 100, value: $fillPercent)
+            } header: {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: Self.gridDimension, maximum: Self.gridDimension))]) {
                     ForEach(Self.patterns, id: \.self) { thisPattern in
                         Button {
                             pattern = thisPattern
-                            presentationMode.wrappedValue.dismiss()
+                            dismiss()
                         } label: {
                             if thisPattern == pattern {
                                 patternView.getView(for: thisPattern, hatchWidth: hatchWidth, fillPercent: fillPercent)
@@ -58,31 +60,21 @@ struct FillPatternPickerView: View {
                             }
                         }
                         .buttonStyle(.plain)
-                        .hoverEffect(.lift)
                     }
                 }
-                .padding(.horizontal)
+                .padding(.bottom)
             }
-            Group {
-                ListSliderBlock(title: "Hatch Width", min: 20, max: 50, value: $hatchWidth)
-                    .padding(.horizontal)
-                ListSliderBlock(title: "Fill Percent", min: 0, max: 100, value: $fillPercent)
-                    .padding(.horizontal)
-            }
-            .frame(maxHeight: 50)
         }
+        .listStyle(.insetGrouped)
     }
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                Self.backgroundColor.edgesIgnoringSafeArea(.all)
-                patternGrid
-                    .navigationTitle(title)
-            }
+            patternGrid
             .toolbar {
                 DismissButton()
             }
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

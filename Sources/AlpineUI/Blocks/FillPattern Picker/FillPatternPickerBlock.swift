@@ -39,7 +39,7 @@ public struct FillPatternPickerBlock: View {
             )
             .popover(isPresented: $isPresented) {
                 FillPatternPickerView(title: title, pattern: $pattern, patternView: patternView)
-                    .frame(minWidth: 200, idealWidth: 500, maxWidth: .infinity, minHeight: 300, idealHeight: 500, maxHeight: .infinity)
+                    .frame(minWidth: 200, idealWidth: 500, maxWidth: .infinity, minHeight: 300, idealHeight: 400, maxHeight: .infinity)
             }
         }
     }
