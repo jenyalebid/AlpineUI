@@ -32,9 +32,9 @@ public struct DismissButton: View {
             }
         } label: {
             Image(systemName: "xmark")
-                .imageScale(.large)
+                .imageScale(.medium)
                 .tint(.secondary)
-                .padding(9)
+                .padding(8)
                 .background(Color(uiColor: .systemGray5))
                 .clipShape(Circle())
         }
