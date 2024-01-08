@@ -48,7 +48,7 @@ public struct ListTextFieldBlock: View {
     }
     
     var textField: some View {
-        TextField(placeHolder ?? title, text: $content)
+        TextField(placeHolder ?? "", text: $content)
             .requiredOutline(required && content.isEmpty)
             .textFieldStyle(.roundedBorder)
     }
