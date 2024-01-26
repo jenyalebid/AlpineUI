@@ -55,6 +55,7 @@ public struct BoolCheckmarkBlock: View {
                     bool = false
                 }
         }
+        .background(Color.clear)
         .padding(6)
         .overlay (
             Group {

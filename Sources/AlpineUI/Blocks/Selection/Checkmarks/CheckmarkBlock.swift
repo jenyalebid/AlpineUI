@@ -34,7 +34,7 @@ public struct CheckmarkBlock: View {
         }
         .if(independent, transform: { view in
             view
-                .background(isEnabled ? Color(UIColor.systemBackground) : Color(UIColor.systemGray3).opacity(0.5))
+                .background(isEnabled ? .clear : Color(UIColor.systemGray3).opacity(0.5))
                 .onTapGesture {
                     checked.toggle()
                     changed.toggle()

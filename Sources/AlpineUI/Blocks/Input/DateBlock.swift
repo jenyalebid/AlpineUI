@@ -32,7 +32,7 @@ public struct DateBlock: View {
             Text(date.toString(format: "MMM dd, yyyy"))
                 .padding(8)
                 .foregroundColor(Color(uiColor: .label))
-                .background(Color(uiColor: .systemGray6))
+                .background(Color(UIColor.systemBackground))
                 .cornerRadius(5)
                 .popover(isPresented: $showPicker) {
                     DatePicker("", selection: $date, displayedComponents: components)

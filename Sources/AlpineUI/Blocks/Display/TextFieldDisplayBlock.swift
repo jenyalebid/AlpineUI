@@ -39,7 +39,7 @@ public struct TextFieldDisplayBlock: View {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(Color((required && text == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required && text == "") ? 1.2 : 0.2)
                 )
-                .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
+                .background(isEnabled ? Color(UIColor.systemBackground) : Color(UIColor.systemGray3).opacity(0.5))
                 .cornerRadius(5)
         }
         .frame(maxWidth: .infinity)

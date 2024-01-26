@@ -80,7 +80,7 @@ public struct SingleDropdownBlock: View {
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(Color((required && selection == "") ? UIColor.systemRed : UIColor.systemGray), lineWidth: (required && selection == "") ? 1.2 : 0.2)
             )
-            .background(isEnabled ? Color(UIColor.systemGray6).opacity(0.5) : Color(UIColor.systemGray3).opacity(0.5))
+            .background(isEnabled ? Color(UIColor.systemBackground) : Color(UIColor.systemGray3).opacity(0.5))
             .cornerRadius(5)
     }
 }
