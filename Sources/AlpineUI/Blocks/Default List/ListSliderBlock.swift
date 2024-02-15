@@ -18,27 +18,30 @@ public struct ListSliderBlock: View {
     var title: String
     var valueRange: ClosedRange<Double>
     var valueType: ValueType
-    
+    var labelWidthPart = 3
     var onEditingChanged: (() -> Void)?
 
-    public init(title: String, min: Int, max: Int, value: Binding<Int>, onEditingChanged: (() -> Void)? = nil) {
+    public init(title: String, min: Int, max: Int, value: Binding<Int>, labelWidthPart: Int = 3, onEditingChanged: (() -> Void)? = nil) {
         self.title = title
         self.valueRange = Double(min)...Double(max)
         self.valueType = .int(value)
+        self.labelWidthPart = labelWidthPart
         self.onEditingChanged = onEditingChanged
     }
 
-    public init(title: String, min: Double, max: Double, value: Binding<Double>, onEditingChanged: (() -> Void)? = nil) {
+    public init(title: String, min: Double, max: Double, value: Binding<Double>, labelWidthPart: Int = 3, onEditingChanged: (() -> Void)? = nil) {
         self.title = title
         self.valueRange = min...max
         self.valueType = .double(value)
+        self.labelWidthPart = labelWidthPart
         self.onEditingChanged = onEditingChanged
     }
 
-    public init(title: String, min: Float, max: Float, value: Binding<Float>, onEditingChanged: (() -> Void)? = nil) {
+    public init(title: String, min: Float, max: Float, value: Binding<Float>, labelWidthPart: Int = 3, onEditingChanged: (() -> Void)? = nil) {
         self.title = title
         self.valueRange = Double(min)...Double(max)
         self.valueType = .float(value)
+        self.labelWidthPart = labelWidthPart
         self.onEditingChanged = onEditingChanged
     }
 
@@ -46,7 +49,7 @@ public struct ListSliderBlock: View {
         GeometryReader { geometry in
             HStack {
                 ListLabel(title)
-                    .frame(width: geometry.size.width / 3, alignment: .leading)
+                    .frame(width: geometry.size.width / CGFloat(labelWidthPart), alignment: .leading)
                 slider
             }
         }
