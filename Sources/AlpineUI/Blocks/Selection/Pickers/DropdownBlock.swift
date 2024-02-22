@@ -11,7 +11,8 @@ public struct DropdownBlock: View {
         
     @Environment(\.isEnabled) var isEnabled
     
-    var title: String
+    var title: String?
+    var placeHolder: String?
     var controlField: Bool
     var required: Bool
     
@@ -21,8 +22,9 @@ public struct DropdownBlock: View {
     @FocusState private var focused: Bool
     @StateObject var viewModel: DropdownViewModel
     
-    public init(title: String, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>) {
+    public init(placeHolder: String? = nil, title: String? = nil, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>) {
         self.title = title
+        self.placeHolder = placeHolder
         self._selection = selection
         self.required = required
         self.controlField = controlField
@@ -33,7 +35,9 @@ public struct DropdownBlock: View {
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("\(title):").font(.footnote)
+            if title != nil {
+                Text("\(title!):").font(.footnote)
+            }
             field
                 .popover(isPresented: $viewModel.showDropdown) {
                     BetterList {
@@ -91,7 +95,7 @@ public struct DropdownBlock: View {
     }
     
     var field: some View {
-        TextField("", text: $selection)
+        TextField(placeHolder ?? "", text: $selection)
             .frame(maxWidth: .infinity, alignment: .leading)
             .frame(height: 20)
             .padding(6.0)
