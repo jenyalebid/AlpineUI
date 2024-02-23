@@ -19,11 +19,14 @@ public struct TextAreaBlock: View {
     @Binding var text: String
     @Binding var changed: Bool
     
-    public init(title: String, text: Binding<String>, height: CGFloat?, changed: Binding<Bool>) {
+    var sendKeyboardUpdate: Bool
+    
+    public init(title: String, text: Binding<String>, height: CGFloat?, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false) {
         self.title = title
         self._text = text
         self.height = height
         self._changed = changed
+        self.sendKeyboardUpdate = sendKeyboardUpdate
     }
     
     public var body: some View {
@@ -42,6 +45,10 @@ public struct TextAreaBlock: View {
         .onChange(of: isFocused) { _ in
             if !isFocused {
                 changed.toggle()
+            }
+            
+            if sendKeyboardUpdate {
+                NotificationCenter.default.post(name: Notification.Name("UI_Keyboard_Update"), object: isFocused)
             }
         }
     }

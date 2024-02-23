@@ -22,13 +22,17 @@ public struct DropdownBlock: View {
     @FocusState private var focused: Bool
     @StateObject var viewModel: DropdownViewModel
     
-    public init(placeHolder: String? = nil, title: String? = nil, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>) {
+    var sendKeyboardUpdate: Bool
+    
+    public init(placeHolder: String? = nil, title: String? = nil, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false) {
         self.title = title
         self.placeHolder = placeHolder
         self._selection = selection
         self.required = required
         self.controlField = controlField
         self._changed = changed
+        
+        self.sendKeyboardUpdate = sendKeyboardUpdate
         
         _viewModel = StateObject(wrappedValue: DropdownViewModel(values: values))
     }
@@ -67,7 +71,7 @@ public struct DropdownBlock: View {
             if !viewModel.showDropdown {
                 viewModel.filterList(value: selection)
                 focused = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.viewModel.showDropdown = true
                 }
             }
@@ -85,6 +89,10 @@ public struct DropdownBlock: View {
                 if !focused {
                     endCheck()
                 }
+            }
+            
+            if sendKeyboardUpdate {
+                NotificationCenter.default.post(name: Notification.Name("UI_Keyboard_Update"), object: focused)
             }
         }
         .onChange(of: viewModel.showDropdown) { show in

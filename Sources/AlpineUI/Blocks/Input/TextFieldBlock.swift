@@ -20,12 +20,16 @@ public struct TextFieldBlock: View {
     @Binding var value: String
     @Binding var changed: Bool
     
-    public init(title: String, placeholder: String = "", value: Binding<String>, required: Bool = false, changed: Binding<Bool>) {
+    var sendKeyboardUpdate: Bool
+
+    
+    public init(title: String, placeholder: String = "", value: Binding<String>, required: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false) {
         self.title = title
         self.placeholder = placeholder
         self._value = value
         self.required = required
         self._changed = changed
+        self.sendKeyboardUpdate = sendKeyboardUpdate
     }
     
     public var body: some View {
@@ -41,6 +45,10 @@ public struct TextFieldBlock: View {
                 .onChange(of: isFocused) { _ in
                     if !isFocused {
                         changed.toggle()
+                    }
+                    
+                    if sendKeyboardUpdate {
+                        NotificationCenter.default.post(name: Notification.Name("UI_Keyboard_Update"), object: isFocused)
                     }
                 }
                 .background(isEnabled ? Color(UIColor.systemBackground) : Color(UIColor.systemGray3).opacity(0.5))

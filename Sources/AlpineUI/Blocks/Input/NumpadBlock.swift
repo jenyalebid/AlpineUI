@@ -70,6 +70,7 @@ public struct NumpadBlock<N>: View {
             }
         }
         .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             showPad.toggle()
         }
         .onChange(of: localValue) { val in
