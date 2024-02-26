@@ -22,13 +22,14 @@ public struct NumberFieldBlock: View {
     
     @State private var localValue = 0
     
-    public init(title: String, value: Binding<String>, required: Bool = false, changed: Binding<Bool>) {
+    var sendKeyboardUpdate: Bool
+    
+    public init(title: String, value: Binding<String>, required: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false) {
         self.title = title
         self._value = value
         self._changed = changed
         self.required = required
-//        formatter.zeroSymbol = ""
-//        formatter.numberStyle = .scientific
+        self.sendKeyboardUpdate = sendKeyboardUpdate
     }
     
     public var body: some View {
@@ -49,10 +50,10 @@ public struct NumberFieldBlock: View {
             if !isFocused {
                 changed.toggle()
             }
+            
+            if sendKeyboardUpdate {
+                NotificationCenter.default.post(name: Notification.Name("UI_Keyboard_Update"), object: isFocused)
+            }
         }
-//        .onChange(of: localValue) { val in
-//            value = formatter.string(from: localValue as NSNumber) as! T
-//        }
-        
     }
 }
