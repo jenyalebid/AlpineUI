@@ -63,7 +63,7 @@ public struct SettingBlock<Content: View, Destination: View>: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke()
-                    .frame(width: 34, height: 34)
+                    .frame(width: 34, height: 34, alignment: .leading)
                 Image(systemName: image)
                     .resizable()
                     .scaledToFit()
@@ -85,7 +85,7 @@ public struct SettingBlock<Content: View, Destination: View>: View {
             Spacer()
             displayContent()
         }
-        .padding(2)
+        .padding([.vertical, .leading], 2)
         .contentShape(Rectangle())
     }
 }
