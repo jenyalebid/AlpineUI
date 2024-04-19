@@ -107,8 +107,19 @@ public struct NumpadBlock<N>: View {
             textValue = val
         }
         else {
-            value = formatter.number(from: val) as! N
+            value = correctValue(formatter.number(from: val))
         }
+    }
+
+    func correctValue(_ number: NSNumber?) -> N {
+        if let tempValue = number as? N {
+            return tempValue
+        }
+        defer { 
+            textValue = "" 
+            localValue = ""
+        }
+        return NSNumber(0) as! N
     }
 }
 
