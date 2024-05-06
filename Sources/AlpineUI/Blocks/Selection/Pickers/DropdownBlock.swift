@@ -23,8 +23,9 @@ public struct DropdownBlock: View {
     @StateObject var viewModel: DropdownViewModel
     
     var sendKeyboardUpdate: Bool
+    var allowBlank: Bool
     
-    public init(placeHolder: String? = nil, title: String? = nil, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false) {
+    public init(placeHolder: String? = nil, title: String? = nil, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false, allowBlank: Bool = false) {
         self.title = title
         self.placeHolder = placeHolder
         self._selection = selection
@@ -33,6 +34,7 @@ public struct DropdownBlock: View {
         self._changed = changed
         
         self.sendKeyboardUpdate = sendKeyboardUpdate
+        self.allowBlank = allowBlank
         
         _viewModel = StateObject(wrappedValue: DropdownViewModel(values: values))
     }
@@ -76,7 +78,10 @@ public struct DropdownBlock: View {
                 }
             }
         }
-        .onChange(of: selection) { val in
+        .onChange(of: selection) { _, val in
+            if val == " " && !allowBlank {
+                selection = ""
+            }
             if !viewModel.selected {
                 viewModel.filterList(value: val)
             }
@@ -84,7 +89,7 @@ public struct DropdownBlock: View {
                 focused = false
             }
         }
-        .onChange(of: focused) { _ in
+        .onChange(of: focused) { _, _ in
             if !viewModel.showDropdown {
                 if !focused {
                     endCheck()
@@ -95,7 +100,7 @@ public struct DropdownBlock: View {
                 NotificationCenter.default.post(name: Notification.Name("UI_Keyboard_Update"), object: focused)
             }
         }
-        .onChange(of: viewModel.showDropdown) { show in
+        .onChange(of: viewModel.showDropdown) { _, show in
             if !show {
                 endCheck()
             }
