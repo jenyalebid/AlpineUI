@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-struct MultiSelectMenu: View {
+public struct MultiSelectMenu: View {
     
     @StateObject var viewModel: MultiSelectMenuViewModel
     
     @Binding var selections: String
     
-    init(values: [PickerOption], selections: Binding<String>) {
+    public init(values: [PickerOption], selections: Binding<String>) {
         self._selections = selections
         self._viewModel = StateObject(wrappedValue: MultiSelectMenuViewModel(selections: selections.wrappedValue, values: values))
     }
     
-    var body: some View {
+    public var body: some View {
         ScrollView {
             ForEach(viewModel.values) { value in
                 VStack(spacing: 10) {
