@@ -13,13 +13,11 @@ let package = Package(
             name: "AlpineUI",
             targets: ["AlpineUI"]),
     ],
-    dependencies: [
-        .package(url: "https://github.com/jenyalebid/JSwiftUI.git", .branch("main"))
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "AlpineUI",
-            dependencies: ["JSwiftUI"],
+            dependencies: [],
             resources: [.process("Resources")]
         ),
         .testTarget(

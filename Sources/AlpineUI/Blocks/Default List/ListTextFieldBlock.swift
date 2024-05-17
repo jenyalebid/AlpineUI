@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import JSwiftUI
 
 public struct ListTextFieldBlock: View {
     
