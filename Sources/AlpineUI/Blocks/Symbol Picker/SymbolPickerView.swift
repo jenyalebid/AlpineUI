@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SymbolPickerView: View {
+public struct SymbolPickerView: View {
 
     private static let symbols = Symbols.shared.allSymbols
 
@@ -26,7 +26,7 @@ struct SymbolPickerView: View {
     
     @Environment(\.presentationMode) private var presentationMode
 
-    init(title: String, symbol: Binding<String>) {
+    public init(title: String, symbol: Binding<String>) {
         self.title = title
         _symbol = symbol
     }
@@ -71,7 +71,7 @@ struct SymbolPickerView: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationView {
             ZStack {
                 Self.backgroundColor.edgesIgnoringSafeArea(.all)
