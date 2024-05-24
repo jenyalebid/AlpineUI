@@ -11,10 +11,8 @@ class Symbols {
 
     static let shared = Symbols()
 
-    let allSymbols: [String]
-
-    private init() {
-        self.allSymbols = Self.fetchSymbols(fileName: "sfsymbol4_1")
+    func loadSymbols(from fileName: String) -> [String] {
+        return Self.fetchSymbols(fileName: fileName)
     }
 
     private static func fetchSymbols(fileName: String) -> [String] {
@@ -29,5 +27,4 @@ class Symbols {
             .split(separator: "\n")
             .map { String($0) }
     }
-
 }

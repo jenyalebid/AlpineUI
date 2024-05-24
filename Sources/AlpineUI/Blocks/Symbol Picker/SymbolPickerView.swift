@@ -9,8 +9,11 @@ import SwiftUI
 
 public struct SymbolPickerView: View {
 
-    private static let symbols = Symbols.shared.allSymbols
-
+    @Environment(\.presentationMode) private var presentationMode
+    
+    @Binding public var symbol: String
+    @State private var searchText = ""
+    
     private static let gridDimension: CGFloat = 64
     private static let symbolSize: CGFloat = 24
     private static let symbolCornerRadius: CGFloat = 8
@@ -18,19 +21,33 @@ public struct SymbolPickerView: View {
     private static let selectedItemBackgroundColor = Color.accentColor
     private static let backgroundColor = Color(UIColor.systemGroupedBackground)
 
+    private let symbols: [String]
+    private var title: String
 
-    @Binding public var symbol: String
-    @State private var searchText = ""
-    
-    var title: String
-    
-    @Environment(\.presentationMode) private var presentationMode
-
-    public init(title: String, symbol: Binding<String>) {
+    public init(title: String, symbol: Binding<String>, symbolsFileName: String = "sfsymbol_toolbar") {
         self.title = title
         _symbol = symbol
+        symbols = Symbols.shared.loadSymbols(from: symbolsFileName)
     }
 
+    public var body: some View {
+        NavigationView {
+            ZStack {
+                Self.backgroundColor.edgesIgnoringSafeArea(.all)
+                searchableSymbolGrid
+            }
+            .navigationBarTitleDisplayMode(.inline)
+//            .toolbar {
+//                ToolbarItem(placement: .cancellationAction) {
+//                    Button(LocalizedString("cancel")) {
+//                        presentationMode.wrappedValue.dismiss()
+//                    }
+//                }
+//            }
+        }
+        .navigationViewStyle(.stack)
+    }
+    
     // MARK: - View Components
 
     private var searchableSymbolGrid: some View {
@@ -42,7 +59,7 @@ public struct SymbolPickerView: View {
     private var symbolGrid: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: Self.gridDimension, maximum: Self.gridDimension))]) {
-                ForEach(Self.symbols.filter { searchText.isEmpty ? true : $0.localizedCaseInsensitiveContains(searchText) }, id: \.self) { thisSymbol in
+                ForEach(symbols.filter { searchText.isEmpty ? true : $0.localizedCaseInsensitiveContains(searchText) }, id: \.self) { thisSymbol in
                     Button {
                         symbol = thisSymbol
                         presentationMode.wrappedValue.dismiss()
@@ -70,28 +87,10 @@ public struct SymbolPickerView: View {
             .padding(.horizontal)
         }
     }
-
-    public var body: some View {
-        NavigationView {
-            ZStack {
-                Self.backgroundColor.edgesIgnoringSafeArea(.all)
-                searchableSymbolGrid
-            }
-            .navigationBarTitleDisplayMode(.inline)
-//            .toolbar {
-//                ToolbarItem(placement: .cancellationAction) {
-//                    Button(LocalizedString("cancel")) {
-//                        presentationMode.wrappedValue.dismiss()
-//                    }
-//                }
-//            }
-        }
-        .navigationViewStyle(.stack)
+    
+    private func LocalizedString(_ key: String) -> String {
+        NSLocalizedString(key, bundle: .module, comment: "")
     }
-}
-
-private func LocalizedString(_ key: String) -> String {
-    NSLocalizedString(key, bundle: .module, comment: "")
 }
 
 struct SymbolPicker_Previews: PreviewProvider {
