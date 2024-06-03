@@ -85,9 +85,9 @@ public struct DropdownBlock: View {
             if !viewModel.selected {
                 viewModel.filterList(value: val)
             }
-            else {
-                focused = false
-            }
+//            else {
+//                focused = false
+//            }
         }
         .onChange(of: focused) { _, _ in
             if !viewModel.showDropdown {
