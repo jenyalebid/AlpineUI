@@ -124,6 +124,7 @@ public struct DropdownBlock: View {
     }
     
     func endCheck() {
+        viewModel.selected = false
         viewModel.showDropdown = false
         changed.toggle()
     }
