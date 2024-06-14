@@ -36,8 +36,13 @@ public struct SymbolPickerBlock: View {
                     }
             )
             .popover(isPresented: $isPresented) {
-                SymbolPickerView(title: title, symbol: $symbol)
+                SymbolPickerView(title: title, symbol: $symbol, symbolsSet: .map)
                     .frame(minWidth: 300, idealWidth: 500, maxWidth: .infinity, minHeight: 400, idealHeight: 500, maxHeight: .infinity)
+                    .overlay(
+                        DismissButton()
+                            .padding(6),
+                        alignment: .topTrailing
+                    )
             }
         }
     }

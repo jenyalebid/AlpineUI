@@ -28,10 +28,10 @@ public struct HexColorPickerBlock: View {
                 .labelsHidden()
         }
         .contentShape(Rectangle())
-        .onChange(of: color) { newValue in
+        .onChange(of: color) { _, newValue in
             colorText = newValue.toHex()
         }
-        .onChange(of: colorText) { newValue in
+        .onChange(of: colorText) { _, newValue in
             if color.toHex() != newValue {
                 color = Color(hex: newValue)
             }

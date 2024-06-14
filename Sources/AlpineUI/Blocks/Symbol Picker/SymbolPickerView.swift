@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+public enum SymbolsSet: String {
+    case toolbar = "sfsymbol_toolbar"
+    case map = "sfsymbol4_1"
+}
+
 public struct SymbolPickerView: View {
 
     @Environment(\.presentationMode) private var presentationMode
@@ -24,10 +29,10 @@ public struct SymbolPickerView: View {
     private let symbols: [String]
     private var title: String
 
-    public init(title: String, symbol: Binding<String>, symbolsFileName: String = "sfsymbol_toolbar") {
+    public init(title: String, symbol: Binding<String>, symbolsSet: SymbolsSet) {
         self.title = title
         _symbol = symbol
-        symbols = Symbols.shared.loadSymbols(from: symbolsFileName)
+        symbols = Symbols.shared.loadSymbols(from: symbolsSet.rawValue)
     }
 
     public var body: some View {
@@ -98,8 +103,8 @@ struct SymbolPicker_Previews: PreviewProvider {
 
     static var previews: some View {
         Group {
-            SymbolPickerView(title: "Test", symbol: Self.$symbol)
-            SymbolPickerView(title: "Test", symbol: Self.$symbol)
+            SymbolPickerView(title: "Test", symbol: Self.$symbol, symbolsSet: .toolbar)
+            SymbolPickerView(title: "Test", symbol: Self.$symbol, symbolsSet: .toolbar)
                 .preferredColorScheme(.dark)
         }
     }
