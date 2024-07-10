@@ -104,9 +104,3 @@ public struct ListSortBlock: View {
 //            .environmentObject(viewModel)
 //    }
 //}
-
-extension Binding where Value == Bool {
-    func negate() -> Bool {
-        return !(self.wrappedValue)
-    }
-}

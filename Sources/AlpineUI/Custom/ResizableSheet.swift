@@ -69,9 +69,3 @@ struct ResizeableSheet<Content: View> : UIViewControllerRepresentable {
     }
 }
 
-extension View {
-    public func resizableSheet<Content: View>(isPresented: Binding<Bool>, @ViewBuilder content: @escaping () -> Content) -> some View {
-        self.background(ResizeableSheet(show: isPresented, content: content))
-    }
-}
-

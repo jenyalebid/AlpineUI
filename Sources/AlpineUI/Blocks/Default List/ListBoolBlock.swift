@@ -67,13 +67,6 @@ struct RequiredViewModifier: ViewModifier {
     }
 }
 
-public extension View {
-    
-    func requiredOutline(_ isRequired: Bool, padding: CGFloat = 0) -> some View {
-        modifier(RequiredViewModifier(isRequired: isRequired, padding: padding))
-    }
-}
-
 public struct BooleanBlock: View {
     
     var label: String

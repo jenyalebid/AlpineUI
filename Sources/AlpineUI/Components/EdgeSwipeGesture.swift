@@ -43,9 +43,3 @@ struct EdgeSwipeGestureModifier: UIViewRepresentable {
         }
     }
 }
-
-public extension View {
-    func onEdgeSwipe(edge: UIRectEdge, perform action: @escaping () -> Void) -> some View {
-        self.overlay(EdgeSwipeGestureModifier(edge: edge, onRecognized: action))
-    }
-}

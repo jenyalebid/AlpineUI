@@ -33,11 +33,3 @@ public struct BlinkEffect: ViewModifier {
             }
     }
 }
-
-
-extension View {
-    
-    public func blinkEffect(minimum: Double = 0, maximum: Double = 1) -> some View {
-        return modifier(BlinkEffect(minimum: minimum, maximum: maximum))
-    }
-}

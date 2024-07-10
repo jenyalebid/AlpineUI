@@ -31,11 +31,3 @@ struct NavigationWithDismiss: ViewModifier {
         }
     }
 }
-
-public extension View {
-    
-    @available(iOS 16.0, *)
-    func navigationWithDimiss(isPresented: Binding<Bool>, alignment: ToolbarItemPlacement) -> some View {
-        modifier(NavigationWithDismiss(isPresented: isPresented, dismissAlignmenet: alignment))
-    }
-}

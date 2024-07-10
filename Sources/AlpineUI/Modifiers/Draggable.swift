@@ -96,10 +96,3 @@ struct DraggableModifier: ViewModifier {
         }
     }
 }
-
-public extension View {
-    
-    func draggable(isPresented: Binding<Bool>, alignment: Alignment) -> some View {
-        self.modifier(DraggableModifier(isPresented: isPresented, alignment: alignment))
-    }
-}

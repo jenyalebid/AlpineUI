@@ -48,9 +48,3 @@ public struct SlideGestureModifier: ViewModifier {
             }
     }
 }
-
-extension View {
-    public func slideGesture(show: Binding<Bool>, alignment: Alignment, allowMovement: Bool = true) -> some View {
-        return modifier(SlideGestureModifier(show: show, alignment: alignment, allowMovement: allowMovement))
-    }
-}

@@ -58,10 +58,3 @@ public struct ListItemBGSelectModifier: ViewModifier {
             }
     }
 }
-
-extension View {
-    public func listItemBackGround(id: UUID?, showSelected: Bool = true) -> some View {
-        return modifier(ListItemBGSelectModifier(id: id, showSelected: showSelected))
-    }
-}
-

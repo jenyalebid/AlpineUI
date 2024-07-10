@@ -8,10 +8,10 @@
 import SwiftUI
 import UIKit
 
-extension Color {
+public extension Color {
 
     // alpha is in first place
-    public init(hex: String) {
+     init(hex: String) {
         var hexSanitized: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
         if (hexSanitized.count != 6 && hexSanitized.count != 8) {
@@ -28,7 +28,7 @@ extension Color {
         self.init(red: r, green: g, blue: b, opacity: a)
     }
 
-    public func toHex() -> String {
+    func toHex() -> String {
         let uic = UIColor(self)
         guard let components = uic.cgColor.components, (components.count == 3 || components.count == 4) else {
             return "#ff000000"

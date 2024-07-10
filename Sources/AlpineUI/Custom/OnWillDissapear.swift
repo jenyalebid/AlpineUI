@@ -41,18 +41,3 @@ struct WillDisappearHandler: UIViewControllerRepresentable {
         }
     }
 }
-
-public struct WillDisappearModifier: ViewModifier {
-    let callback: () -> Void
-
-    public func body(content: Content) -> some View {
-        content
-            .background(WillDisappearHandler(onWillDisappear: callback))
-    }
-}
-
-extension View {
-    public func onWillDisappear(_ perform: @escaping () -> Void) -> some View {
-        self.modifier(WillDisappearModifier(callback: perform))
-    }
-}

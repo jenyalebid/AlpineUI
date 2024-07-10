@@ -14,9 +14,17 @@ public extension Binding {
     }
 }
 
+extension Binding where Value == Bool {
+    func negate() -> Bool {
+        return !(self.wrappedValue)
+    }
+}
+
 public func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
     Binding(
         get: { lhs.wrappedValue ?? rhs },
         set: { lhs.wrappedValue = $0 }
     )
 }
+
+
