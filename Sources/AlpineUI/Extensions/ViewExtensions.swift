@@ -1,5 +1,5 @@
 //
-//  View.swift
+//  ViewExtensions.swift
 //
 //
 //  Created by Vladislav on 7/10/24.
@@ -11,6 +11,25 @@ public extension View {
     
     var shakeOnTap: some View {
         modifier(ShakeEffect())
+    }
+    
+    var uiOrientationGetter: some View {
+        modifier(InterfaceOrientation())
+    }
+    
+    var popupTracker: some View {
+        modifier(PopupTracker())
+    }
+}
+
+public extension View {
+    
+    func requiredOverlay(_ required: Bool, padding: CGFloat? = nil, minWidth: CGFloat? = nil, minHeight: CGFloat? = nil, type: RequiredOverlayModifier.OverlayType) -> some View {
+        modifier(RequiredOverlayModifier(required: required, padding: padding, minWidth: minWidth, minHeight: minHeight, overlayType: type))
+    }
+    
+    func trackDeviceOrientation() -> some View {
+        self.modifier(DeviceOrientationViewModifier())
     }
     
     func blinkEffect(minimum: Double = 0, maximum: Double = 1) -> some View {
@@ -65,6 +84,15 @@ public extension View {
         modifier(SelectionModifier(guid: id))
     }
     
+    func dismissKeyboardOnTap() -> some View {
+        modifier(DismissKeyboardOnTap())
+    }
+    
+    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
+        modifier(DeviceRotationViewModifier(action: action))
+    }
+    
+    
     @available(iOS 16.0, *)
     func navigationWithDimiss(isPresented: Binding<Bool>, alignment: ToolbarItemPlacement) -> some View {
         modifier(NavigationWithDismiss(isPresented: isPresented, dismissAlignmenet: alignment))
@@ -93,10 +121,14 @@ public extension View {
         clipShape( RoundedCorner(radius: radius, corners: corners) )
     }
     
-//    func print(_ varargs: Any...) -> Self {
-//        Swift.print(varargs)
-//        return self
-//    }
+    @ViewBuilder
+    func applySearchableIfNeeded(_ condition: Bool) -> some View {
+        if condition {
+            self.searchable(text: .constant(""))
+        } else {
+            self
+        }
+    }
     
     @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
         if condition {
@@ -113,6 +145,11 @@ public extension View {
             self
         }
     }
+    
+    //    func print(_ varargs: Any...) -> Self {
+    //        Swift.print(varargs)
+    //        return self
+    //    }
 }
 
 private struct FramePreferenceKey: PreferenceKey {

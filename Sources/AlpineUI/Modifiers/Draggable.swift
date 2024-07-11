@@ -10,10 +10,20 @@ import SwiftUI
 struct DraggableModifier: ViewModifier {
     
     @Binding var isPresented: Bool
+    
     @State private var translation: CGSize = .zero
 
+    private let threshold: CGFloat = 100
+    private var isHorizontal: Bool {
+        switch alignment {
+        case .leading, .trailing:
+            return true
+        default:
+            return false
+        }
+    }
+    
     var alignment: Alignment
-    let threshold: CGFloat = 100
     
     func body(content: Content) -> some View {
         content
@@ -70,15 +80,6 @@ struct DraggableModifier: ViewModifier {
                         }
                     }
             )
-    }
-
-    var isHorizontal: Bool {
-        switch alignment {
-        case .leading, .trailing:
-            return true
-        default:
-            return false
-        }
     }
 
     func Edge(from alignment: Alignment) -> Edge {
