@@ -62,6 +62,19 @@ public struct NumpadBlock<N>: View {
                                 changed.toggle()
                             }
                     }
+                    .onChange(of: localValue) { val in
+                        if let limit {
+                            guard Double(val) ?? 0 <= limit else{
+                                return
+                            }
+                        }
+                        if guardCheck(value: val) {
+                            modify(val: val)
+                        }
+                    }
+                    .onDisappear {
+                        localValue = ""
+                    }
                 }
         }
         .onAppear {
@@ -72,16 +85,6 @@ public struct NumpadBlock<N>: View {
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             showPad.toggle()
-        }
-        .onChange(of: localValue) { val in
-            if let limit {
-                guard Double(val) ?? 0 <= limit else{
-                    return
-                }
-            }
-            if guardCheck(value: val) {
-                modify(val: val)
-            }
         }
     }
     
