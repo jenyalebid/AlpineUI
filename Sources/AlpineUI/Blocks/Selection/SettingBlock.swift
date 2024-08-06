@@ -9,18 +9,18 @@ import SwiftUI
 
 public struct SettingBlock<Content: View, Destination: View>: View {
     
-    var image: String
-    var color: Color = .accentColor
-    var title: String
-    var subtitle: String?
-    
-    var displayContent: () -> Content
-    var destination: () -> Destination
-    var action: (() -> ())?
+    private var image: String
+    private var color: Color = .accentColor
+    private var title: String
+    private var subtitle: String?
+    private var displayContent: () -> Content
+    private var destination: () -> Destination
+    private var action: (() -> ())?
+    private var eventTracker: UIEventTracker?
     
     @State var isActiveNavigation = false
     
-    public init(image: String, color: Color = .accentColor, title: String, subtitle: String? = nil, @ViewBuilder displayContent: @escaping () -> Content = {EmptyView()}, destination: @escaping (() -> Destination) = {EmptyView()}, action: (() -> ())? = nil) {
+    public init(image: String, color: Color = .accentColor, title: String, subtitle: String? = nil, eventTracker: UIEventTracker? = nil, @ViewBuilder displayContent: @escaping () -> Content = {EmptyView()}, destination: @escaping (() -> Destination) = {EmptyView()}, action: (() -> ())? = nil) {
         self.image = image
         self.color = color
         self.title = title
@@ -28,7 +28,7 @@ public struct SettingBlock<Content: View, Destination: View>: View {
         self.displayContent = displayContent
         self.destination = destination
         self.action = action
-        
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
@@ -44,16 +44,17 @@ public struct SettingBlock<Content: View, Destination: View>: View {
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded {
+                            eventTracker?.logUIEvent(.settingTap, parameters: ["title": title])
                             if let action = action {
                                 action()
                             }
                             if !(destination is (() -> EmptyView)) {
                                 isActiveNavigation.toggle()
+                                eventTracker?.logUIEvent(.navigationLinkActivated, parameters: ["destination": String(describing: Destination.self)])
                             }
                         }
                 )
-        }
-        else {
+        } else {
             blockContent
         }
     }

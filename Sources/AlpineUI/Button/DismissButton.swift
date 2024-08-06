@@ -9,21 +9,26 @@ import SwiftUI
 
 @available(iOS 17, *)
 public struct DismissButton: View {
+    
+    @Environment(\.dismiss) var dismiss
 
     var environmentDismiss: Bool
     var action: (() -> Void)?
+    private var eventTracker: UIEventTracker?
     
-    @Environment(\.dismiss) var dismiss
-    
-    public init(environmentDismiss: Bool = true, action: (() -> Void)? = nil) {
+    public init(environmentDismiss: Bool = true,
+                eventTracker: UIEventTracker? = nil,
+                action: (() -> Void)? = nil) {
         self.environmentDismiss = environmentDismiss
         self.action = action
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
         Button(role: .cancel) {
             if environmentDismiss {
                 dismiss()
+                eventTracker?.logUIEvent(.dismissButton)
             }
             if let action {
                 withAnimation {
@@ -38,7 +43,6 @@ public struct DismissButton: View {
                 .background(Color(uiColor: .systemGray5))
                 .clipShape(Circle())
         }
-
     }
 }
 

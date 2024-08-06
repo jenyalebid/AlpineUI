@@ -9,19 +9,21 @@ import SwiftUI
 
 public struct CheckmarkBlock: View {
     
-    @Environment(\.isEnabled) var isEnabled
-    
-    var text: String
-    var independent: Bool
+    @Environment(\.isEnabled) private var isEnabled
     
     @Binding var checked: Bool
     @Binding var changed: Bool
     
-    public init(text: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true) {
+    private var text: String
+    private var independent: Bool
+    private var eventTracker: UIEventTracker?
+    
+    public init(text: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true,  eventTracker: UIEventTracker? = nil) {
         self.text = text
         self._checked = checked
         self._changed = changed
         self.independent = independent
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
@@ -38,6 +40,7 @@ public struct CheckmarkBlock: View {
                 .onTapGesture {
                     checked.toggle()
                     changed.toggle()
+                    eventTracker?.logUIEvent(.checkmarkToggled, parameters: ["text": text, "checked": checked])
                 }
         })
     }

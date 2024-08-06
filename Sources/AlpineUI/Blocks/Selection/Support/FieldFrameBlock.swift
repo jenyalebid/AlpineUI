@@ -7,26 +7,28 @@
 
 import SwiftUI
 
-struct FieldFrameBlock: View {
-    
-    @Environment(\.isEnabled) var isEnabled
+internal struct FieldFrameBlock: View {
     
     enum FieldType {
         case text
         case TextField
     }
     
-    var required: Bool
-    var fieldType: FieldType
-    
-    @Binding var selection: String
+    @Environment(\.isEnabled) private var isEnabled
     
     @FocusState private var focused: Bool
     
-    init(selection: Binding<String>, required: Bool = false, fieldType: FieldType) {
+    @Binding var selection: String
+    
+    private var required: Bool
+    private var fieldType: FieldType
+    private var eventTracker: UIEventTracker?
+    
+    init(selection: Binding<String>, required: Bool = false, fieldType: FieldType, eventTracker: UIEventTracker? = nil) {
         self._selection = selection
         self.required = required
         self.fieldType = fieldType
+        self.eventTracker = eventTracker
     }
     
     var body: some View {

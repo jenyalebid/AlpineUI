@@ -9,13 +9,12 @@ import SwiftUI
 
 class DropdownViewModel: ObservableObject {
     
-    var allValues: [PickerOption]
-    
     @Published var filteredValues: [PickerOption] = []
-    
     @Published var showDropdown = false
     @Published var selected = false
     @Published var show = false
+    
+    var allValues: [PickerOption]
     
     init(values: [PickerOption]) {
         self.allValues = values

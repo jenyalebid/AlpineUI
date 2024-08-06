@@ -1,5 +1,5 @@
 //
-//  PickerViewModel.swift
+//  SingleDropdownViewModel.swift
 //  AlpineUI
 //
 //  Created by Jenya Lebid on 5/2/22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class PickerViewModel: ObservableObject {
+class SingleDropdownViewModel: ObservableObject {
 
     @Published var selection: String
 

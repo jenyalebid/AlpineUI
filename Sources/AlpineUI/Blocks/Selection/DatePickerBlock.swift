@@ -9,17 +9,19 @@ import SwiftUI
 
 public struct DatePickerBlock: View {
 
-    @Environment(\.isEnabled) var isEnabled
-    
-    var title: String
+    @Environment(\.isEnabled) private var isEnabled
     
     @Binding var value: Date
     @Binding var changed: Bool
     
-    public init(title: String, value: Binding<Date>, changed: Binding<Bool>) {
+    private var title: String
+    private var eventTracker: UIEventTracker?
+    
+    public init(title: String, value: Binding<Date>, changed: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
         self.title = title
         self._value = value
         self._changed = changed
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
@@ -33,9 +35,6 @@ public struct DatePickerBlock: View {
                 .transformEffect(.init(scaleX: 0.95, y: 0.95))
 
         }
-//        .onChange(of: value) { _ in
-//            changed.toggle()
-//        }
     }
 }
 

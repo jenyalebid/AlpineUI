@@ -7,21 +7,21 @@
 
 import SwiftUI
 
-public struct ColorPickerBlock: View {
+internal struct ColorPickerBlock: View {
     
     @Binding var color: Color
-    
-    var colors: [Color]
-    var size: CGFloat
-    
-    var defaultColors: [Color] = [.red, .green, .blue, .orange, .yellow, .pink, .teal]
-    
     @State private var showSelector = false
     
-    public init(color: Binding<Color>, colors: [Color]? = nil, size: CGFloat = 40) {
+    private var colors: [Color]
+    private var size: CGFloat
+    private var defaultColors: [Color] = [.red, .green, .blue, .orange, .yellow, .pink, .teal]
+    private var eventTracker: UIEventTracker?
+    
+    public init(color: Binding<Color>, colors: [Color]? = nil, size: CGFloat = 40, eventTracker: UIEventTracker? = nil) {
         self._color = color
         self.size = size
         self.colors = colors ?? defaultColors
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
@@ -29,42 +29,15 @@ public struct ColorPickerBlock: View {
             .foregroundColor(color)
             .frame(width: size, height: size)
             .popover(isPresented: $showSelector) {
-                ColorPickerSelector(color: $color, show: $showSelector, colors: colors)
+                ColorPickerSelector(color: $color, show: $showSelector, colors: colors, eventTracker: eventTracker)
             }
             .onTapGesture {
                 showSelector.toggle()
+                eventTracker?.logUIEvent(.colorSelectorOpened, parameters: ["currentColor": color.description])
             }
     }
 }
 
-
-struct ColorPickerSelector: View {
-    
-    @Binding var color: Color
-    @Binding var show: Bool
-    
-    var colors: [Color]
-
-    let columns = [GridItem(.adaptive(minimum: 40))]
-    
-    var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(colors, id: \.self) { color in
-                    RoundedRectangle(cornerRadius: 5)
-                        .foregroundColor(color)
-                        .frame(width: 40, height: 40)
-                        .onTapGesture {
-                            self.color = color
-                            show.toggle()
-                        }
-                }
-            }
-            .padding()
-        }
-        .frame(idealWidth: 200, maxHeight: 120)
-    }
-}
 
 struct ColorPickerBlock_Previews: PreviewProvider {
     static var previews: some View {

@@ -11,23 +11,25 @@ public struct MultiSelectBlock: View {
     
     @Environment(\.isEnabled) var isEnabled
     
-    var title: String
-    var values: [PickerOption]
-    var required: Bool
-    
     @Binding var selections: String
     @Binding var changed: Bool
     
-    @State var showPopover = false
+    @State private var showPopover = false
     
     @FocusState private var focused: Bool
     
-    public init(title: String, values: [PickerOption], selections: Binding<String>, required: Bool = false, changed: Binding<Bool>) {
+    private var title: String
+    private var values: [PickerOption]
+    private var required: Bool
+    private var eventTracker: UIEventTracker?
+    
+    public init(title: String, values: [PickerOption], selections: Binding<String>, required: Bool = false, changed: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
         self.title = title
         self.values = values
         self._selections = selections
         self.required = required
         self._changed = changed
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
@@ -36,7 +38,7 @@ public struct MultiSelectBlock: View {
                 .font(.footnote)
             FieldFrameBlock(selection: $selections, fieldType: .text)
                 .popover(isPresented: $showPopover) {
-                    MultiSelectMenu(values: values, selections: $selections)
+                    MultiSelectMenu(values: values, selections: $selections, eventTracker: eventTracker)
                 }
         }
         .onChange(of: selections) { _ in
@@ -44,6 +46,11 @@ public struct MultiSelectBlock: View {
         }
         .onTapGesture {
             showPopover.toggle()
+            if showPopover {
+                eventTracker?.logUIEvent(.popoverOpened, parameters: ["title": title])
+            } else {
+                eventTracker?.logUIEvent(.popoverClosed, parameters: ["title": title])
+            }
         }
     }
 }

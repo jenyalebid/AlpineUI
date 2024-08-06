@@ -9,12 +9,12 @@ import SwiftUI
 
 public struct ToolBarImage: View {
     
-    var image: String
-    var tag: Int
-    var size = 10
-    var font = Font.title2
-    
     @Binding var currentTag: Int
+    
+    private var image: String
+    private var tag: Int
+    private var size = 10
+    private var font = Font.title2
     
     public init(image: String, tag: Int, currentTag: Binding<Int>) {
         self.image = image

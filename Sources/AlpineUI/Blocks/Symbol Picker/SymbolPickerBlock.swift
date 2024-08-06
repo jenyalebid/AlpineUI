@@ -9,14 +9,17 @@ import SwiftUI
 
 public struct SymbolPickerBlock: View {
     
-    var title: String
     @Binding var symbol: String
     
     @State private var isPresented = false
     
-    public init(title: String, symbol: Binding<String>) {
+    private var title: String
+    private var eventTracker: UIEventTracker?
+    
+    public init(title: String, symbol: Binding<String>, eventTracker: UIEventTracker? = nil) {
         self.title = title
         self._symbol = symbol
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
@@ -36,10 +39,10 @@ public struct SymbolPickerBlock: View {
                     }
             )
             .popover(isPresented: $isPresented) {
-                SymbolPickerView(title: title, symbol: $symbol, symbolsSet: .map)
+                SymbolPickerView(title: title, symbol: $symbol, symbolsSet: .map, eventTracker: eventTracker)
                     .frame(minWidth: 300, idealWidth: 500, maxWidth: .infinity, minHeight: 400, idealHeight: 500, maxHeight: .infinity)
                     .overlay(
-                        DismissButton()
+                        DismissButton(eventTracker: eventTracker)
                             .padding(6),
                         alignment: .topTrailing
                     )

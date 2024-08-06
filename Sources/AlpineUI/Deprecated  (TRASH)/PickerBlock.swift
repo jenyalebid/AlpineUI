@@ -11,7 +11,7 @@
 //    
 //    @Environment(\.isEnabled) var isEnabled
 //    
-//    @ObservedObject var viewModel: PickerViewModel
+//    @ObservedObject var viewModel: SingleDropdownViewModel
 //    
 //    var title: String
 //    var values: [[String]]

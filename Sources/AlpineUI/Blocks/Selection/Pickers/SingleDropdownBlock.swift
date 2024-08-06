@@ -9,24 +9,25 @@ import SwiftUI
 
 public struct SingleDropdownBlock: View {
     
-    @Environment(\.isEnabled) var isEnabled
-    @StateObject var viewModel: PickerViewModel
-    
-    var title: String
-    var required: Bool
+    @Environment(\.isEnabled) private var isEnabled
     
     @Binding var selection: String
     @Binding var changed: Bool
     
+    @StateObject private var viewModel: SingleDropdownViewModel
     @State private var show = false
     
-    public init(title: String, values: [PickerOption], selection: Binding<String>, required: Bool = false, changed: Binding<Bool>) {
+    private var title: String
+    private var required: Bool
+    private var eventTracker: UIEventTracker?
+    
+    public init(title: String, values: [PickerOption], selection: Binding<String>, required: Bool = false, changed: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
         self.title = title
         self._selection = selection
         self.required = required
         self._changed = changed
         
-        _viewModel = StateObject(wrappedValue: PickerViewModel(selection: selection.wrappedValue, values: values))
+        _viewModel = StateObject(wrappedValue: SingleDropdownViewModel(selection: selection.wrappedValue, values: values))
     }
     
     public var body: some View {
@@ -39,6 +40,7 @@ public struct SingleDropdownBlock: View {
                     ScrollView {
                         ForEach(viewModel.values) { value in
                             Button {
+                                eventTracker?.logUIEvent(.dropdownSelection, parameters: ["selection": selection])
                                 viewModel.selection = value.primaryText
                                 selection = viewModel.selection
                                 show.toggle()
@@ -64,13 +66,15 @@ public struct SingleDropdownBlock: View {
         }
         .onChange(of: selection) { _ in
             changed.toggle()
+            eventTracker?.logUIEvent(.dropdownSelectionChanged, parameters: ["selection": selection])
         }
         .onTapGesture {
             show.toggle()
+            eventTracker?.logUIEvent(.dropdownOpened, parameters: ["title": title])
         }
     }
     
-    var field: some View {
+    private var field: some View {
         Text("\(viewModel.selection)")
             .frame(maxWidth: .infinity, alignment: .leading)
             .frame(height: 20)

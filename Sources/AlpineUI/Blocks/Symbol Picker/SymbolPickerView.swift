@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-public enum SymbolsSet: String {
-    case toolbar = "sfsymbol_toolbar"
-    case map = "sfsymbol4_1"
-}
-
 public struct SymbolPickerView: View {
 
     @Environment(\.presentationMode) private var presentationMode
@@ -25,14 +20,15 @@ public struct SymbolPickerView: View {
     private static let unselectedItemBackgroundColor = Color(UIColor.systemBackground)
     private static let selectedItemBackgroundColor = Color.accentColor
     private static let backgroundColor = Color(UIColor.systemGroupedBackground)
-
     private let symbols: [String]
     private var title: String
-
-    public init(title: String, symbol: Binding<String>, symbolsSet: SymbolsSet) {
+    private var eventTracker: UIEventTracker?
+    
+    public init(title: String, symbol: Binding<String>, symbolsSet: SymbolsSet, eventTracker: UIEventTracker? = nil) {
         self.title = title
         _symbol = symbol
         symbols = Symbols.shared.loadSymbols(from: symbolsSet.rawValue)
+        self.eventTracker = eventTracker
     }
 
     public var body: some View {
@@ -42,13 +38,6 @@ public struct SymbolPickerView: View {
                 searchableSymbolGrid
             }
             .navigationBarTitleDisplayMode(.inline)
-//            .toolbar {
-//                ToolbarItem(placement: .cancellationAction) {
-//                    Button(LocalizedString("cancel")) {
-//                        presentationMode.wrappedValue.dismiss()
-//                    }
-//                }
-//            }
         }
         .navigationViewStyle(.stack)
     }
@@ -67,6 +56,7 @@ public struct SymbolPickerView: View {
                 ForEach(symbols.filter { searchText.isEmpty ? true : $0.localizedCaseInsensitiveContains(searchText) }, id: \.self) { thisSymbol in
                     Button {
                         symbol = thisSymbol
+                        eventTracker?.logUIEvent(.symbolGridSelected, typ: .selection, parameters: ["titlePicker" : "\(title)", "searchText": "\(searchText)"])
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         if thisSymbol == symbol {
@@ -91,10 +81,6 @@ public struct SymbolPickerView: View {
             }
             .padding(.horizontal)
         }
-    }
-    
-    private func LocalizedString(_ key: String) -> String {
-        NSLocalizedString(key, bundle: .module, comment: "")
     }
 }
 

@@ -32,7 +32,6 @@ public struct NavigationBlock<Content: View>: View {
 struct NavigationBlock_Previews: PreviewProvider {
     static var previews: some View {
         NavigationBlock(title: "Test") {
-            
         }
     }
 }

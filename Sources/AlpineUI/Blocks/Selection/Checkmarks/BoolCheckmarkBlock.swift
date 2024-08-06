@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-public struct BoolCheckmarkBlock: View {
+internal struct BoolCheckmarkBlock: View {
     
-    var title: String
-    var ch1Title: String
-    var ch2Title: String
-    var required: Bool
-    
-    var spacing: Double
-
     @Binding var bool: NSNumber
     @Binding var changed: Bool
     
-    public init(title: String = "", ch1Title: String = "", ch2Title: String = "", bool: Binding<NSNumber>, spacing: Double = 20, required: Bool = false, changed: Binding<Bool>) {
+    private var title: String
+    private var ch1Title: String
+    private var ch2Title: String
+    private var required: Bool
+    private var spacing: Double
+    private var eventTracker: UIEventTracker?
+    
+    init(title: String = "", ch1Title: String = "", ch2Title: String = "", bool: Binding<NSNumber>, spacing: Double = 20, required: Bool = false, changed: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
         self.title = title
         self.ch1Title = ch1Title
         self.ch2Title = ch2Title
@@ -27,10 +27,10 @@ public struct BoolCheckmarkBlock: View {
         self.spacing = spacing
         self.required = required
         self._changed = changed
-        
+        self.eventTracker = eventTracker
     }
     
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 2) {
             if title != "" {
                 Text("\(title):").font(.footnote)
@@ -43,14 +43,14 @@ public struct BoolCheckmarkBlock: View {
     
     var checkmarks: some View {
         HStack {
-            CheckmarkBlock(text: ch1Title, checked: .constant(bool == true ? true : false), changed: .constant(false), independent: false)
+            CheckmarkBlock(text: ch1Title, checked: .constant(bool == true ? true : false), changed: .constant(false), independent: false, eventTracker: eventTracker)
                 .onTapGesture {
                     bool = true
                 }
             Divider()
                 .padding(.horizontal, spacing)
                 .frame(height: 30)
-            CheckmarkBlock(text: ch2Title, checked: .constant(bool == false ? true : false), changed: .constant(false), independent: false)
+            CheckmarkBlock(text: ch2Title, checked: .constant(bool == false ? true : false), changed: .constant(false), independent: false, eventTracker: eventTracker)
                 .onTapGesture {
                     bool = false
                 }

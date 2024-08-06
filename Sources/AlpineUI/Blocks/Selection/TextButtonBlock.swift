@@ -9,21 +9,20 @@ import SwiftUI
 
 public struct TextButtonBlock<Destination: View>: View {
     
-    var image: String?
-    var text: String?
-    var height: CGFloat?
-    var width: CGFloat?
-    var foreground: Color
-    var background: Color
-    var font: Font
-    
-    var action: (() -> ())?
-    var destination: () -> Destination
-    
     @State private var destinationActive = false
-
     
-    public init(image: String? = nil, text: String? = nil, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, action: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
+    private var image: String?
+    private var text: String?
+    private var height: CGFloat?
+    private var width: CGFloat?
+    private var foreground: Color
+    private var background: Color
+    private var font: Font
+    private var action: (() -> ())?
+    private var destination: () -> Destination
+    private var eventTracker: UIEventTracker?
+    
+    public init(image: String? = nil, text: String? = nil, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, eventTracker: UIEventTracker? = nil, action: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
         self.image = image
         self.text = text
         self.width = width
@@ -33,15 +32,18 @@ public struct TextButtonBlock<Destination: View>: View {
         self.font = font
         self.action = action
         self.destination = destination
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
         Button {
+            eventTracker?.logUIEvent(.textButton, parameters: ["text": text ?? ""])
             if let action {
                 action()
             }
             if hasDestination {
                 destinationActive.toggle()
+                eventTracker?.logUIEvent(.navigationLinkActivated, parameters: ["destination": String(describing: Destination.self)])
             }
         } label: {
             HStack {

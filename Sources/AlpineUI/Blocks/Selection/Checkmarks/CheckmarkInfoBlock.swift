@@ -7,30 +7,32 @@
 
 import SwiftUI
 
-public struct CheckmarkInfoBlock: View {
+internal struct CheckmarkInfoBlock: View {
     
-    @Environment(\.isEnabled) var isEnabled
-    
-    var primaryText: String
-    var secondaryText: String
-    var independent: Bool
-    var width: CGFloat?
+    @Environment(\.isEnabled) private var isEnabled
     
     @Binding var checked: Bool
     @Binding var changed: Bool
     
-    public init(prmaryText: String, secondaryText: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true, width: CGFloat? = nil) {
+    private var primaryText: String
+    private var secondaryText: String
+    private var independent: Bool
+    private var width: CGFloat?
+    private var eventTracker: UIEventTracker?
+    
+    public init(prmaryText: String, secondaryText: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true, width: CGFloat? = nil, eventTracker: UIEventTracker? = nil) {
         self.primaryText = prmaryText
         self.secondaryText = secondaryText
         self._checked = checked
         self._changed = changed
         self.independent = independent
         self.width = width
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
         HStack {
-            CheckmarkBlock(text: primaryText, checked: $checked, changed: $changed, independent: false)
+            CheckmarkBlock(text: primaryText, checked: $checked, changed: $changed, independent: false, eventTracker: eventTracker)
                 .padding(.trailing)
             if width != nil {
                 Spacer()

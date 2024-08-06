@@ -7,18 +7,21 @@
 
 import SwiftUI
 
-public struct MultiSelectMenu: View {
+internal struct MultiSelectMenu: View {
     
     @StateObject var viewModel: MultiSelectMenuViewModel
     
     @Binding var selections: String
     
-    public init(values: [PickerOption], selections: Binding<String>) {
+    private var eventTracker: UIEventTracker?
+    
+    init(values: [PickerOption], selections: Binding<String>,  eventTracker: UIEventTracker? = nil) {
         self._selections = selections
         self._viewModel = StateObject(wrappedValue: MultiSelectMenuViewModel(selections: selections.wrappedValue, values: values))
+        self.eventTracker = eventTracker
     }
     
-    public var body: some View {
+    var body: some View {
         ScrollView {
             ForEach(viewModel.values) { value in
                 VStack(spacing: 10) {
@@ -32,6 +35,7 @@ public struct MultiSelectMenu: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         selections = viewModel.addRemoveFromSelection(value.primaryText)
+                        eventTracker?.logUIEvent(.multiSelectMenuSelectionChanged,typ: .selection,  parameters: ["item": value.primaryText])
                     }
                     .padding(.horizontal, 10.0)
                     if viewModel.values.last != value {

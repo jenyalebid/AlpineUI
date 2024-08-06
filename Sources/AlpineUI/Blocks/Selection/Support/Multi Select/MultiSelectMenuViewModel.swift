@@ -9,9 +9,9 @@ import SwiftUI
 
 public class MultiSelectMenuViewModel: ObservableObject {
     
-    var values: [PickerOption]
+    @Published var selectedValues: [String] = []
     
-    var hasOrder: Bool {
+    private var hasOrder: Bool {
         for value in values {
             if value.order != 0 {
                 return true
@@ -20,7 +20,7 @@ public class MultiSelectMenuViewModel: ObservableObject {
         return false
     }
     
-    @Published var selectedValues: [String] = []
+    var values: [PickerOption]
     
     init(selections: String, values: [PickerOption]) {
         self.values = values
@@ -29,22 +29,21 @@ public class MultiSelectMenuViewModel: ObservableObject {
         sortValues()
     }
     
-    func checkEmpty() {
+    private func checkEmpty() {
         if values.isEmpty {
             values.append(PickerOption(primaryText: "NULL"))
         }
     }
     
-    func sortValues() {
+    private func sortValues() {
         if hasOrder {
             values = values.sorted { $0.order < $1.order }
-        }
-        else {
+        } else {
             values = values.sorted { $0.primaryText.lowercased() < $1.primaryText.lowercased() }
         }
     }
     
-    func makeArrayFromString(_ string: String) -> [String] {
+    private func makeArrayFromString(_ string: String) -> [String] {
         if string == "" {
             return []
         }
@@ -57,15 +56,14 @@ public class MultiSelectMenuViewModel: ObservableObject {
         return components
     }
     
-    func makeStringFromArray(_ array: [String]) -> String {
+    private func makeStringFromArray(_ array: [String]) -> String {
         return array.joined(separator: ", ")
     }
     
     func addRemoveFromSelection(_ value: String) -> String {
         if let index = selectedValues.firstIndex(of: value) {
             selectedValues.remove(at: index)
-        }
-        else {
+        } else {
             selectedValues.append(value)
         }
         return makeStringFromArray(selectedValues)
