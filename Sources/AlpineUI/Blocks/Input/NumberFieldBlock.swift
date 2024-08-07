@@ -9,11 +9,7 @@ import SwiftUI
 
 public struct NumberFieldBlock: View {
     
-    @Environment(\.isEnabled) var isEnabled
-    
-    var title: String
-    var required: Bool
-    let formatter = NumberFormatter()
+    @Environment(\.isEnabled) private var isEnabled
     
     @FocusState private var isFocused: Bool
     
@@ -22,7 +18,10 @@ public struct NumberFieldBlock: View {
     
     @State private var localValue = 0
     
-    var sendKeyboardUpdate: Bool
+    private let formatter = NumberFormatter()
+    private var title: String
+    private var required: Bool
+    private var sendKeyboardUpdate: Bool
     
     public init(title: String, value: Binding<String>, required: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false) {
         self.title = title

@@ -9,15 +9,14 @@ import SwiftUI
 
 public struct ListLabel: View {
     
+    private var content: String
+    
     public init(_ content: String) {
         self.content = content
     }
     
-    var content: String
-    
     public var body: some View {
         Text(content + ":")
-//            .fontWeight(.semibold)
             .font(.caption)
     }
 }

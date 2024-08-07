@@ -9,20 +9,18 @@ import SwiftUI
 
 public struct TextFieldBlock: View {
     
-    @Environment(\.isEnabled) var isEnabled
+    @Environment(\.isEnabled) private var isEnabled
     
-    var title: String
-    var placeholder: String
-    var required: Bool
-
     @FocusState private var isFocused: Bool
     
     @Binding var value: String
     @Binding var changed: Bool
     
-    var sendKeyboardUpdate: Bool
+    private var title: String
+    private var placeholder: String
+    private var required: Bool
+    private var sendKeyboardUpdate: Bool
 
-    
     public init(title: String, placeholder: String = "", value: Binding<String>, required: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false) {
         self.title = title
         self.placeholder = placeholder

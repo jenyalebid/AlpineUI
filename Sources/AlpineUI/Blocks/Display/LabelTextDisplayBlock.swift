@@ -9,10 +9,9 @@ import SwiftUI
 
 public struct LabelTextDisplayBlock: View {
     
-    var title: String
-    var text: String
-    
-    var font: Font
+    private var title: String
+    private var text: String
+    private var font: Font
     
     public init(title: String, text: String, font: Font = .footnote) {
         self.title = title
@@ -30,7 +29,6 @@ public struct LabelTextDisplayBlock: View {
             Text(text)
                 .font(font)
         }
-//        .frame(maxWidth: .infinity)
     }
 }
 

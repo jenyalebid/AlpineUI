@@ -9,13 +9,12 @@ import SwiftUI
 
 public struct ListPickerBlock<PickerValue: Hashable, Style: PickerStyle, PickerValues: View>: View {
     
-    var title: String
-    var style: Style
-    
-    private var showLabel: Bool
-    
     @Binding var value: PickerValue
     @ViewBuilder var values: PickerValues
+    
+    private var title: String
+    private var style: Style
+    private var showLabel: Bool
     
     public init(title: String, style: Style = .automatic, value: Binding<PickerValue>, @ViewBuilder values: () -> PickerValues) {
         self.title = title
@@ -38,13 +37,12 @@ public struct ListPickerBlock<PickerValue: Hashable, Style: PickerStyle, PickerV
     public var body: some View {
         if showLabel {
             pickerWithTitle
-        }
-        else {
+        } else {
             picker
         }
     }
     
-    var pickerWithTitle: some View {
+    private var pickerWithTitle: some View {
         HStack {
             ListLabel(title)
             Spacer()
@@ -52,7 +50,7 @@ public struct ListPickerBlock<PickerValue: Hashable, Style: PickerStyle, PickerV
         }
     }
     
-    var picker: some View {
+    private var picker: some View {
         Picker(title, selection: $value) {
             values
         }

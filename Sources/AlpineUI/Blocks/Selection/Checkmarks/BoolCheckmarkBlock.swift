@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct BoolCheckmarkBlock: View {
+internal struct BoolCheckmarkBlock: View {
     
     @Binding var bool: NSNumber
     @Binding var changed: Bool

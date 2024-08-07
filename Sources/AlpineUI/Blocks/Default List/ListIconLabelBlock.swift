@@ -9,10 +9,10 @@ import SwiftUI
 
 public struct ListIconLabelBlock<Content: View>: View {
     
-    var systemImage: String
-    var title: String
-    
     @ViewBuilder var content: Content
+    
+    private var systemImage: String
+    private var title: String
     
     public init(systemImage: String, title: String, @ViewBuilder content: () -> Content) {
         self.systemImage = systemImage

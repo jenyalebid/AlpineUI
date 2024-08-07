@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-public struct DividerBlock: View {
+internal struct DividerBlock: View {
     
-    var label: String
+    private var label: String
     
     public init(label: String) {
         self.label = label

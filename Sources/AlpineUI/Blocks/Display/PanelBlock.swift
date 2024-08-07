@@ -10,17 +10,20 @@ import SwiftUI
 @available(iOS 16.0, *)
 public struct PanelBlock<Content: View>: View {
     
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) private var colorScheme
+    
+    @Binding var isPresented: Bool
     
     public var content: Content
     
-    @Binding var isPresented: Bool
-    var alignment: Alignment
+    private var alignment: Alignment
+    private var eventTracker: UIEventTracker?
     
-    public init(isPresented: Binding<Bool>, alignment: Alignment, @ViewBuilder content: () -> Content) {
+    public init(isPresented: Binding<Bool>, alignment: Alignment, eventTracker: UIEventTracker? = nil, @ViewBuilder content: () -> Content) {
         self._isPresented = isPresented
         self.alignment = alignment
         self.content = content()
+        self.eventTracker = eventTracker
     }
     
     public var body: some View {
@@ -31,9 +34,12 @@ public struct PanelBlock<Content: View>: View {
         }
     }
     
-    var panel: some View {
+    private var panel: some View {
         content
             .panel(isPresented: $isPresented, alignment: alignment)
+            .onAppear {
+                eventTracker?.logUIEvent(.openPanel, parameters: ["alignment":  String(describing: alignment)])
+            }
     }
 }
 

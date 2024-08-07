@@ -7,17 +7,16 @@
 
 import SwiftUI
 
-public struct TextFieldDisplayBlock: View {
+internal struct TextFieldDisplayBlock: View {
     
-    @Environment(\.isEnabled) var isEnabled
-    
-    var title: String
+    @Environment(\.isEnabled) private var isEnabled
     
     @Binding var text: String
     @Binding var trigger: Bool
     @Binding var changed: Bool
     
-    var required: Bool
+    private var title: String
+    private var required: Bool
         
     public init(title: String, text: Binding<String>, trigger: Binding<Bool> = .constant(false), required: Bool = false, changed: Binding<Bool> = .constant(false)) {
         self.title = title

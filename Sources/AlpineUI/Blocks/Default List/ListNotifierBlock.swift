@@ -9,9 +9,9 @@ import SwiftUI
 
 public struct ListNotifierBlock: View {
     
-    var image: Image
-    var description: String
-    var height: CGFloat
+    private var image: Image
+    private var description: String
+    private var height: CGFloat
     
     public init(description: String, height: CGFloat = 100, image: Image) {
         self.description = description

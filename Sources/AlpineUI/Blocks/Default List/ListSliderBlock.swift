@@ -15,11 +15,11 @@ public struct ListSliderBlock: View {
         case float(Binding<Float>)
     }
 
-    var title: String
-    var valueRange: ClosedRange<Double>
-    var valueType: ValueType
-    var labelWidthPart = 3
-    var onEditingChanged: (() -> Void)?
+    private var title: String
+    private var valueRange: ClosedRange<Double>
+    private var valueType: ValueType
+    private var labelWidthPart = 3
+    private var onEditingChanged: (() -> Void)?
 
     public init(title: String, min: Int, max: Int, value: Binding<Int>, labelWidthPart: Int = 3, onEditingChanged: (() -> Void)? = nil) {
         self.title = title

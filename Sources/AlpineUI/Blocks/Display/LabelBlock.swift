@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct LabelBlock: View {
     
-    var value: String
+    private var value: String
     
     public init(value: String) {
         self.value = value

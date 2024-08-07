@@ -9,17 +9,16 @@ import SwiftUI
 
 public struct TextAreaBlock: View {
     
-    @Environment(\.isEnabled) var isEnabled
-    
-    var title: String
-    var height: CGFloat?
+    @Environment(\.isEnabled) private var isEnabled
     
     @FocusState private var isFocused: Bool
     
-    @Binding var text: String
-    @Binding var changed: Bool
+    @Binding private var text: String
+    @Binding private var changed: Bool
     
-    var sendKeyboardUpdate: Bool
+    private var title: String
+    private var height: CGFloat?
+    private var sendKeyboardUpdate: Bool
     
     public init(title: String, text: Binding<String>, height: CGFloat?, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false) {
         self.title = title

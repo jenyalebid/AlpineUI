@@ -9,13 +9,13 @@ import SwiftUI
 
 public struct ListNumberFieldBlock<T>: View where T: Numeric & LosslessStringConvertible {
     
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) private var colorScheme
     
-    var label: String
     @Binding var value: T
     
-    var formatter: NumberFormatter
-    var keyboardType: UIKeyboardType
+    private var label: String
+    private var formatter: NumberFormatter
+    private var keyboardType: UIKeyboardType
     
     public init(title: String, value: Binding<T>, formatter: NumberFormatter = NumberFormatter(), keyboardType: UIKeyboardType = .decimalPad) {
         self.label = title

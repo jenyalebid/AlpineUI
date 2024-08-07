@@ -12,10 +12,10 @@ internal struct ColorPickerSelector: View {
     @Binding var color: Color
     @Binding var show: Bool
     
-    var colors: [Color]
-    var eventTracker: UIEventTracker?
-    
     private let columns = [GridItem(.adaptive(minimum: 40))]
+    
+    var eventTracker: UIEventTracker?
+    var colors: [Color]
   
     var body: some View {
         ScrollView {

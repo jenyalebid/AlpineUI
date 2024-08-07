@@ -10,11 +10,12 @@ import SwiftUI
 public struct DateBlock: View {
     
     @Binding var date: Date
+    
     @State var showPicker = false
 
-    var title: String
-    var components: DatePicker<Label>.Components = .date
-    var actionOnDismiss: (() -> ())?
+    private var title: String
+    private var components: DatePicker<Label>.Components = .date
+    private var actionOnDismiss: (() -> ())?
     
     public init(title: String, date: Binding<Date>, components: DatePickerComponents = .date, actionOnDismiss: (() -> ())? = nil) {
         self.title = title

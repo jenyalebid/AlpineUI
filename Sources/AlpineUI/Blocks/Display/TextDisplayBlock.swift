@@ -9,9 +9,9 @@ import SwiftUI
 
 public struct TextDisplayBlock: View {
     
-    var title: String
-    var text: String
-    var font: Font
+    private var title: String
+    private var text: String
+    private var font: Font
     
     public init(title: String, text: String, font: Font = .body) {
         self.title = title
@@ -25,7 +25,6 @@ public struct TextDisplayBlock: View {
             Text("\(text)")
                 .font(font)
         }
-//        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

@@ -9,8 +9,9 @@ import SwiftUI
 
 public struct ListLabelBlock<Content: View>: View {
     
-    var label: String
     @ViewBuilder var content: Content
+    
+    private var label: String
     
     public init(label: String, @ViewBuilder content: () -> Content) {
         self.label = label

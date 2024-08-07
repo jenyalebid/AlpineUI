@@ -122,9 +122,9 @@ public extension View {
     }
     
     @ViewBuilder
-    func applySearchableIfNeeded(_ condition: Bool) -> some View {
+    func applySearchableIfNeeded(_ condition: Bool, searchText: Binding<String> = .constant("")) -> some View {
         if condition {
-            self.searchable(text: .constant(""))
+            self.searchable(text: searchText)
         } else {
             self
         }

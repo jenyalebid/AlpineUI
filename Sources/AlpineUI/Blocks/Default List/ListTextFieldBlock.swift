@@ -9,11 +9,11 @@ import SwiftUI
 
 public struct ListTextFieldBlock: View {
     
-    var title: String
-    var placeHolder: String?
     @Binding var content: String
     
-    var required: Bool
+    private var title: String
+    private var placeHolder: String?
+    private var required: Bool
         
     public init(title: String, placeHolder: String? = nil, content: Binding<String>, required: Bool = false) {
         self.title = title
@@ -50,28 +50,6 @@ public struct ListTextFieldBlock: View {
         TextField(placeHolder ?? "", text: $content)
             .requiredOutline(required && content.isEmpty)
             .textFieldStyle(.roundedBorder)
-    }
-}
-
-public struct ListIconTextFieldBlock: View {
-    
-    var systemImage: String
-    var title: String
-    
-    public init(systemImage: String, title: String) {
-        self.systemImage = systemImage
-        self.title = title
-    }
-    
-    public var body: some View {
-        HStack {
-            Image(systemName: systemImage)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 20, height: 20, alignment: .center)
-                .padding(.trailing, 4)
-            Text(title)
-        }
     }
 }
 

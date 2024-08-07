@@ -9,14 +9,13 @@ import SwiftUI
 
 public struct ListTextBlock: View {
     
+    private var title: String
+    private var content: String
+    
     public init(title: String, content: String) {
         self.title = title
         self.content = content
     }
-    
-    
-    var title: String
-    var content: String
     
     public var body: some View {
         HStack {

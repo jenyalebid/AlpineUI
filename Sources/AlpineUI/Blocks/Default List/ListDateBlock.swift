@@ -9,8 +9,9 @@ import SwiftUI
 
 public struct ListDateBlock: View {
     
-    var label: String
     @Binding var value: Date
+    
+    private var label: String
     
     public init(label: String, value: Binding<Date>) {
         self.label = label

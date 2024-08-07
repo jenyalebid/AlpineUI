@@ -9,11 +9,10 @@ import SwiftUI
 
 public struct ListAlertBlock: View {
     
-    var missingRequirements: Bool
-    var notExported: Bool
-    var deleted: Bool
-    
-    var showExported: Bool
+    private var missingRequirements: Bool
+    private var notExported: Bool
+    private var deleted: Bool
+    private var showExported: Bool
     
     public init(missingRequirements: Bool, notExported: Bool, deleted: Bool = false, showExported: Bool = false) {
         self.missingRequirements = missingRequirements
@@ -21,7 +20,6 @@ public struct ListAlertBlock: View {
         self.deleted = deleted
         self.showExported = showExported
     }
-    
     
     public var body: some View {
         VStack(alignment: .leading) {
@@ -36,8 +34,7 @@ public struct ListAlertBlock: View {
             if notExported {
                 Text("Not Exported")
                     .foregroundColor(Color("NotExported"))
-            }
-            else if showExported {
+            } else if showExported {
                 Text("Exported")
                     .foregroundColor(Color.green)
             }

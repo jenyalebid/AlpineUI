@@ -29,7 +29,7 @@ internal struct ColorPickerBlock: View {
             .foregroundColor(color)
             .frame(width: size, height: size)
             .popover(isPresented: $showSelector) {
-                ColorPickerSelector(color: $color, show: $showSelector, colors: colors, eventTracker: eventTracker)
+                ColorPickerSelector(color: $color, show: $showSelector, eventTracker: eventTracker, colors: colors)
             }
             .onTapGesture {
                 showSelector.toggle()

@@ -23,6 +23,11 @@ public enum UIEvent: String {
     case dropdownSelection = "dropdown_selection"
     case dropdownSelectionChanged = "dropdown_selection_changed"
     case checkmarkToggled = "checkmark_toggled"
+    case openPanel = "open_panel"
+    case toggleChanged = "toggle_changed" 
+    case booleanPickerChanged = "boolean_picker_changed"
+    case colorPickerChanged = "color_picker_changed"
+    case colorTextChanged = "color_text_changed"
 }
 
 
