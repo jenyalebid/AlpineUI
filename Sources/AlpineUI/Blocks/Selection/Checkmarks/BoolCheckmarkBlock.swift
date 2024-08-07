@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct BoolCheckmarkBlock: View {
+public struct BoolCheckmarkBlock: View {
     
     @Binding var bool: NSNumber
     @Binding var changed: Bool
@@ -19,7 +19,7 @@ internal struct BoolCheckmarkBlock: View {
     private var spacing: Double
     private var eventTracker: UIEventTracker?
     
-    init(title: String = "", ch1Title: String = "", ch2Title: String = "", bool: Binding<NSNumber>, spacing: Double = 20, required: Bool = false, changed: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
+    public init(title: String = "", ch1Title: String = "", ch2Title: String = "", bool: Binding<NSNumber>, spacing: Double = 20, required: Bool = false, changed: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
         self.title = title
         self.ch1Title = ch1Title
         self.ch2Title = ch2Title
@@ -30,7 +30,7 @@ internal struct BoolCheckmarkBlock: View {
         self.eventTracker = eventTracker
     }
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 2) {
             if title != "" {
                 Text("\(title):").font(.footnote)

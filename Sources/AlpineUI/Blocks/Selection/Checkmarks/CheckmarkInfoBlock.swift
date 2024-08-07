@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct CheckmarkInfoBlock: View {
+public struct CheckmarkInfoBlock: View {
     
     @Environment(\.isEnabled) private var isEnabled
     
