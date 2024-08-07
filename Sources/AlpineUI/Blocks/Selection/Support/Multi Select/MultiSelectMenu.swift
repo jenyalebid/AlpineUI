@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct MultiSelectMenu: View {
+public struct MultiSelectMenu: View {
     
     @StateObject var viewModel: MultiSelectMenuViewModel
     
@@ -15,13 +15,13 @@ internal struct MultiSelectMenu: View {
     
     private var eventTracker: UIEventTracker?
     
-    init(values: [PickerOption], selections: Binding<String>,  eventTracker: UIEventTracker? = nil) {
+    public init(values: [PickerOption], selections: Binding<String>,  eventTracker: UIEventTracker? = nil) {
         self._selections = selections
         self._viewModel = StateObject(wrappedValue: MultiSelectMenuViewModel(selections: selections.wrappedValue, values: values))
         self.eventTracker = eventTracker
     }
     
-    var body: some View {
+    public var body: some View {
         ScrollView {
             ForEach(viewModel.values) { value in
                 VStack(spacing: 10) {
