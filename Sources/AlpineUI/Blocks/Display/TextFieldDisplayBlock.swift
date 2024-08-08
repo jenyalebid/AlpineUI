@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct TextFieldDisplayBlock: View {
+public struct TextFieldDisplayBlock: View {
     
     @Environment(\.isEnabled) private var isEnabled
     
@@ -46,7 +46,7 @@ internal struct TextFieldDisplayBlock: View {
         .onTapGesture {
             trigger.toggle()
         }
-        .onChange(of: text) { _ in
+        .onChange(of: text) { _, _ in
             changed.toggle()
         }
     }

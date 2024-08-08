@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct BoolCheckmarkBlock: View {
+public struct BoolCheckmarkBlock: View {
     
     @Binding var bool: NSNumber
     @Binding var changed: Bool
@@ -65,7 +65,7 @@ internal struct BoolCheckmarkBlock: View {
                 }
             }
         )
-        .onChange(of: bool) { _ in
+        .onChange(of: bool) { _, _ in
             changed.toggle()
         }
     }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct ColorPickerBlock: View {
+public struct ColorPickerBlock: View {
     
     @Binding var color: Color
     @State private var showSelector = false
