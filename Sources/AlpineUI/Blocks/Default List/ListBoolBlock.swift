@@ -15,15 +15,15 @@ public struct ListBoolBlock: View {
     private var left: String
     private var right: String
     private var required: Bool
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(label: String, left: String, right: String, value: Binding<NSNumber>, required: Bool = false, eventTracker: UIEventTracker? = nil) {
+    public init(label: String, left: String, right: String, value: Binding<NSNumber>, required: Bool = false, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.label = label
         self.left = left
         self.right = right
         self._value = value
         self.required = required
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
@@ -34,7 +34,9 @@ public struct ListBoolBlock: View {
     }
     
     var bool: some View {
-        BooleanPicker(leftLabel: left, rightLabel: right, value: $value, eventTracker: eventTracker)
+        BooleanPicker(leftLabel: left, rightLabel: right, value: $value, onEvent: { event, parameters in
+            onEvent?(event, parameters)
+        })
             .frame(height: 26)
             .requiredOutline(required && value != 0 && value != 1)
             .frame(maxWidth: .infinity, minHeight: 26)

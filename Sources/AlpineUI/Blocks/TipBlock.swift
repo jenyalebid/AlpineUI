@@ -12,12 +12,12 @@ public struct TipBlock<T: Tip>: View {
     
     private var tip: T
     private var actionHandler: ((Tips.Action) -> Void)?
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(_ tip: T, eventTracker: UIEventTracker? = nil, actionHandler: ((Tips.Action) -> Void)? = nil) {
+    public init(_ tip: T, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil, actionHandler: ((Tips.Action) -> Void)? = nil) {
         self.tip = tip
         self.actionHandler = actionHandler
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
 
     public var body: some View {

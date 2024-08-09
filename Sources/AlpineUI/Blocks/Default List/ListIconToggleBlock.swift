@@ -13,9 +13,9 @@ public struct ListIconToggleBlock: View {
     
     private var systemImage: String
     private var title: String?
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(_ systemImage: String, title: String? = nil, isOn: Binding<Bool>, eventTracker: UIEventTracker? = nil ) {
+    public init(_ systemImage: String, title: String? = nil, isOn: Binding<Bool>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil ) {
         self.systemImage = systemImage
         self.title = title
         self._isOn = isOn
@@ -35,7 +35,7 @@ public struct ListIconToggleBlock: View {
             Toggle("", isOn: $isOn)
                 .labelsHidden()
                 .onChange(of: isOn) { oldValue, newValue in
-                    eventTracker?.logUIEvent(.toggleChanged, parameters: ["title": title, "isOn": newValue])
+                    onEvent?(.toggleChanged, ["title": title, "isOn": newValue])
                 }
         }
     }

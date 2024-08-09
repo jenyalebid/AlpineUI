@@ -19,9 +19,9 @@ public struct SingleDropdownBlock: View {
     
     private var title: String
     private var required: Bool
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, values: [PickerOption], selection: Binding<String>, required: Bool = false, changed: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
+    public init(title: String, values: [PickerOption], selection: Binding<String>, required: Bool = false, changed: Binding<Bool>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self._selection = selection
         self.required = required
@@ -40,7 +40,7 @@ public struct SingleDropdownBlock: View {
                     ScrollView {
                         ForEach(viewModel.values) { value in
                             Button {
-                                eventTracker?.logUIEvent(.dropdownSelection, parameters: ["selection": selection])
+                                onEvent?(.dropdownSelection, ["selection": selection])
                                 viewModel.selection = value.primaryText
                                 selection = viewModel.selection
                                 show.toggle()
@@ -66,11 +66,11 @@ public struct SingleDropdownBlock: View {
         }
         .onChange(of: selection) { _ in
             changed.toggle()
-            eventTracker?.logUIEvent(.dropdownSelectionChanged, parameters: ["selection": selection])
+            onEvent?(.dropdownSelectionChanged, ["selection": selection])
         }
         .onTapGesture {
             show.toggle()
-            eventTracker?.logUIEvent(.dropdownOpened, parameters: ["title": title])
+            onEvent?(.dropdownOpened, ["title": title])
         }
     }
     

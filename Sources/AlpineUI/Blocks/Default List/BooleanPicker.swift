@@ -13,18 +13,20 @@ internal struct BooleanPicker: View {
     
     private var leftLabel: String
     private var rightLabel: String
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(leftLabel: String, rightLabel: String, value: Binding<NSNumber>, eventTracker: UIEventTracker? = nil) {
+    public init(leftLabel: String, rightLabel: String, value: Binding<NSNumber>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.leftLabel = leftLabel
         self.rightLabel = rightLabel
         self._value = value
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
         HStack {
-            BooleanBlock(label: leftLabel, checked: .constant(value == true ? true : false), eventTracker: eventTracker)
+            BooleanBlock(label: leftLabel, checked: .constant(value == true ? true : false), onEvent: { event, parameters in
+                onEvent?(event, parameters)
+            })
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded {
@@ -34,7 +36,9 @@ internal struct BooleanPicker: View {
             Divider()
                 .frame(height: 20)
                 .padding(.horizontal)
-            BooleanBlock(label: rightLabel, checked: .constant(value == false ? true : false), eventTracker: eventTracker)
+            BooleanBlock(label: rightLabel, checked: .constant(value == false ? true : false), onEvent: { event, parameters in
+                onEvent?(event, parameters)
+            })
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded {

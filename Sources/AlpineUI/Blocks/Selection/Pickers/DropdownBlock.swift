@@ -23,16 +23,16 @@ public struct DropdownBlock: View {
     private var required: Bool
     private var sendKeyboardUpdate: Bool
     private var allowBlank: Bool
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(placeHolder: String? = nil, title: String? = nil, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false, allowBlank: Bool = false, eventTracker: UIEventTracker? = nil) {
+    public init(placeHolder: String? = nil, title: String? = nil, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false, allowBlank: Bool = false, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self.placeHolder = placeHolder
         self._selection = selection
         self.required = required
         self.controlField = controlField
         self._changed = changed
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
         self.sendKeyboardUpdate = sendKeyboardUpdate
         self.allowBlank = allowBlank
         
@@ -62,7 +62,7 @@ public struct DropdownBlock: View {
                                 selection = value.primaryText
                                 viewModel.makeSelection()
                                 focused = false
-                                eventTracker?.logUIEvent(.dropdownSelection, parameters: ["selectedItem": value.primaryText])
+                                onEvent?(.dropdownSelection, ["selectedItem": value.primaryText])
                             }
                         }
                         .padding(6)
@@ -76,7 +76,7 @@ public struct DropdownBlock: View {
                 focused = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.viewModel.showDropdown = true
-                    eventTracker?.logUIEvent(.dropdownOpened, parameters: ["currentSelection": selection])
+                    onEvent?(.dropdownOpened, ["currentSelection": selection])
                 }
             }
         }

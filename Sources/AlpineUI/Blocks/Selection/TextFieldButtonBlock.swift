@@ -12,13 +12,13 @@ public struct TextFieldButtonBlock: View {
     private var title: String
     private var text: String
     private var action: () -> ()
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, text: String, eventTracker: UIEventTracker? = nil, action: @escaping () -> ()) {
+    public init(title: String, text: String, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil, action: @escaping () -> ()) {
         self.title = title
         self.text = text
         self.action = action
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
 
     public var body: some View {
@@ -27,7 +27,7 @@ public struct TextFieldButtonBlock: View {
                 .font(.footnote)
             Button {
                 action()
-                eventTracker?.logUIEvent(.textFieldButton, parameters: ["titleTextFieldButton" : "\(title)", "textTextFieldButton" : "\(text)"])
+                onEvent?(.textFieldButton, ["titleTextFieldButton" : "\(title)", "textTextFieldButton" : "\(text)"])
             } label: {
                 FieldFrameBlock(selection: .constant(text), fieldType: .text)
             }

@@ -13,13 +13,13 @@ public struct HexColorPickerBlock: View {
     @State var color: Color
     
     private var title: String
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, color: Binding<String>, eventTracker: UIEventTracker? = nil) {
+    public init(title: String, color: Binding<String>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self._color = State(wrappedValue: Color(hex: color.wrappedValue))
         _colorText = color
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
@@ -32,12 +32,12 @@ public struct HexColorPickerBlock: View {
         .contentShape(Rectangle())
         .onChange(of: color) { oldValue, newValue in
             colorText = newValue.toHex()
-            eventTracker?.logUIEvent(.colorPickerChanged, parameters: ["title": title, "oldColor": oldValue.toHex(), "newColor": newValue.toHex()])
+            onEvent?(.colorPickerChanged, ["title": title, "oldColor": oldValue.toHex(), "newColor": newValue.toHex()])
         }
         .onChange(of: colorText) { oldValue, newValue in
             if color.toHex() != newValue {
                 color = Color(hex: newValue)
-                eventTracker?.logUIEvent(.colorTextChanged, parameters: ["title": title, "oldColorText": oldValue, "newColorText": newValue])
+                onEvent?(.colorTextChanged, ["title": title, "oldColorText": oldValue, "newColorText": newValue])
             }
         }
     }

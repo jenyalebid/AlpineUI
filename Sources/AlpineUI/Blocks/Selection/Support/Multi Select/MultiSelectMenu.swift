@@ -13,12 +13,12 @@ public struct MultiSelectMenu: View {
     
     @Binding var selections: String
     
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(values: [PickerOption], selections: Binding<String>,  eventTracker: UIEventTracker? = nil) {
+    public init(values: [PickerOption], selections: Binding<String>,  onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self._selections = selections
         self._viewModel = StateObject(wrappedValue: MultiSelectMenuViewModel(selections: selections.wrappedValue, values: values))
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
@@ -35,7 +35,7 @@ public struct MultiSelectMenu: View {
                     .contentShape(Rectangle())
                     .onTapGesture {
                         selections = viewModel.addRemoveFromSelection(value.primaryText)
-                        eventTracker?.logUIEvent(.multiSelectMenuSelectionChanged,typ: .selection,  parameters: ["item": value.primaryText])
+                        onEvent?(.multiSelectMenuSelectionChanged, ["item": value.primaryText])
                     }
                     .padding(.horizontal, 10.0)
                     if viewModel.values.last != value {

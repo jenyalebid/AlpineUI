@@ -15,13 +15,13 @@ public struct DatePickerBlock: View {
     @Binding var changed: Bool
     
     private var title: String
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, value: Binding<Date>, changed: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
+    public init(title: String, value: Binding<Date>, changed: Binding<Bool>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self._value = value
         self._changed = changed
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {

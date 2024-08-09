@@ -20,9 +20,9 @@ public struct TextButtonBlock<Destination: View>: View {
     private var font: Font
     private var action: (() -> ())?
     private var destination: () -> Destination
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(image: String? = nil, text: String? = nil, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, eventTracker: UIEventTracker? = nil, action: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
+    public init(image: String? = nil, text: String? = nil, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil, action: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
         self.image = image
         self.text = text
         self.width = width
@@ -32,18 +32,18 @@ public struct TextButtonBlock<Destination: View>: View {
         self.font = font
         self.action = action
         self.destination = destination
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
         Button {
-            eventTracker?.logUIEvent(.textButton, parameters: ["text": text ?? ""])
+            onEvent?(.textButton, ["text": text ?? ""])
             if let action {
                 action()
             }
             if hasDestination {
                 destinationActive.toggle()
-                eventTracker?.logUIEvent(.navigationLinkActivated, parameters: ["destination": String(describing: Destination.self)])
+                onEvent?(.navigationLinkActivated, ["destination": String(describing: Destination.self)])
             }
         } label: {
             HStack {

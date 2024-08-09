@@ -16,11 +16,11 @@ public struct SettingBlock<Content: View, Destination: View>: View {
     private var displayContent: () -> Content
     private var destination: () -> Destination
     private var action: (() -> ())?
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
     @State var isActiveNavigation = false
     
-    public init(image: String, color: Color = .accentColor, title: String, subtitle: String? = nil, eventTracker: UIEventTracker? = nil, @ViewBuilder displayContent: @escaping () -> Content = {EmptyView()}, destination: @escaping (() -> Destination) = {EmptyView()}, action: (() -> ())? = nil) {
+    public init(image: String, color: Color = .accentColor, title: String, subtitle: String? = nil, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil, @ViewBuilder displayContent: @escaping () -> Content = {EmptyView()}, destination: @escaping (() -> Destination) = {EmptyView()}, action: (() -> ())? = nil) {
         self.image = image
         self.color = color
         self.title = title
@@ -28,7 +28,7 @@ public struct SettingBlock<Content: View, Destination: View>: View {
         self.displayContent = displayContent
         self.destination = destination
         self.action = action
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
@@ -44,13 +44,13 @@ public struct SettingBlock<Content: View, Destination: View>: View {
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded {
-                            eventTracker?.logUIEvent(.settingTap, parameters: ["title": title])
+                            onEvent?(.settingTap, ["title": title])
                             if let action = action {
                                 action()
                             }
                             if !(destination is (() -> EmptyView)) {
                                 isActiveNavigation.toggle()
-                                eventTracker?.logUIEvent(.navigationLinkActivated, parameters: ["destination": String(describing: Destination.self)])
+                                onEvent?(.navigationLinkActivated, ["destination": String(describing: Destination.self)])
                             }
                         }
                 )

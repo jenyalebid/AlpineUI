@@ -17,13 +17,13 @@ public struct PanelBlock<Content: View>: View {
     public var content: Content
     
     private var alignment: Alignment
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(isPresented: Binding<Bool>, alignment: Alignment, eventTracker: UIEventTracker? = nil, @ViewBuilder content: () -> Content) {
+    public init(isPresented: Binding<Bool>, alignment: Alignment, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil, @ViewBuilder content: () -> Content) {
         self._isPresented = isPresented
         self.alignment = alignment
         self.content = content()
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
@@ -38,7 +38,7 @@ public struct PanelBlock<Content: View>: View {
         content
             .panel(isPresented: $isPresented, alignment: alignment)
             .onAppear {
-                eventTracker?.logUIEvent(.openPanel, parameters: ["alignment":  String(describing: alignment)])
+                onEvent?(.openPanel, ["alignment":  String(describing: alignment)])
             }
     }
 }

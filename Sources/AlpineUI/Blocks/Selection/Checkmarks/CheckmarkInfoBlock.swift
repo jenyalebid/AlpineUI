@@ -18,21 +18,23 @@ public struct CheckmarkInfoBlock: View {
     private var secondaryText: String
     private var independent: Bool
     private var width: CGFloat?
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(prmaryText: String, secondaryText: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true, width: CGFloat? = nil, eventTracker: UIEventTracker? = nil) {
+    public init(prmaryText: String, secondaryText: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true, width: CGFloat? = nil, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.primaryText = prmaryText
         self.secondaryText = secondaryText
         self._checked = checked
         self._changed = changed
         self.independent = independent
         self.width = width
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
         HStack {
-            CheckmarkBlock(text: primaryText, checked: $checked, changed: $changed, independent: false, eventTracker: eventTracker)
+            CheckmarkBlock(text: primaryText, checked: $checked, changed: $changed, independent: false, onEvent: { event, parameters in
+                onEvent?(event, parameters)
+            })
                 .padding(.trailing)
             if width != nil {
                 Spacer()

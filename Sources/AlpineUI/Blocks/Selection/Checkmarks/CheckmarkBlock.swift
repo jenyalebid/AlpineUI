@@ -16,14 +16,14 @@ public struct CheckmarkBlock: View {
     
     private var text: String
     private var independent: Bool
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(text: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true,  eventTracker: UIEventTracker? = nil) {
+    public init(text: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true,  onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.text = text
         self._checked = checked
         self._changed = changed
         self.independent = independent
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
@@ -40,7 +40,7 @@ public struct CheckmarkBlock: View {
                 .onTapGesture {
                     checked.toggle()
                     changed.toggle()
-                    eventTracker?.logUIEvent(.checkmarkToggled, parameters: ["text": text, "checked": checked])
+                    onEvent?(.checkmarkToggled, ["text": text, "checked": checked])
                 }
         })
     }

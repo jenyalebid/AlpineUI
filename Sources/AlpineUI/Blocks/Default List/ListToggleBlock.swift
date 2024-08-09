@@ -13,16 +13,16 @@ public struct ListToggleBlock: View {
     
     private var title: String
     private var showTitle: Bool
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, isOn: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
+    public init(title: String, isOn: Binding<Bool>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self._isOn = isOn
         
         self.showTitle = true
     }
     
-    public init(isOn: Binding<Bool>, eventTracker: UIEventTracker? = nil) {
+    public init(isOn: Binding<Bool>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = ""
         self._isOn = isOn
         
@@ -49,7 +49,7 @@ public struct ListToggleBlock: View {
         Toggle(title, isOn: $isOn)
             .labelsHidden()
             .onChange(of: isOn) { oldValue, newValue in
-                eventTracker?.logUIEvent(.toggleChanged, parameters: ["title": title, "isOn": newValue])
+                onEvent?(.toggleChanged, ["title": title, "isOn": newValue])
             }
     }
 }

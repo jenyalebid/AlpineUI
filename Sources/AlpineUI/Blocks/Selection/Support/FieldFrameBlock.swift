@@ -22,13 +22,13 @@ internal struct FieldFrameBlock: View {
     
     private var required: Bool
     private var fieldType: FieldType
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    init(selection: Binding<String>, required: Bool = false, fieldType: FieldType, eventTracker: UIEventTracker? = nil) {
+    init(selection: Binding<String>, required: Bool = false, fieldType: FieldType, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self._selection = selection
         self.required = required
         self.fieldType = fieldType
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     var body: some View {
