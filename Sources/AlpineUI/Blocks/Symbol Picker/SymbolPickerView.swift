@@ -22,13 +22,13 @@ public struct SymbolPickerView: View {
     private static let backgroundColor = Color(UIColor.systemGroupedBackground)
     private let symbols: [String]
     private var title: String
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, symbol: Binding<String>, symbolsSet: SymbolsSet, eventTracker: UIEventTracker? = nil) {
+    public init(title: String, symbol: Binding<String>, symbolsSet: SymbolsSet,  onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         _symbol = symbol
         symbols = Symbols.shared.loadSymbols(from: symbolsSet.rawValue)
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
 
     public var body: some View {
@@ -56,7 +56,7 @@ public struct SymbolPickerView: View {
                 ForEach(symbols.filter { searchText.isEmpty ? true : $0.localizedCaseInsensitiveContains(searchText) }, id: \.self) { thisSymbol in
                     Button {
                         symbol = thisSymbol
-                        eventTracker?.logUIEvent(.symbolGridSelected, typ: .selection, parameters: ["titlePicker" : "\(title)", "searchText": "\(searchText)"])
+                        onEvent?(.symbolGridSelected, ["titlePicker" : "\(title)", "searchText": "\(searchText)"])
                         presentationMode.wrappedValue.dismiss()
                     } label: {
                         if thisSymbol == symbol {

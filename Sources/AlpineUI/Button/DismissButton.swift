@@ -12,23 +12,23 @@ public struct DismissButton: View {
     
     @Environment(\.dismiss) var dismiss
 
-    var environmentDismiss: Bool
-    var action: (() -> Void)?
-    private var eventTracker: UIEventTracker?
+    private var environmentDismiss: Bool
+    private var action: (() -> Void)?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
     public init(environmentDismiss: Bool = true,
-                eventTracker: UIEventTracker? = nil,
-                action: (() -> Void)? = nil) {
+                action: (() -> Void)? = nil,
+                onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.environmentDismiss = environmentDismiss
         self.action = action
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
         Button(role: .cancel) {
             if environmentDismiss {
                 dismiss()
-                eventTracker?.logUIEvent(.dismissButton)
+                onEvent?(.dismissButton, nil)
             }
             if let action {
                 withAnimation {

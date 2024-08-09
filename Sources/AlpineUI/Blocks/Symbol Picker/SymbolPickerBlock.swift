@@ -14,12 +14,12 @@ public struct SymbolPickerBlock: View {
     @State private var isPresented = false
     
     private var title: String
-    private var eventTracker: UIEventTracker?
+    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, symbol: Binding<String>, eventTracker: UIEventTracker? = nil) {
+    public init(title: String, symbol: Binding<String>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self._symbol = symbol
-        self.eventTracker = eventTracker
+        self.onEvent = onEvent
     }
     
     public var body: some View {
@@ -39,10 +39,14 @@ public struct SymbolPickerBlock: View {
                     }
             )
             .popover(isPresented: $isPresented) {
-                SymbolPickerView(title: title, symbol: $symbol, symbolsSet: .map, eventTracker: eventTracker)
+                SymbolPickerView(title: title, symbol: $symbol, symbolsSet: .map, onEvent: { event, parameters in
+                    onEvent?(event, parameters)
+                })
                     .frame(minWidth: 300, idealWidth: 500, maxWidth: .infinity, minHeight: 400, idealHeight: 500, maxHeight: .infinity)
                     .overlay(
-                        DismissButton(eventTracker: eventTracker)
+                        DismissButton(onEvent: { event, parameters in
+                            onEvent?(event, parameters)
+                        })
                             .padding(6),
                         alignment: .topTrailing
                     )
@@ -56,3 +60,4 @@ struct SymbolPickerBlock_Previews: PreviewProvider {
         SymbolPickerBlock(title: "Symbol Pick", symbol: .constant("trash"))
     }
 }
+
