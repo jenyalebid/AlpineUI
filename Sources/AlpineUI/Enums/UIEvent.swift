@@ -28,6 +28,9 @@ public enum UIEvent: String {
     case booleanPickerChanged = "boolean_picker_changed"
     case colorPickerChanged = "color_picker_changed"
     case colorTextChanged = "color_text_changed"
+    case openedAdvancedSettings = "opened_advanced_settings"
+    case switchedDatabase = "switched_database"
+    case attemptingSync = "attempting_sync"
 }
 
 
