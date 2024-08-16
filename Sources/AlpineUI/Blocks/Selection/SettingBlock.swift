@@ -16,11 +16,11 @@ public struct SettingBlock<Content: View, Destination: View>: View {
     private var displayContent: () -> Content
     private var destination: () -> Destination
     private var action: (() -> ())?
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
     @State var isActiveNavigation = false
     
-    public init(image: String, color: Color = .accentColor, title: String, subtitle: String? = nil, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil, @ViewBuilder displayContent: @escaping () -> Content = {EmptyView()}, destination: @escaping (() -> Destination) = {EmptyView()}, action: (() -> ())? = nil) {
+    public init(image: String, color: Color = .accentColor, title: String, subtitle: String? = nil, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil, @ViewBuilder displayContent: @escaping () -> Content = {EmptyView()}, destination: @escaping (() -> Destination) = {EmptyView()}, action: (() -> ())? = nil) {
         self.image = image
         self.color = color
         self.title = title
@@ -44,7 +44,7 @@ public struct SettingBlock<Content: View, Destination: View>: View {
                 .simultaneousGesture(
                     TapGesture()
                         .onEnded {
-                            onEvent?(.settingTap, ["title": title])
+                            onEvent?(.tapAction, ["place": "setting", "action": "tap", "title": title])
                             if let action = action {
                                 action()
                             }

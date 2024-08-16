@@ -14,9 +14,9 @@ public struct SymbolPickerBlock: View {
     @State private var isPresented = false
     
     private var title: String
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, symbol: Binding<String>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(title: String, symbol: Binding<String>, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self._symbol = symbol
         self.onEvent = onEvent

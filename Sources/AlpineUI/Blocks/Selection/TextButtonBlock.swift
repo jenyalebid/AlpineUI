@@ -20,9 +20,9 @@ public struct TextButtonBlock<Destination: View>: View {
     private var font: Font
     private var action: (() -> ())?
     private var destination: () -> Destination
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(image: String? = nil, text: String? = nil, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil, action: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
+    public init(image: String? = nil, text: String? = nil, width: CGFloat? = nil, height: CGFloat? = nil, foreground: Color = .white, background: Color = .accentColor, font: Font = .body, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil, action: (() -> ())? = nil, @ViewBuilder destination: @escaping () -> Destination = {EmptyView()}) {
         self.image = image
         self.text = text
         self.width = width

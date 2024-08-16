@@ -13,9 +13,9 @@ public struct MultiSelectMenu: View {
     
     @Binding var selections: String
     
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(values: [PickerOption], selections: Binding<String>,  onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(values: [PickerOption], selections: Binding<String>,  onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self._selections = selections
         self._viewModel = StateObject(wrappedValue: MultiSelectMenuViewModel(selections: selections.wrappedValue, values: values))
         self.onEvent = onEvent

@@ -22,9 +22,9 @@ internal struct FieldFrameBlock: View {
     
     private var required: Bool
     private var fieldType: FieldType
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    init(selection: Binding<String>, required: Bool = false, fieldType: FieldType, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    init(selection: Binding<String>, required: Bool = false, fieldType: FieldType, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self._selection = selection
         self.required = required
         self.fieldType = fieldType

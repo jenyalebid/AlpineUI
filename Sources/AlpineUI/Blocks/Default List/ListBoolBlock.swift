@@ -15,9 +15,9 @@ public struct ListBoolBlock: View {
     private var left: String
     private var right: String
     private var required: Bool
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(label: String, left: String, right: String, value: Binding<NSNumber>, required: Bool = false, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(label: String, left: String, right: String, value: Binding<NSNumber>, required: Bool = false, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.label = label
         self.left = left
         self.right = right

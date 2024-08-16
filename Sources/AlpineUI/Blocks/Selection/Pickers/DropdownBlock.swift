@@ -23,9 +23,9 @@ public struct DropdownBlock: View {
     private var required: Bool
     private var sendKeyboardUpdate: Bool
     private var allowBlank: Bool
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(placeHolder: String? = nil, title: String? = nil, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false, allowBlank: Bool = false, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(placeHolder: String? = nil, title: String? = nil, values: [PickerOption], selection: Binding<String>, required: Bool = false, controlField: Bool = false, changed: Binding<Bool>, sendKeyboardUpdate: Bool = false, allowBlank: Bool = false, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self.placeHolder = placeHolder
         self._selection = selection
@@ -62,7 +62,7 @@ public struct DropdownBlock: View {
                                 selection = value.primaryText
                                 viewModel.makeSelection()
                                 focused = false
-                                onEvent?(.dropdownSelection, ["selectedItem": value.primaryText])
+                                onEvent?(.dropdownAction, ["action": "selection", "selectedItem": value.primaryText])
                             }
                         }
                         .padding(6)
@@ -76,7 +76,7 @@ public struct DropdownBlock: View {
                 focused = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.viewModel.showDropdown = true
-                    onEvent?(.dropdownOpened, ["currentSelection": selection])
+                    onEvent?(.dropdownAction, ["action": "opened", "currentSelection": selection])
                 }
             }
         }

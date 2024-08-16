@@ -12,9 +12,9 @@ internal struct BooleanBlock: View {
     @Binding var checked: Bool
     
     private var label: String
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(label: String, checked: Binding<Bool>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil ) {
+    public init(label: String, checked: Binding<Bool>, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil ) {
         self.label = label
         self._checked = checked
         self.onEvent = onEvent
@@ -29,7 +29,7 @@ internal struct BooleanBlock: View {
         .contentShape(RoundedRectangle(cornerRadius: 5))
         .onTapGesture {
             checked.toggle()
-            onEvent?(.booleanPickerChanged, ["label": label])
+            onEvent?(.booleanPickerAction, ["action": "changed", "label": label])
         }
     }
 }

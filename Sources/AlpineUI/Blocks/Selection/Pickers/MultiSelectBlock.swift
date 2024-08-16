@@ -21,9 +21,9 @@ public struct MultiSelectBlock: View {
     private var title: String
     private var values: [PickerOption]
     private var required: Bool
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, values: [PickerOption], selections: Binding<String>, required: Bool = false, changed: Binding<Bool>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(title: String, values: [PickerOption], selections: Binding<String>, required: Bool = false, changed: Binding<Bool>, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self.values = values
         self._selections = selections

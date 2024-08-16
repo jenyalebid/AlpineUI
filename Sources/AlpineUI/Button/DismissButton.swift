@@ -14,11 +14,11 @@ public struct DismissButton: View {
 
     private var environmentDismiss: Bool
     private var action: (() -> Void)?
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
     public init(environmentDismiss: Bool = true,
                 action: (() -> Void)? = nil,
-                onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+                onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.environmentDismiss = environmentDismiss
         self.action = action
         self.onEvent = onEvent

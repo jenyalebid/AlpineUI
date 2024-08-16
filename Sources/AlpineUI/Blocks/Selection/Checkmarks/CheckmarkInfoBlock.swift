@@ -18,9 +18,9 @@ public struct CheckmarkInfoBlock: View {
     private var secondaryText: String
     private var independent: Bool
     private var width: CGFloat?
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(prmaryText: String, secondaryText: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true, width: CGFloat? = nil, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(prmaryText: String, secondaryText: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true, width: CGFloat? = nil, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.primaryText = prmaryText
         self.secondaryText = secondaryText
         self._checked = checked

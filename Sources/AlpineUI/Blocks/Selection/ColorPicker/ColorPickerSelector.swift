@@ -14,7 +14,7 @@ internal struct ColorPickerSelector: View {
     
     private let columns = [GridItem(.adaptive(minimum: 40))]
     
-    var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     var colors: [Color]
   
     var body: some View {
@@ -27,7 +27,7 @@ internal struct ColorPickerSelector: View {
                         .onTapGesture {
                             self.color = color
                             show.toggle()
-                            onEvent?(.colorSelected, ["selectedColor": color.description])
+                            onEvent?(.colorAction, ["selector": "color", "action": "selected", "selectedColor": color.description])
                         }
                 }
             }

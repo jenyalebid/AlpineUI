@@ -13,9 +13,9 @@ internal struct BooleanPicker: View {
     
     private var leftLabel: String
     private var rightLabel: String
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(leftLabel: String, rightLabel: String, value: Binding<NSNumber>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(leftLabel: String, rightLabel: String, value: Binding<NSNumber>, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.leftLabel = leftLabel
         self.rightLabel = rightLabel
         self._value = value

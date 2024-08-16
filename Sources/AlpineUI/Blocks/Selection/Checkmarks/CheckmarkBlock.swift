@@ -16,9 +16,9 @@ public struct CheckmarkBlock: View {
     
     private var text: String
     private var independent: Bool
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(text: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true,  onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(text: String, checked: Binding<Bool>, changed: Binding<Bool>, independent: Bool = true,  onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.text = text
         self._checked = checked
         self._changed = changed
@@ -40,7 +40,7 @@ public struct CheckmarkBlock: View {
                 .onTapGesture {
                     checked.toggle()
                     changed.toggle()
-                    onEvent?(.checkmarkToggled, ["text": text, "checked": checked])
+                    onEvent?(.checkmarkAction, ["text": text, "checked": checked])
                 }
         })
     }

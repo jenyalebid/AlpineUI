@@ -22,9 +22,9 @@ public struct SymbolPickerView: View {
     private static let backgroundColor = Color(UIColor.systemGroupedBackground)
     private let symbols: [String]
     private var title: String
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, symbol: Binding<String>, symbolsSet: SymbolsSet,  onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(title: String, symbol: Binding<String>, symbolsSet: SymbolsSet,  onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         _symbol = symbol
         symbols = Symbols.shared.loadSymbols(from: symbolsSet.rawValue)

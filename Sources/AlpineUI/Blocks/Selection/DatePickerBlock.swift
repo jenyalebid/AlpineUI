@@ -15,9 +15,9 @@ public struct DatePickerBlock: View {
     @Binding var changed: Bool
     
     private var title: String
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, value: Binding<Date>, changed: Binding<Bool>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(title: String, value: Binding<Date>, changed: Binding<Bool>, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self._value = value
         self._changed = changed

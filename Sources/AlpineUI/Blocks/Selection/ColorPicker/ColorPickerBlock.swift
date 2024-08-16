@@ -15,9 +15,9 @@ public struct ColorPickerBlock: View {
     private var colors: [Color]
     private var size: CGFloat
     private var defaultColors: [Color] = [.red, .green, .blue, .orange, .yellow, .pink, .teal]
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(color: Binding<Color>, colors: [Color]? = nil, size: CGFloat = 40, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(color: Binding<Color>, colors: [Color]? = nil, size: CGFloat = 40, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self._color = color
         self.size = size
         self.colors = colors ?? defaultColors
@@ -35,7 +35,7 @@ public struct ColorPickerBlock: View {
             }
             .onTapGesture {
                 showSelector.toggle()
-                onEvent?(.colorSelectorOpened, ["currentColor": color.description])
+                onEvent?(.colorAction, ["selector": "color", "action": "opened", "currentColor": color.description])
             }
     }
 }

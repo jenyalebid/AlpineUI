@@ -12,9 +12,9 @@ public struct TextFieldButtonBlock: View {
     private var title: String
     private var text: String
     private var action: () -> ()
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, text: String, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil, action: @escaping () -> ()) {
+    public init(title: String, text: String, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil, action: @escaping () -> ()) {
         self.title = title
         self.text = text
         self.action = action

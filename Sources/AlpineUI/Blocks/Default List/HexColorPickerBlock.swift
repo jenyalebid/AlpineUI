@@ -13,9 +13,9 @@ public struct HexColorPickerBlock: View {
     @State var color: Color
     
     private var title: String
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(title: String, color: Binding<String>, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(title: String, color: Binding<String>, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.title = title
         self._color = State(wrappedValue: Color(hex: color.wrappedValue))
         _colorText = color
@@ -32,12 +32,12 @@ public struct HexColorPickerBlock: View {
         .contentShape(Rectangle())
         .onChange(of: color) { oldValue, newValue in
             colorText = newValue.toHex()
-            onEvent?(.colorPickerChanged, ["title": title, "oldColor": oldValue.toHex(), "newColor": newValue.toHex()])
+            onEvent?(.colorAction, ["selector": "color_picker", "action": "changed", "title": title, "oldColor": oldValue.toHex(), "newColor": newValue.toHex()])
         }
         .onChange(of: colorText) { oldValue, newValue in
             if color.toHex() != newValue {
                 color = Color(hex: newValue)
-                onEvent?(.colorTextChanged, ["title": title, "oldColorText": oldValue, "newColorText": newValue])
+                onEvent?(.colorAction, [ "selector": "text_color_picker", "action": "changed" ,"title": title, "oldColorText": oldValue, "newColorText": newValue])
             }
         }
     }

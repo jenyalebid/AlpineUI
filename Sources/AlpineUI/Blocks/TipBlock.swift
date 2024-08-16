@@ -12,9 +12,9 @@ public struct TipBlock<T: Tip>: View {
     
     private var tip: T
     private var actionHandler: ((Tips.Action) -> Void)?
-    private var onEvent: ((UIEvent, [String: Any]?) -> Void)?
+    private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(_ tip: T, onEvent: ((UIEvent, [String: Any]?) -> Void)? = nil, actionHandler: ((Tips.Action) -> Void)? = nil) {
+    public init(_ tip: T, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil, actionHandler: ((Tips.Action) -> Void)? = nil) {
         self.tip = tip
         self.actionHandler = actionHandler
         self.onEvent = onEvent
