@@ -25,4 +25,6 @@ public enum UIEventType: String, Codable, CaseIterable {
     case submit = "submit"
     case hover = "hover"
     case resize = "resize"
+    case appear = "appear"
+    case disappear = "disappear"
 }

@@ -23,11 +23,8 @@ public enum AlpineUIEvent: String {
     case toggleAction = "toggle_action"
     case booleanPickerAction = "boolean_picker_action"
     case dropdownAction = "dropdown_action"
-    case openedAdvancedSettings = "opened_advanced_settings"
     case switchedDatabase = "switched_database"
     case attemptingSync = "attempting_sync"
-    case labelSymbologyViewOpened = "label_symbology_view_opened"
-    case rasterLayerViewOpened = "raster_layer_view_opened"
-    case vectorLayerViewOpened = "vector_layer_view_opened"
-    case symbologyVisibilityViewOpened = "symbology_visibility_view_opened"
+    case viewOpened = "opened_view"
+    case viewClosed = "closed_view"
 }
