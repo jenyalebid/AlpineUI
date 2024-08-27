@@ -11,13 +11,13 @@ public struct ListBoolBlock: View {
     
     @Binding var value: NSNumber
     
-    private var label: String
+    private var label: AttributedString
     private var left: String
     private var right: String
     private var required: Bool
     private var onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)?
     
-    public init(label: String, left: String, right: String, value: Binding<NSNumber>, required: Bool = false, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
+    public init(label: AttributedString, left: String, right: String, value: Binding<NSNumber>, required: Bool = false, onEvent: ((AlpineUIEvent, [String: Any]?) -> Void)? = nil) {
         self.label = label
         self.left = left
         self.right = right

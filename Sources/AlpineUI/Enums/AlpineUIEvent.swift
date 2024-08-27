@@ -27,4 +27,5 @@ public enum AlpineUIEvent: String {
     case attemptingSync = "attempting_sync"
     case viewOpened = "opened_view"
     case viewClosed = "closed_view"
+    case loginButton = "login_button"
 }

@@ -11,9 +11,9 @@ public struct ListDateBlock: View {
     
     @Binding var value: Date
     
-    private var label: String
+    private var label: AttributedString
     
-    public init(label: String, value: Binding<Date>) {
+    public init(label: AttributedString, value: Binding<Date>) {
         self.label = label
         self._value = value
     }

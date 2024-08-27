@@ -9,15 +9,23 @@ import SwiftUI
 
 public struct ListLabel: View {
     
-    private var content: String
+    var label: AttributedString?
     
-    public init(_ content: String) {
-        self.content = content
+    public init(_ label: CustomStringConvertible?) {
+        if let attributedString = label as? AttributedString {
+            self.label = attributedString
+        } else if let string = label as? String {
+            self.label = AttributedString(string)
+        } else {
+            self.label = nil
+        }
     }
     
     public var body: some View {
-        Text(content + ":")
-            .font(.caption)
+        if let label {
+            Text(label + ":")
+                .font(.caption)
+        }
     }
 }
 
