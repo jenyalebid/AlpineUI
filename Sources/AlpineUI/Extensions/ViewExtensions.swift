@@ -17,8 +17,20 @@ public extension View {
         modifier(InterfaceOrientation())
     }
     
+    var listSelector: some View {
+        modifier(ListObjectSelectorModifier())
+    }
+    
     var popupTracker: some View {
         modifier(PopupTracker())
+    }
+    
+    var popupPresenter: some View {
+        modifier(AlertManagerModifier())
+    }
+    
+    var popoutPresenter: some View {
+        self.overlay { PopoutView() }
     }
 }
 
@@ -64,8 +76,16 @@ public extension View {
         modifier(DraggableModifier(isPresented: isPresented, alignment: alignment))
     }
     
-    var listSelector: some View {
-        modifier(ListObjectSelectorModifier())
+    func thresholdDraggable(alignment: Binding<Alignment>) -> some View {
+        self.modifier(ThresholdDraggableModifier(alignment: alignment))
+    }
+    
+    func sceneAlert(isPresented: Binding<Bool>, alert: SceneAlert) -> some View {
+        modifier(SceneAlertModifier(isPresented: isPresented, alert: alert))
+    }
+    
+    func calculateSize(in size: Binding<CGSize>) -> some View {
+        modifier(ViewSizeCalculatorModifier(size: size))
     }
     
     func popup<T: View>(isPresented: Binding<Bool>, alignment: Alignment = .center, direction: Alignment = .bottom, @ViewBuilder content: () -> T) -> some View {

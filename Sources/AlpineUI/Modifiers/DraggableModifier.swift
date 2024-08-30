@@ -1,5 +1,5 @@
 //
-//  Draggable.swift
+//  DraggableModifier.swift
 //  ApineUI
 //
 //  Created by Jenya Lebid on 6/5/23.
