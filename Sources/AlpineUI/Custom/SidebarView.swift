@@ -23,7 +23,8 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
     var sidebar: Sidebar
     var detail: Detail
     
-    public init(selection: Binding<Selection>, isExpanded: Binding<Bool>, width: CGFloat = 300, @ViewBuilder sidebar: () -> Sidebar, @ViewBuilder detail: () -> Detail) {
+    public init(selection: Binding<Selection>, isExpanded: Binding<Bool>, 
+                width: CGFloat = 300, @ViewBuilder sidebar: () -> Sidebar, @ViewBuilder detail: () -> Detail) {
         self._selection = selection
         self._isExpanded = isExpanded
         self.width = width
@@ -48,6 +49,7 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
                 .overlay(alignment: .trailing) {
                     HStack {
                         Divider()
+                            .opacity(isExpanded ? 1 : 0)
                     }
                     .ignoresSafeArea()
                 }
