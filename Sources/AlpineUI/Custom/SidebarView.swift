@@ -44,7 +44,7 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
     
     var compactSidebarContent: some View {
         GeometryReader { geometry in
-            let width = geometry.size.width * 0.80
+            let width = geometry.size.width * 0.85
             detail
             if isExpanded {
                 Rectangle()
@@ -76,7 +76,6 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
             .overlay(alignment: .trailing) {
                 HStack {
                     Divider()
-//                        .opacity(isExpanded ? 1 : 0)
                 }
                 .ignoresSafeArea()
             }
