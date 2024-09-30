@@ -18,21 +18,28 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
     
     @Binding var selection: Selection
     @Binding var isExpanded: Bool
-    var width: CGFloat
     
+    @State private var dragOffset: CGFloat = 0
+    @State private var startOffset: CGFloat = 0
+    @State private var visiblePercentage: CGFloat = 0
+    
+    let effectiveWidth: CGFloat
+    var width: CGFloat
+    var gestureEnabled: Bool
     var sidebar: Sidebar
     var detail: Detail
     
-    public init(selection: Binding<Selection>, isExpanded: Binding<Bool>, 
-                width: CGFloat = 300, @ViewBuilder sidebar: () -> Sidebar, @ViewBuilder detail: () -> Detail) {
+    public init(selection: Binding<Selection>, isExpanded: Binding<Bool>,
+                width: CGFloat = 300, gestureEnabled: Bool = true, @ViewBuilder sidebar: () -> Sidebar, @ViewBuilder detail: () -> Detail) {
         self._selection = selection
         self._isExpanded = isExpanded
         self.width = width
+        self.effectiveWidth = width * 0.85
+        self.gestureEnabled = gestureEnabled
         self.sidebar = sidebar()
         self.detail = detail()
     }
 
-    
     public var body: some View {
         switch hSizeClass {
         case .regular:
@@ -44,30 +51,61 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
     
     var compactSidebarContent: some View {
         GeometryReader { geometry in
-            let width = geometry.size.width * 0.85
-            detail
-            if isExpanded {
-                Rectangle()
-                    .fill(.black.opacity(0.10)).ignoresSafeArea()
-                    .onTapGesture {
-                        withAnimation {
-                            isExpanded.toggle()
+            ZStack(alignment: .leading) {
+                detail
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .overlay {
+                        if visiblePercentage > 0 {
+                            Rectangle()
+                                .fill(.black.opacity(0.50)).ignoresSafeArea()
+                                .onTapGesture {
+                                    withAnimation(.smooth(duration: 0.1)) {
+                                        isExpanded.toggle()
+                                    }
+                                }
                         }
                     }
+                
+                if isExpanded || dragOffset != 0 {
+                    sidebarContent(for: effectiveWidth)
+                        .frame(width: effectiveWidth)
+                        .offset(x: min(max(dragOffset + startOffset, -effectiveWidth), 0))
+                }
             }
-            sidebarContent(for: width)
-
+            .gesture(gestureEnabled ? dragGesture(for: effectiveWidth) : nil)
+            .animation(.smooth(), value: isExpanded)
         }
-        .animation(.smooth(duration: 0.50), value: isExpanded)
+        .onChange(of: isExpanded, initial: true) { _, newValue in
+            withAnimation {
+                visiblePercentage = newValue ? 1 : 0
+                startOffset = newValue ? 0 : -effectiveWidth
+                dragOffset = 0
+            }
+        }
     }
     
     var regularSidebarContent: some View {
         GeometryReader { geometry in
-            sidebarContent(for: width)
-            detail
-                .padding(.leading, isExpanded ? width : 0)
+            HStack(spacing: 0) {
+                if isExpanded || dragOffset != 0 {
+                    sidebarContent(for: width)
+                        .frame(width: width)
+                        .offset(x: min(max(dragOffset + startOffset, -width), 0))
+                        .gesture(gestureEnabled ? dragGesture(for: width) : nil)
+                }
+                
+                detail
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                    .offset(x: isExpanded ? width : 0)
+            }
+            .animation(.smooth(), value: isExpanded)
         }
-        .animation(.smooth(duration: 0.50), value: isExpanded)
+        .onChange(of: isExpanded, initial: true) { _, newValue in
+            withAnimation {
+                startOffset = newValue ? 0 : -width
+                dragOffset = 0
+            }
+        }
     }
     
     func sidebarContent(for width: CGFloat) -> some View {
@@ -79,7 +117,33 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
                 }
                 .ignoresSafeArea()
             }
-            .offset(x: isExpanded ? 0 : -width)
+            .offset(x: min(max(dragOffset + startOffset, -width), 0))
+    }
+    
+    func dragGesture(for width: CGFloat) -> some Gesture {
+        DragGesture()
+            .onChanged { value in
+                dragOffset = value.translation.width
+                
+                let dragDistance = value.translation.width + startOffset
+                visiblePercentage = 1 - (-dragDistance / width)
+            }
+            .onEnded { value in
+                let dragDistance = value.translation.width + startOffset
+                visiblePercentage = 1 - (-dragDistance / width)
+
+                withAnimation(.smooth()) {
+                    if visiblePercentage > 0.70 {
+                        isExpanded = true
+                        startOffset = 0
+                    } else {
+                        visiblePercentage = 0
+                        isExpanded = false
+                        startOffset = -width
+                    }
+                }
+                dragOffset = 0
+            }
     }
 }
 
@@ -90,7 +154,6 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
 fileprivate struct SidebarPreview: View {
     
     @State private var selection = 1
-    
     @State private var isExpanded = true
     
     var body: some View {
