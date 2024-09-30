@@ -36,28 +36,51 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
     public var body: some View {
         switch hSizeClass {
         case .regular:
-            sidebarContent
+            regularSidebarContent
         default:
-            sidebar
+            compactSidebarContent
         }
     }
     
-    var sidebarContent: some View {
+    var compactSidebarContent: some View {
         GeometryReader { geometry in
-            sidebar
-                .frame(width: width)
-                .overlay(alignment: .trailing) {
-                    HStack {
-                        Divider()
-                            .opacity(isExpanded ? 1 : 0)
+            let width = geometry.size.width * 0.80
+            detail
+            if isExpanded {
+                Rectangle()
+                    .fill(.black.opacity(0.10)).ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            isExpanded.toggle()
+                        }
                     }
-                    .ignoresSafeArea()
-                }
-                .offset(x: isExpanded ? 0 : -width)
+            }
+            sidebarContent(for: width)
+
+        }
+        .animation(.smooth(duration: 0.50), value: isExpanded)
+    }
+    
+    var regularSidebarContent: some View {
+        GeometryReader { geometry in
+            sidebarContent(for: width)
             detail
                 .padding(.leading, isExpanded ? width : 0)
         }
-        .animation(.bouncy(duration: 0.50), value: isExpanded)
+        .animation(.smooth(duration: 0.50), value: isExpanded)
+    }
+    
+    func sidebarContent(for width: CGFloat) -> some View {
+        sidebar
+            .frame(width: width)
+            .overlay(alignment: .trailing) {
+                HStack {
+                    Divider()
+//                        .opacity(isExpanded ? 1 : 0)
+                }
+                .ignoresSafeArea()
+            }
+            .offset(x: isExpanded ? 0 : -width)
     }
 }
 
