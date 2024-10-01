@@ -5,7 +5,6 @@
 //  Created by Vladislav on 7/11/24.
 //
 
-
 import SwiftUI
 
 public extension EnvironmentValues {
@@ -23,5 +22,9 @@ public extension EnvironmentValues {
     var deviceOrientation: UIDeviceOrientation {
         get { self[OrientationInfoKey.self] }
         set { self[OrientationInfoKey.self] = newValue }
+    }
+    
+    var safeAreaInsets: EdgeInsets {
+        self[SafeAreaInsetsKey.self]
     }
 }

@@ -18,3 +18,9 @@ struct UISafeAreaSize: EnvironmentKey {
 struct OrientationInfoKey: EnvironmentKey {
     static let defaultValue: UIDeviceOrientation = .unknown
 }
+
+struct SafeAreaInsetsKey: EnvironmentKey {
+    static var defaultValue: EdgeInsets {
+        UIApplication.shared.keyWindow?.safeAreaInsets.swiftUiInsets ?? EdgeInsets()
+    }
+}

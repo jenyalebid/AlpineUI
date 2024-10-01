@@ -7,30 +7,7 @@
 
 import SwiftUI
 
-private struct SafeAreaInsetsKey: EnvironmentKey {
-    static var defaultValue: EdgeInsets {
-        UIApplication.shared.keyWindow?.safeAreaInsets.swiftUiInsets ?? EdgeInsets()
-    }
-}
-
-private extension UIEdgeInsets {
-    var swiftUiInsets: EdgeInsets {
-        EdgeInsets(top: top, leading: left, bottom: bottom, trailing: right)
-    }
-}
-
-public extension EnvironmentValues {
-    var safeAreaInsets: EdgeInsets {
-        self[SafeAreaInsetsKey.self]
-    }
-}
-
 public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: View {
-    
-    enum PresentationType {
-        case push
-        case overlay
-    }
     
     @Environment(\.horizontalSizeClass) private var hSizeClass
     @Environment(\.safeAreaInsets) private var safeArea
@@ -41,14 +18,12 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
     @State private var dragOffset: CGFloat = 0
     @State private var startOffset: CGFloat = 0
     @State private var visiblePercentage: CGFloat = 0
+    @State private var currentOffset = 0
     
     private var width: CGFloat
-    
-    var gestureEnabled: Bool
-    var sidebar: Sidebar
-    var detail: Detail
-    
-    @State private var currentOffset = 0
+    private var gestureEnabled: Bool
+    private var sidebar: Sidebar
+    private var detail: Detail
     
     public init(selection: Binding<Selection>, isExpanded: Binding<Bool>,
                 width: CGFloat = 300, gestureEnabled: Bool = true, @ViewBuilder sidebar: () -> Sidebar, @ViewBuilder detail: () -> Detail) {
@@ -69,10 +44,10 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
                 compactSidebarContent
             }
         }
-        .animation(.smooth(duration: 0.50), value: isExpanded)
+        .animation(.smooth(), value: isExpanded)
     }
     
-    var compactSidebarContent: some View {
+    private var compactSidebarContent: some View {
         GeometryReader { geometry in
             let effectiveWidth = min((geometry.size.width * 0.85), width)
             ZStack(alignment: .leading) {
@@ -83,7 +58,7 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
                             Rectangle()
                                 .fill(.black.opacity(0.50)).ignoresSafeArea()
                                 .onTapGesture {
-                                    withAnimation(.smooth(duration: 0.1)) {
+                                    withAnimation(.smooth()) {
                                         isExpanded.toggle()
                                     }
                                 }
@@ -103,7 +78,7 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
         }
     }
     
-    var regularSidebarContent: some View {
+    private var regularSidebarContent: some View {
         GeometryReader { geometry in
             sidebarContent(for: width)
                 .frame(width: width)
@@ -113,20 +88,20 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
         }
     }
     
-    func sidebarContent(for width: CGFloat) -> some View {
+    private func sidebarContent(for width: CGFloat) -> some View {
         sidebar
             .frame(width: width)
             .overlay(alignment: .trailing) {
                 HStack {
                     Divider()
-                        .padding(.top, safeArea.top)
+//                        .padding(.top, safeArea.top)
                 }
                 .ignoresSafeArea()
             }
             .offset(x: isExpanded ? 0 : -width)
     }
     
-    func dragGesture(for width: CGFloat) -> some Gesture {
+    private func dragGesture(for width: CGFloat) -> some Gesture {
         DragGesture()
             .onChanged { value in
                 dragOffset = value.translation.width
@@ -152,7 +127,7 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
             }
     }
     
-    var swipeGesture: some Gesture {
+    private var swipeGesture: some Gesture {
         DragGesture(minimumDistance: 50, coordinateSpace: .local)
             .onEnded { value in
                 let horizontalAmount = value.translation.width as CGFloat

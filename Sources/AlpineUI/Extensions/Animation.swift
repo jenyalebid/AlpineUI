@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Animation {
-    static func smooth(duration: Double = 0.5) -> Animation {
+    static func smoothEaseInOut(duration: Double = 0.5) -> Animation {
         .easeInOut(duration: duration)
     }
 }
