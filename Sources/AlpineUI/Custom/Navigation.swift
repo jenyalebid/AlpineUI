@@ -21,7 +21,7 @@ public extension EnvironmentValues {
 @Observable
 public class Navigation {
     
-    public init() {}
-    
     public var path = NavigationPath()
+    
+    public init() {}
 }

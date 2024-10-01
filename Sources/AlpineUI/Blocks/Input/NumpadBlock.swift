@@ -25,6 +25,10 @@ public struct NumpadBlock<N>: View {
     @State private var showPad = false
     @State private var localValue = ""
     
+    // Double, Int, Float
+    // If Int, do not show dot.
+    // if in compact view show as sheet and show textField above
+    
     public init(title: String, value: Binding<N>, limit: Double? = nil, required: Bool = false, changed: Binding<Bool>) {
         self.title = title
         self._value = value
