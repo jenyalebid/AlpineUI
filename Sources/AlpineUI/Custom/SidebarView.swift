@@ -7,6 +7,24 @@
 
 import SwiftUI
 
+private struct SafeAreaInsetsKey: EnvironmentKey {
+    static var defaultValue: EdgeInsets {
+        UIApplication.shared.keyWindow?.safeAreaInsets.swiftUiInsets ?? EdgeInsets()
+    }
+}
+
+private extension UIEdgeInsets {
+    var swiftUiInsets: EdgeInsets {
+        EdgeInsets(top: top, leading: left, bottom: bottom, trailing: right)
+    }
+}
+
+public extension EnvironmentValues {
+    var safeAreaInsets: EdgeInsets {
+        self[SafeAreaInsetsKey.self]
+    }
+}
+
 public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: View {
     
     enum PresentationType {
@@ -15,7 +33,8 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
     }
     
     @Environment(\.horizontalSizeClass) private var hSizeClass
-    
+    @Environment(\.safeAreaInsets) private var safeArea
+
     @Binding var selection: Selection
     @Binding var isExpanded: Bool
     
@@ -23,34 +42,39 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
     @State private var startOffset: CGFloat = 0
     @State private var visiblePercentage: CGFloat = 0
     
-    let effectiveWidth: CGFloat
-    var width: CGFloat
+    private var width: CGFloat
+    
     var gestureEnabled: Bool
     var sidebar: Sidebar
     var detail: Detail
+    
+    @State private var currentOffset = 0
     
     public init(selection: Binding<Selection>, isExpanded: Binding<Bool>,
                 width: CGFloat = 300, gestureEnabled: Bool = true, @ViewBuilder sidebar: () -> Sidebar, @ViewBuilder detail: () -> Detail) {
         self._selection = selection
         self._isExpanded = isExpanded
         self.width = width
-        self.effectiveWidth = width * 0.85
         self.gestureEnabled = gestureEnabled
         self.sidebar = sidebar()
         self.detail = detail()
     }
 
     public var body: some View {
-        switch hSizeClass {
-        case .regular:
-            regularSidebarContent
-        default:
-            compactSidebarContent
+        Group {
+            switch hSizeClass {
+            case .regular:
+                regularSidebarContent
+            default:
+                compactSidebarContent
+            }
         }
+        .animation(.smooth(duration: 0.50), value: isExpanded)
     }
     
     var compactSidebarContent: some View {
         GeometryReader { geometry in
+            let effectiveWidth = min((geometry.size.width * 0.85), width)
             ZStack(alignment: .leading) {
                 detail
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -65,46 +89,27 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
                                 }
                         }
                     }
-                
-                if isExpanded || dragOffset != 0 {
-                    sidebarContent(for: effectiveWidth)
-                        .frame(width: effectiveWidth)
-                        .offset(x: min(max(dragOffset + startOffset, -effectiveWidth), 0))
-                }
+                sidebarContent(for: effectiveWidth)
+                    .offset(x: min(max(dragOffset + startOffset, -effectiveWidth), 0))
             }
             .gesture(gestureEnabled ? dragGesture(for: effectiveWidth) : nil)
-            .animation(.smooth(), value: isExpanded)
-        }
-        .onChange(of: isExpanded, initial: true) { _, newValue in
-            withAnimation {
-                visiblePercentage = newValue ? 1 : 0
-                startOffset = newValue ? 0 : -effectiveWidth
-                dragOffset = 0
+            .onChange(of: isExpanded, initial: true) { _, newValue in
+                withAnimation {
+                    visiblePercentage = newValue ? 1 : 0
+                    startOffset = newValue ? 0 : -effectiveWidth
+                    dragOffset = 0
+                }
             }
         }
     }
     
     var regularSidebarContent: some View {
         GeometryReader { geometry in
-            HStack(spacing: 0) {
-                if isExpanded || dragOffset != 0 {
-                    sidebarContent(for: width)
-                        .frame(width: width)
-                        .offset(x: min(max(dragOffset + startOffset, -width), 0))
-                        .gesture(gestureEnabled ? dragGesture(for: width) : nil)
-                }
-                
-                detail
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    .offset(x: isExpanded ? width : 0)
-            }
-            .animation(.smooth(), value: isExpanded)
-        }
-        .onChange(of: isExpanded, initial: true) { _, newValue in
-            withAnimation {
-                startOffset = newValue ? 0 : -width
-                dragOffset = 0
-            }
+            sidebarContent(for: width)
+                .frame(width: width)
+                .gesture(gestureEnabled ? swipeGesture : nil)
+            detail
+                .padding(.leading, isExpanded ? width : 0)
         }
     }
     
@@ -114,10 +119,11 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
             .overlay(alignment: .trailing) {
                 HStack {
                     Divider()
+                        .padding(.top, safeArea.top)
                 }
                 .ignoresSafeArea()
             }
-            .offset(x: min(max(dragOffset + startOffset, -width), 0))
+            .offset(x: isExpanded ? 0 : -width)
     }
     
     func dragGesture(for width: CGFloat) -> some Gesture {
@@ -143,6 +149,19 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
                     }
                 }
                 dragOffset = 0
+            }
+    }
+    
+    var swipeGesture: some Gesture {
+        DragGesture(minimumDistance: 50, coordinateSpace: .local)
+            .onEnded { value in
+                let horizontalAmount = value.translation.width as CGFloat
+                let verticalAmount = value.translation.height as CGFloat
+                if abs(horizontalAmount) > abs(verticalAmount) {
+                    withAnimation {
+                        isExpanded = horizontalAmount > 0
+                    }
+                }
             }
     }
 }
