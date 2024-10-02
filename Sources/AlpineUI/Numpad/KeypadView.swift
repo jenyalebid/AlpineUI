@@ -60,7 +60,7 @@ struct KeypadView<N: Numeric & LosslessStringConvertible>: View {
             Text(key.label)
                 .font(.largeTitle)
                 .frame(width: 64, height: 64)
-                .background(Color.blue)
+                .background(Color.accentColor)
                 .foregroundColor(.white)
                 .cornerRadius(8)
         }

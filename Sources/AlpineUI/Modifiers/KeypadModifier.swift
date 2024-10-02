@@ -19,10 +19,11 @@ struct KeypadModifier<N: Numeric & LosslessStringConvertible>: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .disabled(true)
+            .allowsHitTesting(false)
             .overlay(
                 Rectangle()
-                    .foregroundColor(Color.orange.opacity(0.01))
+                    .fill(.clear)
+                    .contentShape(Rectangle())
                     .onTapGesture {
                         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         showPad.toggle()
