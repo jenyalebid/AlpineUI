@@ -36,6 +36,10 @@ public extension View {
 
 public extension View {
     
+    func keypad<N: Numeric & LosslessStringConvertible>(value: Binding<N>, limit: Int? = nil) -> some View {
+        self.modifier(KeypadModifier(value: value, limit: limit))
+    }
+    
     func requiredOverlay(_ required: Bool, padding: CGFloat? = nil, minWidth: CGFloat? = nil, minHeight: CGFloat? = nil, type: RequiredOverlayModifier.OverlayType) -> some View {
         modifier(RequiredOverlayModifier(required: required, padding: padding, minWidth: minWidth, minHeight: minHeight, overlayType: type))
     }

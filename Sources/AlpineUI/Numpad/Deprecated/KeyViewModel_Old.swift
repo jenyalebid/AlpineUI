@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-class KeyViewModel: ObservableObject {
+@available(*, deprecated, message: "This is an deprecated object. Use KeypadModifier to display the Keypad.")
+class KeyViewModel_Old: ObservableObject {
     
     var totalSize: CGSize
     var value: String

@@ -7,15 +7,16 @@
 
 import SwiftUI
 
-struct KeyView: View {
+@available(*, deprecated, message: "This is an deprecated object. Use KeypadModifier to display the Keypad.")
+struct KeyView_Old: View {
     
-    @ObservedObject var viewModel: KeyViewModel
+    @ObservedObject var viewModel: KeyViewModel_Old
     
     @Binding var number: String
     
     init(value: String, number: Binding<String>, size: CGSize) {
         self._number = number
-        viewModel = KeyViewModel(totalSize: size, value: value, number: number.wrappedValue)
+        viewModel = KeyViewModel_Old(totalSize: size, value: value, number: number.wrappedValue)
     }
     
     var body: some View {
@@ -33,6 +34,6 @@ struct KeyView: View {
 
 struct KeyView_Previews: PreviewProvider {
     static var previews: some View {
-        KeyView(value: "1", number: Binding.constant("32"), size: UIScreen.main.bounds.size)
+        KeyView_Old(value: "1", number: Binding.constant("32"), size: UIScreen.main.bounds.size)
     }
 }

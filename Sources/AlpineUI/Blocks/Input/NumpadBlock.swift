@@ -11,23 +11,18 @@ public struct NumpadBlock<N>: View {
     
     @Environment(\.isEnabled) var isEnabled
     
-    var title: String
-    var required: Bool
-    let formatter = NumberFormatter()
-    
-    var limit: Double?
-    
     @Binding var value: N
-    @State var textValue = ""
-    
     @Binding var changed: Bool
     
-    @State private var showPad = false
+    @State private var textValue = ""
+    @State private var showPad: Bool = false
     @State private var localValue = ""
+
+    private let formatter = NumberFormatter()
     
-    // Double, Int, Float
-    // If Int, do not show dot.
-    // if in compact view show as sheet and show textField above
+    var title: String
+    var required: Bool
+    var limit: Double?
     
     public init(title: String, value: Binding<N>, limit: Double? = nil, required: Bool = false, changed: Binding<Bool>) {
         self.title = title
@@ -61,7 +56,7 @@ public struct NumpadBlock<N>: View {
                     ZStack {
                         Color.accentColor
                             .scaleEffect(1.5)
-                        KeypadView(number: $localValue, size: UIScreen.main.bounds.size)
+                        KeypadView_Old(number: $localValue, size: UIScreen.main.bounds.size)
                             .onDisappear {
                                 changed.toggle()
                             }
