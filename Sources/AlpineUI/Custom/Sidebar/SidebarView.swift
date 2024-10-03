@@ -9,6 +9,8 @@ import SwiftUI
 
 public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: View {
     
+    @State private var manager = SidebarManager()
+    
     @Environment(\.horizontalSizeClass) private var hSizeClass
     @Environment(\.safeAreaInsets) private var safeArea
 
@@ -45,6 +47,7 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
             }
         }
         .animation(.smooth(), value: isExpanded)
+        .environment(\.sidebar, manager)
     }
     
     private var compactSidebarContent: some View {
@@ -92,11 +95,14 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
         sidebar
             .frame(width: width)
             .overlay(alignment: .trailing) {
-                HStack {
-                    Divider()
-//                        .padding(.top, safeArea.top)
+                if manager.showDivider {
+                    HStack {
+                        Divider()
+                            .padding(.top, manager.dividerPaddingTop ? safeArea.top : 0)
+                            .padding(.bottom, manager.dividerPaddingBottom ? safeArea.bottom : 0)
+                    }
+                    .ignoresSafeArea()
                 }
-                .ignoresSafeArea()
             }
             .offset(x: isExpanded ? 0 : -width)
     }

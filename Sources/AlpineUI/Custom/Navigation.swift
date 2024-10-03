@@ -25,3 +25,21 @@ public class Navigation {
     
     public init() {}
 }
+
+public extension Navigation {
+    
+    func clearStack() {
+        path = NavigationPath()
+    }
+    
+    func append<Item: Hashable>(_ item: Item) {
+        path.append(item)
+    }
+}
+
+public extension Navigation {
+    
+    var isInRoot: Bool {
+        path.isEmpty
+    }
+}

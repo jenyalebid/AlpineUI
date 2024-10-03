@@ -8,9 +8,13 @@
 import Foundation
 
 struct Key: Identifiable, Hashable {
+    
     var id = UUID()
     var label: String
+    var systemImage: String?
+
     let value: KeyValueType
+    
     
     static func == (lhs: Key, rhs: Key) -> Bool {
         lhs.id == rhs.id

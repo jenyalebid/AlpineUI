@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  KeypadView.swift
 //  AlpineUI
 //
 //  Created by Vladislav on 10/2/24.
@@ -17,27 +17,29 @@ struct KeypadView<N: Numeric & LosslessStringConvertible>: View {
     var limit: Int?
     var isCompact: Bool
     
+    var buttonSize: CGFloat {
+        isCompact ? 52 : 62
+    }
+    
+    var width: CGFloat {
+        isCompact ? 200 : 240
+    }
+    
+    var height: CGFloat {
+        isCompact ? 250 : 300
+    }
+    
     var body: some View {
-        VStack(alignment: .center, spacing: 1) {
-            
-            if isCompact {
-                resultBlock
-            }
-         
-            VStack {
-                ForEach(getKeyRows(), id: \.self) { row in
-                    HStack {
-                        ForEach(row) { key in
-                            keyButton(for: key)
-                        }
+        VStack {
+            ForEach(getKeyRows(), id: \.self) { row in
+                HStack {
+                    ForEach(row) { key in
+                        keyButton(for: key)
                     }
                 }
             }
-            .frame(width: 250, height: 300)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.regularMaterial)
-        .cornerRadius(10)
+        .frame(width: width, height: height)
         .onAppear {
             currentValue = String(describing: value)
         }
@@ -57,12 +59,20 @@ struct KeypadView<N: Numeric & LosslessStringConvertible>: View {
         Button(action: {
             handleKeyPress(key)
         }) {
-            Text(key.label)
-                .font(.largeTitle)
-                .frame(width: 64, height: 64)
-                .background(Color.accentColor)
-                .foregroundColor(.white)
-                .cornerRadius(8)
+            Group {
+                if let systemImage = key.systemImage {
+                    Image(systemName: systemImage)
+                }
+                else {
+                    Text(key.label)
+
+                }
+            }
+            .font(.largeTitle)
+            .frame(width: buttonSize, height: buttonSize)
+            .background(Color.accentColor)
+            .foregroundStyle(.white)
+            .cornerRadius(8)
         }
     }
 
@@ -71,7 +81,7 @@ struct KeypadView<N: Numeric & LosslessStringConvertible>: View {
             [Key(label: "7", value: .digit(7)), Key(label: "8", value: .digit(8)), Key(label: "9", value: .digit(9))],
             [Key(label: "4", value: .digit(4)), Key(label: "5", value: .digit(5)), Key(label: "6", value: .digit(6))],
             [Key(label: "1", value: .digit(1)), Key(label: "2", value: .digit(2)), Key(label: "3", value: .digit(3))],
-            [Key(label: "0", value: .digit(0)), Key(label: "<", value: .delete)]
+            [Key(label: "0", value: .digit(0)), Key(label: "", systemImage: "delete.left", value: .delete)]
         ]
         
         if value is Double || value is Float {

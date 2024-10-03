@@ -31,6 +31,8 @@ struct KeypadModifier<N: Numeric & LosslessStringConvertible>: ViewModifier {
             )
             .popover(isPresented: $showPad) {
                 KeypadView(value: $value, limit: limit, isCompact: hSizeClass != .regular)
+                    .presentationBackground(.regularMaterial)
+                    .presentationCompactAdaptation(.popover)
             }
     }
 }
