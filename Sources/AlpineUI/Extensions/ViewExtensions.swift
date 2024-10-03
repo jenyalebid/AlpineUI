@@ -36,6 +36,10 @@ public extension View {
 
 public extension View {
     
+    func shareOverlay(isShared: Bool) -> some View {
+        modifier(ShareOverlayModifier(isShared: isShared))
+    }
+    
     func keypad<N: Numeric & LosslessStringConvertible>(value: Binding<N>, limit: Int? = nil) -> some View {
         self.modifier(KeypadModifier(value: value, limit: limit))
     }
