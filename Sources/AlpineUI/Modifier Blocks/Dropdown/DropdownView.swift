@@ -16,11 +16,12 @@ struct DropdownView<ItemLabel: View, Item: Identifiable>: View {
     var body: some View {
         List {
             ForEach(items) { item in
-                Button {
-                    selectedItem = item
-                } label: {
-                    itemLabel(item)
-                }
+                itemLabel(item)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        selectedItem = item
+                    }
             }
         }
         .listStyle(.plain)

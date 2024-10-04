@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct DropdownModifier<ItemLabel: View, Item: Identifiable>: ViewModifier {
+struct DropdownModifier<ItemLabel: View, Item: Identifiable & Equatable>: ViewModifier {
     
     @State private var showDropdown = false
     var items: [Item]
     @Binding var selectedItem: Item?
     var size: CGSize
+    var dismissOnSelection: Bool
     @ViewBuilder var itemLabel: (_ item: Item) -> ItemLabel
     
     func body(content: Content) -> some View {
@@ -27,15 +28,23 @@ struct DropdownModifier<ItemLabel: View, Item: Identifiable>: ViewModifier {
                     .presentationCompactAdaptation(.popover)
                     .frame(width: size.width, height: size.height)
             })
+            .onChange(of: selectedItem) { oldValue, newValue in
+                if dismissOnSelection {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        showDropdown = false
+                    }
+                }
+            }
     }
 }
 
 public extension View {
-    func dropdown<ItemLabel: View, Item: Identifiable>(for items: [Item], 
+    func dropdown<ItemLabel: View, Item: Identifiable & Equatable>(for items: [Item], 
                                                        selected: Binding<Item?>,
                                                        size: CGSize = CGSize(width: 300, height: 300),
+                                                       dismissOnSelection: Bool = true,
                                                        @ViewBuilder label: @escaping (_ item: Item) -> ItemLabel) -> some View {
-        modifier(DropdownModifier(items: items, selectedItem: selected, size: size, itemLabel: label))
+        modifier(DropdownModifier(items: items, selectedItem: selected, size: size, dismissOnSelection: dismissOnSelection, itemLabel: label))
     }
 }
 
