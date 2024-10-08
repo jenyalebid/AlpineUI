@@ -30,7 +30,7 @@ struct DropdownModifier<ItemLabel: View, Item: Identifiable & Equatable>: ViewMo
             })
             .onChange(of: selectedItem) { oldValue, newValue in
                 if dismissOnSelection {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                         showDropdown = false
                     }
                 }
