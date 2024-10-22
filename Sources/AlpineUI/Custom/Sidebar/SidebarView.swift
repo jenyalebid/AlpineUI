@@ -88,6 +88,13 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
                 .gesture(gestureEnabled ? swipeGesture : nil)
             detail
                 .padding(.leading, isExpanded ? width : 0)
+                .overlay(
+                    Color.clear
+                        .frame(width: 10)
+                        .contentShape(Rectangle())
+                        .gesture(swipeOpenGesture(for: width)) ,
+                    alignment: .leading
+                )
         }
     }
     
@@ -142,6 +149,24 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
                     withAnimation {
                         isExpanded = horizontalAmount > 0
                     }
+                }
+            }
+    }
+    
+    private func swipeOpenGesture(for width: CGFloat) -> some Gesture {
+        DragGesture()
+            .onChanged { value in
+                if value.translation.width > 0 {
+                    dragOffset = value.translation.width
+                }
+            }
+            .onEnded { value in
+                withAnimation(.smooth()) {
+                    if value.translation.width > width / 2 {
+                        isExpanded = true
+                        startOffset = 0
+                    }
+                    dragOffset = 0
                 }
             }
     }
