@@ -56,21 +56,13 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
             ZStack(alignment: .leading) {
                 detail
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .overlay {
-                        if visiblePercentage > 0 {
-                            Rectangle()
-                                .fill(.black.opacity(0.50)).ignoresSafeArea()
-                                .onTapGesture {
-                                    withAnimation(.smooth()) {
-                                        isExpanded.toggle()
-                                    }
-                                }
-                        }
-                    }
+                    .overlay(visibilityOverlay)
+                    .overlay(overlayGesture(for: effectiveWidth), alignment: .leading)
+                   
                 sidebarContent(for: effectiveWidth)
+                    .gesture(gestureEnabled ? swipeCloseGesture : nil)
                     .offset(x: min(max(dragOffset + startOffset, -effectiveWidth), 0))
             }
-            .gesture(gestureEnabled ? dragGesture(for: effectiveWidth) : nil)
             .onChange(of: isExpanded, initial: true) { _, newValue in
                 withAnimation {
                     visiblePercentage = newValue ? 1 : 0
@@ -85,17 +77,32 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
         GeometryReader { geometry in
             sidebarContent(for: width)
                 .frame(width: width)
-                .gesture(gestureEnabled ? swipeGesture : nil)
+                .gesture(gestureEnabled ? swipeCloseGesture : nil)
             detail
                 .padding(.leading, isExpanded ? width : 0)
-                .overlay(
-                    Color.clear
-                        .frame(width: 10)
-                        .contentShape(Rectangle())
-                        .gesture(swipeOpenGesture(for: width)) ,
-                    alignment: .leading
-                )
+                .overlay(overlayGesture(for: width), alignment: .leading)
         }
+    }
+    
+    @ViewBuilder
+    private var visibilityOverlay: some View {
+            if visiblePercentage > 0 {
+                Rectangle()
+                    .fill(.black.opacity(0.50))
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.smooth()) {
+                            isExpanded.toggle()
+                        }
+                    }
+            }
+    }
+    
+    private func overlayGesture(for width: CGFloat) -> some View {
+        Color.clear
+            .frame(width: 10)
+            .contentShape(Rectangle())
+            .gesture(swipeOpenGesture(for: width))
     }
     
     private func sidebarContent(for width: CGFloat) -> some View {
@@ -114,33 +121,7 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
             .offset(x: isExpanded ? 0 : -width)
     }
     
-    private func dragGesture(for width: CGFloat) -> some Gesture {
-        DragGesture()
-            .onChanged { value in
-                dragOffset = value.translation.width
-                
-                let dragDistance = value.translation.width + startOffset
-                visiblePercentage = 1 - (-dragDistance / width)
-            }
-            .onEnded { value in
-                let dragDistance = value.translation.width + startOffset
-                visiblePercentage = 1 - (-dragDistance / width)
-
-                withAnimation(.smooth()) {
-                    if visiblePercentage > 0.70 {
-                        isExpanded = true
-                        startOffset = 0
-                    } else {
-                        visiblePercentage = 0
-                        isExpanded = false
-                        startOffset = -width
-                    }
-                }
-                dragOffset = 0
-            }
-    }
-    
-    private var swipeGesture: some Gesture {
+    private var swipeCloseGesture: some Gesture {
         DragGesture(minimumDistance: 50, coordinateSpace: .local)
             .onEnded { value in
                 let horizontalAmount = value.translation.width as CGFloat
@@ -168,6 +149,32 @@ public struct SidebarView<Selection: Hashable, Sidebar: View, Detail: View>: Vie
                     }
                     dragOffset = 0
                 }
+            }
+    }
+    
+    private func dragGesture(for width: CGFloat) -> some Gesture {
+        DragGesture()
+            .onChanged { value in
+                dragOffset = value.translation.width
+                
+                let dragDistance = value.translation.width + startOffset
+                visiblePercentage = 1 - (-dragDistance / width)
+            }
+            .onEnded { value in
+                let dragDistance = value.translation.width + startOffset
+                visiblePercentage = 1 - (-dragDistance / width)
+
+                withAnimation(.smooth()) {
+                    if visiblePercentage > 0.70 {
+                        isExpanded = true
+                        startOffset = 0
+                    } else {
+                        visiblePercentage = 0
+                        isExpanded = false
+                        startOffset = -width
+                    }
+                }
+                dragOffset = 0
             }
     }
 }
