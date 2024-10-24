@@ -49,5 +49,16 @@ public extension AlertButton {
     static var notNow: AlertButton {
         AlertButton(title: "Not Now", style: .cancel, action: {})
     }
-}
 
+    static var no: AlertButton {
+        AlertButton(title: "No", style: .cancel, action: {})
+    }
+    
+    static var doRestart: AlertButton {
+        AlertButton(title: "Quit App", action: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                exit(0)
+            }
+        })
+    }
+}
