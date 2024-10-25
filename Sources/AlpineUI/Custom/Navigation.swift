@@ -27,6 +27,12 @@ public class Navigation {
 }
 
 public extension Navigation {
+    var isInRoot: Bool {
+        path.isEmpty
+    }
+}
+
+public extension Navigation {
     
     func clearStack() {
         path = NavigationPath()
@@ -39,7 +45,15 @@ public extension Navigation {
 
 public extension Navigation {
     
-    var isInRoot: Bool {
-        path.isEmpty
+    func pop() {
+        path.removeLast()
+    }
+    
+    func popToRoot() {
+        path.removeLast(path.count)
+    }
+    
+    func push<Screen: Hashable>(_ screen: Screen) {
+        path.append(screen)
     }
 }
