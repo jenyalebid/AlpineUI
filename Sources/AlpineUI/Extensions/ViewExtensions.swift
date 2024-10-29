@@ -186,3 +186,21 @@ private struct FramePreferenceKey: PreferenceKey {
         value = nextValue()
     }
 }
+
+public extension View {
+    
+    @ViewBuilder
+    func autoEdgePopover<Content: View>(
+        isPresented: Binding<Bool>,
+        attachmentAnchor: PopoverAttachmentAnchor = .rect(.bounds),
+        @ViewBuilder content: @escaping () -> Content) -> some View 
+    {
+        if #available(iOS 18, *) {
+            self
+                .popover(isPresented: isPresented, attachmentAnchor: attachmentAnchor, content: content)
+        } else {
+            self
+                .popover(isPresented: isPresented, attachmentAnchor: attachmentAnchor, content: content)
+        }
+    }
+}

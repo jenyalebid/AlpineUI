@@ -38,7 +38,7 @@ public struct SymbolPickerBlock: View {
                         isPresented.toggle()
                     }
             )
-            .popover(isPresented: $isPresented) {
+            .autoEdgePopover(isPresented: $isPresented) {
                 SymbolPickerView(title: title, symbol: $symbol, symbolsSet: .map, onEvent: { event, parameters in
                     onEvent?(event, parameters)
                 })
