@@ -203,4 +203,19 @@ public extension View {
                 .popover(isPresented: isPresented, attachmentAnchor: attachmentAnchor, content: content)
         }
     }
+    
+    @ViewBuilder
+    func autoEdgePopover<Item: Identifiable, Content: View>(
+        item: Binding<Item?>,
+        attachmentAnchor: PopoverAttachmentAnchor = .rect(.bounds),
+        @ViewBuilder content: @escaping (Item) -> Content) -> some View
+    {
+        if #available(iOS 18, *) {
+            self
+                .popover(item: item, attachmentAnchor: attachmentAnchor, content: content)
+        } else {
+            self
+                .popover(item: item, attachmentAnchor: attachmentAnchor, content: content)
+        }
+    }
 }
