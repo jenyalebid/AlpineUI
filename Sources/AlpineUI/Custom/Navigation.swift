@@ -7,15 +7,19 @@
 
 import SwiftUI
 
-private struct NavigationEnvironmentKey: EnvironmentKey {
-    static let defaultValue: Navigation = Navigation()
-}
+//private struct NavigationEnvironmentKey: EnvironmentKey {
+//    static let defaultValue: Navigation = Navigation()
+//}
+
+//public extension EnvironmentValues {
+    //    var navigation: Navigation {
+    //        get { self[NavigationEnvironmentKey.self] }
+    //        set { self[NavigationEnvironmentKey.self] = newValue }
+    //    }
+//}
 
 public extension EnvironmentValues {
-    var navigation: Navigation {
-        get { self[NavigationEnvironmentKey.self] }
-        set { self[NavigationEnvironmentKey.self] = newValue }
-    }
+    @Entry var navigation: Navigation = Navigation()
 }
 
 @Observable
@@ -23,37 +27,21 @@ public class Navigation {
     
     public var path = NavigationPath()
     
-    public init() {}
-}
-
-public extension Navigation {
     var isInRoot: Bool {
         path.isEmpty
     }
-}
+    
+    public init() {}
 
-public extension Navigation {
-    
-    func clearStack() {
-        path = NavigationPath()
-    }
-    
-    func append<Item: Hashable>(_ item: Item) {
-        path.append(item)
-    }
-}
-
-public extension Navigation {
-    
-    func pop() {
+    public func pop() {
         path.removeLast()
     }
     
-    func popToRoot() {
-        path.removeLast(path.count)
+    public func popToRoot() {
+        path = NavigationPath()
     }
     
-    func push<Screen: Hashable>(_ screen: Screen) {
+    public func push<Screen: Hashable>(_ screen: Screen) {
         path.append(screen)
     }
 }
