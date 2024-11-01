@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-//private struct NavigationEnvironmentKey: EnvironmentKey {
-//    static let defaultValue: Navigation = Navigation()
-//}
-
-//public extension EnvironmentValues {
-    //    var navigation: Navigation {
-    //        get { self[NavigationEnvironmentKey.self] }
-    //        set { self[NavigationEnvironmentKey.self] = newValue }
-    //    }
-//}
+private struct NavigationEnvironmentKey: EnvironmentKey {
+    static let defaultValue: Navigation = Navigation()
+}
 
 public extension EnvironmentValues {
-    @Entry var navigation: Navigation = Navigation()
+        var navigation: Navigation {
+            get { self[NavigationEnvironmentKey.self] }
+            set { self[NavigationEnvironmentKey.self] = newValue }
+        }
 }
+
+//public extension EnvironmentValues {
+//    @Entry var navigation: Navigation = Navigation()
+//}
 
 @Observable
 public class Navigation {
