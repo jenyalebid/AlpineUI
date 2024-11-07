@@ -11,10 +11,10 @@ public struct CameraPhotoPicker: UIViewControllerRepresentable {
     
     @Environment(\.dismiss) var dismiss
     
-    @Binding var data: Data?
+    @Binding var image: UIImage?
     
-    public init(data: Binding<Data?>) {
-        self._data = data
+    public init(image: Binding<UIImage?>) {
+        self._image = image
     }
     
     public func makeUIViewController(context: Context) -> UIImagePickerController {
@@ -47,9 +47,9 @@ public struct CameraPhotoPicker: UIViewControllerRepresentable {
         
         public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             guard let photo = info[.editedImage] as? UIImage else { return }
-            let croppedImage = resizeImage(image: photo, targetSize: CGSize(width: 1920, height: 1080))
+//            let croppedImage = resizeImage(image: photo, targetSize: CGSize(width: 1920, height: 1080))
             
-            photoPicker.data = croppedImage.jpegData(compressionQuality: 0.75)
+            photoPicker.image = photo
             self.photoPicker.dismiss()
         }
         
