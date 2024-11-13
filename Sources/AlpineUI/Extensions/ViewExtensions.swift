@@ -40,8 +40,8 @@ public extension View {
         modifier(ShareOverlayModifier(isShared: isShared))
     }
     
-    func keypad<N: Numeric & LosslessStringConvertible>(value: Binding<N>, limit: Int? = nil) -> some View {
-        self.modifier(KeypadModifier(value: value, limit: limit))
+    func keypad<N: Numeric & LosslessStringConvertible>(value: Binding<N>, edge: Edge = .bottom, limit: Int? = nil) -> some View {
+        self.modifier(KeypadModifier(value: value, limit: limit, edge: edge))
     }
     
     func requiredOverlay(_ required: Bool, padding: CGFloat? = nil, minWidth: CGFloat? = nil, minHeight: CGFloat? = nil, type: RequiredOverlayModifier.OverlayType) -> some View {

@@ -16,6 +16,7 @@ struct KeypadModifier<N: Numeric & LosslessStringConvertible>: ViewModifier {
     @State private var showPad = false
     
     var limit: Int?
+    var edge: Edge
 
     func body(content: Content) -> some View {
         content
@@ -29,7 +30,7 @@ struct KeypadModifier<N: Numeric & LosslessStringConvertible>: ViewModifier {
                         showPad.toggle()
                     }
             )
-            .popover(isPresented: $showPad) {
+            .popover(isPresented: $showPad, arrowEdge: edge) {
                 KeypadView(value: $value, limit: limit, isCompact: hSizeClass != .regular)
                     .presentationBackground(.regularMaterial)
                     .presentationCompactAdaptation(.popover)
